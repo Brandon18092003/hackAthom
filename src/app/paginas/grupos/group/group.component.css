@@ -4,7 +4,7 @@
 
 .section {
     display: flex;
-    height: 60vh;
+    height: 80vh;
     width: 100%;
 }
 
@@ -43,22 +43,17 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* Center content vertically */
 }
 
 .group-name {
     margin: 0;
-    /* Remove default margin */
     padding-top: 0;
-    /* Remove default padding */
 }
 
 .group-alert {
     color: red;
     margin-top: 0px;
-    /* Add some space above the alert */
     font-size: 0.9em;
-    /* Slightly smaller font size for the alert */
 }
 
 .eliminar-icon {
@@ -81,6 +76,7 @@
     display: flex;
     flex-direction: column;
     padding-left: 10px;
+    position: relative;
 }
 
 .chat-header {
@@ -98,6 +94,12 @@
 
 .chat-header h2 {
     margin: 10px;
+}
+
+.ellipsis-icon {
+    font-size: 20px;
+    margin-left: auto;
+    cursor: pointer;
 }
 
 .chat-content {
@@ -129,7 +131,7 @@
     flex-grow: 1;
 }
 
-.alert-details p{
+.alert-details p {
     color: #4A0097 !important;
 }
 
@@ -190,37 +192,81 @@
     height: 50vh;
 }
 
-
-
-.integrantes {
+.slide-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
     width: 50%;
-    margin-top: 20px;
-    background-color: white;
+    height: 100%;
+    background-color: #EFF6FF;
+    border-radius: 5px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    z-index: 1000;
 }
 
-.integrantes .headerInt{
+.slide-panel.open {
+    transform: translateX(0);
+    display: flex;
+}
+
+.chat {
+    position: relative;
+}
+
+.close-panel {
+    align-self: flex-end;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.close-panel:hover {
+    background-color: #0056b3;
+}
+
+.integrantes, .notificaciones {
+    background-color: white;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.integrantes .headerInt, .notificaciones .headerNot {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-right: 10px;
+    margin-bottom: 10px;
 }
 
-.integrantes h2 {
-    margin: 15px;
+.integrantes h2, .notificaciones h2 {
+    margin: 0;
 }
 
-.headerInt .añadir{
+.añadir, .alert {
     background-color: #2FBD46;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: none;
     color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-
-.headerInt .añadir:hover{
+.añadir:hover, .alert:hover {
     background-color: green;
+}
+
+.table-container {
+    max-height: 200px; /* Ajusta esto según sea necesario */
+    overflow-y: auto;
 }
 
 table {
@@ -229,120 +275,83 @@ table {
 }
 
 th.mat-header-cell {
-    background-color: #f44336 !;
+    background-color: #f44336;
     color: white;
 }
 
-td.mat-cell,
-th.mat-header-cell {
+td.mat-cell, th.mat-header-cell {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
 
-.eliminar-button {
+.eliminar-button, .editar-button {
     width: 40px;
     height: 40px;
     border: none;
     border-radius: 5px;
-    background-color: red;
-    /* Color rojo */
     margin: 1px;
     color: white !important;
-    /* Texto blanco */
+}
+
+.eliminar-button {
+    background-color: red;
 }
 
 .eliminar-button:hover {
     background-color: #c82333;
-    /* Color rojo más oscuro al pasar el mouse */
     border-color: darkred;
 }
 
-/* Estilos para el botón Crear */
 .editar-button {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
     background-color: #007BFF;
-    /* Color azul */
-    margin: 1px;
-    color: white !important;
-    /* Texto blanco */
 }
 
 .editar-button:hover {
     background-color: #0056B3;
-    /* Color azul más oscuro al pasar el mouse */
 }
 
-.notificaciones {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    margin-top: 20px;
-    margin-left: 10px;
-    background-color: white;
-    max-height: 400px; /* Fija la altura máxima del contenedor */
-    overflow-y: auto; /* Añade desplazamiento vertical */
+.alert-cards {
+    max-height: 200px; /* Ajusta esto según sea necesario */
+    overflow-y: auto;
 }
 
-.headerNot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-right: 10px;
-}
-
-.notificaciones h2 {
-    margin: 20px;
-}
-
-.notificaciones .alert {
-    color: white !important;
-    background-color: red !important;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.alert-card {
+.notificaciones .alert-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
     border-radius: 5px;
     background-color: #E2D9FF;
-    margin: 10px;
+    margin: 10px 0;
 }
 
-.alert-content {
+.notificaciones .alert-content {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 
-.alert-details {
+.notificaciones .alert-details {
     flex-grow: 1;
-    color: white !important;
 }
 
-.alert-details h3{
+.notificaciones .alert-details h3 {
     color: #4A0097 !important;
+    margin: 0;
 }
 
-.alert-actions {
+.notificaciones .alert-actions {
     display: flex;
     gap: 10px;
 }
 
-.alert-actions button {
+.notificaciones .alert-actions button {
     background: none;
     border: none;
     cursor: pointer;
 }
 
-.alert-actions button i {
+.notificaciones .alert-actions button i {
     font-size: 1em;
 }

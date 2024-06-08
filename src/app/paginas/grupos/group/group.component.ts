@@ -55,6 +55,8 @@ export class GroupComponent implements OnInit {
   alertMessage: AlertDialogData | null = null;
   alertas: AlertDialogData[] = [];  // Array para almacenar las alertas
 
+  isPanelOpen: boolean = false; // Estado del panel deslizante
+
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,
@@ -102,6 +104,10 @@ export class GroupComponent implements OnInit {
         this.chatContent.nativeElement.scrollTop = this.chatContent.nativeElement.scrollHeight;
       }
     }, 0);
+  }
+
+  togglePanel(): void {
+    this.isPanelOpen = !this.isPanelOpen;
   }
 
   openEditDialog(element: { nombres: string, rol: string }): void {
