@@ -31,6 +31,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { AlertDialogComponent } from './paginas/grupos/group/alert-dialog/alert-dialog.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { withFetch } from '@angular/common/http';
+import { CommonModule } from '@angular/common'; // Importar CommonModule
+import { PruebaComponent } from './prueba/prueba.component';
 
 
 @NgModule({
@@ -44,7 +48,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     CrearGroupComponent,
     EditarGrupoComponent,
     VerPerfilComponent,
-    AlertDialogComponent
+    AlertDialogComponent,
+    PruebaComponent
   ],
   imports: [
     BrowserModule,
@@ -66,11 +71,15 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatCardModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    HttpClientModule,
+    CommonModule
   ],
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
+    provideHttpClient(withFetch())
+
   ],
   bootstrap: [AppComponent],
 })

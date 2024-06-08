@@ -1,16 +1,3 @@
-export interface Curso {
-    id: number;
-    nombre: string;
-    codigo: string;
-}
-
-export interface Grupo {
-    id: number;
-    nombre: string;
-    fecha_creacion: Date;
-    curso: Curso;
-}
-
 export interface Habilidad {
     id: number;
     nombre: string;
@@ -114,4 +101,38 @@ export interface UpdateMiembroDTO {
     codigoUsuario: string;
     idGrupo: number;
     rolGrupo: string;
+}
+
+export interface ConversacionGrupal {
+    id: number;
+    grupo: Grupo;
+    fechaInicio: Date;
+    mensajes: MensajeConversacionGrupal[];
+}
+
+export interface MensajeConversacionGrupal {
+    id: number;
+    conversacionGrupal: ConversacionGrupal;
+    persona: Persona;
+    mensaje: string;
+    fechaEnvio: Date;
+}
+
+export interface Grupo {
+    id: number;
+    nombre: string;
+    fecha_creacion: Date;
+    curso: Curso;
+}
+
+export interface Curso {
+    id: number;
+    nombre: string;
+    codigo: string;
+}
+
+export interface MensajeRequest {
+    conversacionId: number;
+    codigoPersona: string;
+    mensaje: string;
 }

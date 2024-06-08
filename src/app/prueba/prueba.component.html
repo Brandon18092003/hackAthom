@@ -1,0 +1,11 @@
+<div *ngIf="conversacion">
+    <h2>Conversación en grupo: {{ conversacion?.grupo?.nombre }}</h2>
+    <div *ngFor="let mensaje of mensajes">
+      <p><strong>{{ mensaje.persona?.nombres }} {{ mensaje.persona?.ap_paterno }}:</strong> {{ mensaje.mensaje }}</p>
+    </div>
+    <input #codigo type="text" placeholder="Código de persona">
+    <input #mensaje type="text" placeholder="Escribe un mensaje">
+    <button (click)="enviarMensajeRest(conversacion?.id!, codigo.value, mensaje.value)">Enviar via REST</button>
+    <button (click)="enviarMensajeWebSocket(conversacion?.id!, codigo.value, mensaje.value)">Enviar via WebSocket</button>
+  </div>
+  
