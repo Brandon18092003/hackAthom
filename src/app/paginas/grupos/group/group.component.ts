@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditarGrupoComponent } from './editar-grupo/editar-grupo.component';
 import { AlertDialogComponent, AlertDialogData } from './alert-dialog/alert-dialog.component';
 import { EditAlertComponent, EditAlertDialogData } from './edit-alert/edit-alert.component';
+import { AlertService } from '../../../services/alert.service';
+import { AgregarIntegranteComponent } from './agregar-integrante/agregar-integrante.component';
 import Swal from 'sweetalert2';
 
 interface Grupo {
@@ -50,10 +52,13 @@ export class GroupComponent implements OnInit {
   selectedGroup: Grupo | null = null;
   newMessage: string = '';
   mensajes: Mensaje[] = [];
-  alertMessage: Mensaje | null = null;
+  alertMessage: AlertDialogData | null = null;
   alertas: AlertDialogData[] = [];  // Array para almacenar las alertas
 
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog,
+    private alertService: AlertService,
+  ) {}
 
   ngOnInit(): void {
     this.selectedGroup = this.grupos[0]; // Selecciona el primer grupo por defecto
@@ -113,6 +118,20 @@ export class GroupComponent implements OnInit {
     });
   }
 
+  openAddDialog(): void {
+    const dialogRef = this.dialog.open(AgregarIntegranteComponent, {
+      width: '800px',
+      height: '490px'
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Agregar el nuevo integrante a la lista
+        this.integrantes.push({ nombres: result.nombre, rol: result.rol });
+        this.dataSource.data = this.integrantes;
+      }
+    });
+  }
   eliminarIntegrante(element: Integrante): void {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -213,11 +232,41 @@ export class GroupComponent implements OnInit {
   }
 
   anclarAlerta(alerta: AlertDialogData): void {
-    // Aquí puedes agregar la lógica para anclar la alerta, si es necesario
+    this.alertMessage = alerta;
+
+    if (this.selectedGroup) {
+      this.selectedGroup.alerta = alerta.asunto;
+    }
+
+    this.alertService.setPinnedAlert(true);
+
     Swal.fire({
       icon: 'info',
       title: 'Alerta anclada',
       text: `La alerta ${alerta.asunto} ha sido anclada.`
     });
+  }
+
+  desanclarAlerta(): void {
+    if (this.alertMessage) {
+      const alerta = this.alertMessage;
+      this.alertMessage = null;
+
+      if (this.selectedGroup) {
+        this.selectedGroup.alerta = undefined;
+      }
+
+      this.alertService.setPinnedAlert(false);
+
+      Swal.fire({
+        icon: 'info',
+        title: 'Alerta desanclada',
+        text: `La alerta ${alerta.asunto} ha sido desanclada.`
+      });
+    }
+  }
+
+  isAlertaAnclada(alerta: AlertDialogData): boolean {
+    return this.alertMessage === alerta;
   }
 }

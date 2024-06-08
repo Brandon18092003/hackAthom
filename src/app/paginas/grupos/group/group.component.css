@@ -61,12 +61,15 @@
     /* Slightly smaller font size for the alert */
 }
 
-
 .eliminar-icon {
+    width: 40px;
+    height: 40px;
     background-color: red;
     color: white !important;
     margin-left: auto;
     cursor: pointer;
+    border: none;
+    border-radius: 50%;
 }
 
 .eliminar-icon:hover {
@@ -106,26 +109,34 @@
     flex-direction: column;
 }
 
-
 .alert-message {
     display: flex;
-    color: white;
-    background-color: red;
-    /* Color amarillo para destacar */
+    justify-content: space-between;
+    align-items: center;
+    color: #4A0097 !important;
+    background-color: #E2D9FF !important;
     padding: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     border-radius: 5px;
     width: 100%;
-    /* Ocupa todo el ancho */
     box-sizing: border-box;
-    /* Asegura que el padding no sobrepase el ancho */
     position: sticky;
     top: 0;
     z-index: 10;
-    /* Asegura que se superpone a otros elementos */
 }
 
+.alert-details {
+    flex-grow: 1;
+}
 
+.alert-details p{
+    color: #4A0097 !important;
+}
+
+.close-button {
+    color: white;
+    cursor: pointer;
+}
 
 .mensaje {
     margin: 5px 0;
@@ -181,15 +192,35 @@
 
 
 
-
 .integrantes {
     width: 50%;
     margin-top: 20px;
     background-color: white;
 }
 
+.integrantes .headerInt{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 10px;
+}
+
 .integrantes h2 {
     margin: 15px;
+}
+
+.headerInt .añadir{
+    background-color: #2FBD46;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    color: white;
+}
+
+
+.headerInt .añadir:hover{
+    background-color: green;
 }
 
 table {
@@ -210,6 +241,10 @@ th.mat-header-cell {
 }
 
 .eliminar-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
     background-color: red;
     /* Color rojo */
     margin: 1px;
@@ -225,7 +260,11 @@ th.mat-header-cell {
 
 /* Estilos para el botón Crear */
 .editar-button {
-    background-color: black;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
     /* Color azul */
     margin: 1px;
     color: white !important;
@@ -233,12 +272,9 @@ th.mat-header-cell {
 }
 
 .editar-button:hover {
-    background-color: #333;
+    background-color: #0056B3;
     /* Color azul más oscuro al pasar el mouse */
 }
-
-
-
 
 .notificaciones {
     display: flex;
@@ -277,7 +313,7 @@ th.mat-header-cell {
     align-items: center;
     padding: 15px;
     border-radius: 5px;
-    background-color: red;
+    background-color: #E2D9FF;
     margin: 10px;
 }
 
@@ -290,6 +326,10 @@ th.mat-header-cell {
 .alert-details {
     flex-grow: 1;
     color: white !important;
+}
+
+.alert-details h3{
+    color: #4A0097 !important;
 }
 
 .alert-actions {

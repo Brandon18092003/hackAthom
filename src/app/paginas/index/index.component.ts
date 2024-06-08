@@ -2,15 +2,21 @@ import { Component, OnInit, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
-  styleUrl: './index.component.css'
+  styleUrls: ['./index.component.css']
 })
 export class IndexComponent implements OnInit{
   currentView: string = 'link1';
   private breakpointObserver = inject(BreakpointObserver);
+  hasPinnedAlert$: Observable<boolean>;
+
+  constructor(private alertService: AlertService,) {
+    this.hasPinnedAlert$ = this.alertService.hasPinnedAlert$;
+  }
 
   ngOnInit(): void {
       if (typeof window !== 'undefined'){

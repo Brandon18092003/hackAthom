@@ -33,6 +33,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { LoginComponent } from './paginas/login/login.component';
 import { EditAlertComponent } from './paginas/grupos/group/edit-alert/edit-alert.component';
+import { AgregarIntegranteComponent } from './paginas/grupos/group/agregar-integrante/agregar-integrante.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { EditAlertComponent } from './paginas/grupos/group/edit-alert/edit-alert
     VerPerfilComponent,
     AlertDialogComponent,
     LoginComponent,
-    EditAlertComponent
+    EditAlertComponent,
+    AgregarIntegranteComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,46 @@
+<div class="body">
+    <h1>Agregar Integrante</h1>
+
+    <div class="headerAdd">
+        <div class="form-group">
+            <select id="salon" [(ngModel)]="selectedSalon" (change)="onSalonChange()">
+                <option value="">Seleccionar por un curso - Sección</option>
+                <option *ngFor="let salon of salones" [value]="salon">{{ salon }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input id="search" placeholder="Buscar por nombre" type="text" [(ngModel)]="searchQuery" (input)="filterAlumnos()">
+        </div>
+    </div>
+    
+
+    <div class="alumnos-list">
+        <div class="card" *ngFor="let alumno of filteredAlumnos">
+            <div class="card-icon">
+                <img src="assets/img_usuario.png" alt="">
+            </div>
+            <div class="card-content">
+                <span>{{ alumno.nombre }}</span>
+            </div>
+            <div class="actions">
+                <button mat-icon-button (click)="selectAlumno(alumno)"><mat-icon>add_circle</mat-icon></button>
+                <button mat-icon-button><mat-icon>visibility</mat-icon></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" [(ngModel)]="nombre">
+    </div>
+
+    <div class="form-group">
+        <label for="rol">Rol</label>
+        <input id="rol" type="text" [(ngModel)]="rol">
+    </div>
+
+    <div class="dialog-actions">
+        <button (click)="onNoClick()">Cancelar</button>
+        <button (click)="onSave()">Guardar</button>
+    </div>
+</div>
