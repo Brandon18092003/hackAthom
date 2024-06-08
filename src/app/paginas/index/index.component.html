@@ -1,0 +1,77 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+
+    <div class="main">
+      <i class="fas fa-bars"></i>
+    </div>
+    <mat-nav-list>
+      <div class="item" [ngClass]="{'item-seleccionado': currentView === 'link1'}" (click)="setView('link1')">
+        <i class="fas fa-book"></i>
+        <p>Cursos</p>
+      </div>
+      <div class="item">
+        <i class="fas fa-comments"></i>
+        <p>Chat</p>
+      </div>
+      <div class="item">
+        <i class="fas fa-calendar-alt"></i>
+        <p>Calendario</p>
+      </div>
+      <div class="item" [ngClass]="{'item-seleccionado': currentView === 'link2'}" (click)="setView('link2')">
+        <i class="fas fa-users"></i>
+        <p>Grupos</p>
+      </div>
+      <div class="item">
+        <i class="fas fa-question-circle"></i>
+        <p>Ayuda</p>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="content">
+    <mat-toolbar class="toolbar">
+      @if (isHandset$ | async) {
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      }
+      <img src="assets/logo.JPG" alt="">
+      <div class="toolbar-right">
+        <div class="notificaciones">
+          <i class="fas fa-bell"></i>
+          <p class="numerito">0</p>
+        </div>
+        <div class="separator"></div>
+        <div class="perfil" [matMenuTriggerFor]="menu">
+          <div class="dato">
+            <div class="nombre">
+              <p>Hola, <span>Persona</span></p>
+            </div>
+            <p class="rol">Rol</p>
+          </div>
+          <img src="assets/img_usuario.png" alt="">
+        </div>
+        <mat-menu #menu="matMenu" class="custom-menu">
+          <button mat-menu-item (click)="setView('link3')">
+            <mat-icon>account_circle</mat-icon>
+            <span>Perfil</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Cerrar Sesión</span>
+          </button>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+    <div *ngIf="currentView === 'link1'">
+      <app-inicio></app-inicio>
+    </div>
+    <div *ngIf="currentView === 'link2'">
+      <app-grupos></app-grupos>
+    </div>
+    <div *ngIf="currentView === 'link3'">
+      <app-perfil></app-perfil>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

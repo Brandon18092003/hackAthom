@@ -1,0 +1,76 @@
+<div class="body">
+    <div class="container">
+        <!-- Crear Grupo Section -->
+        <div class="crear-grupo">
+            <div class="title">
+                <h2>Crear Grupo</h2>
+            </div>
+            <div class="crear-grupo-form">
+                <input type="text" placeholder="INGRESA NOMBRE DEL GRUPO">
+
+                <table mat-table [dataSource]="dataSource">
+                    <!-- Integrantes Column -->
+                    <ng-container matColumnDef="integrantes">
+                        <th mat-header-cell *matHeaderCellDef> Integrantes </th>
+                        <td mat-cell *matCellDef="let element"> {{element.integrantes}} </td>
+                    </ng-container>
+
+                    <!-- Código Column -->
+                    <ng-container matColumnDef="codigo">
+                        <th mat-header-cell *matHeaderCellDef> Código </th>
+                        <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
+                    </ng-container>
+
+                    <!-- Acción Column -->
+                    <ng-container matColumnDef="accion">
+                        <th mat-header-cell *matHeaderCellDef> Acción </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="warn" (click)="remove(element)">
+                                <mat-icon>remove_circle</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+                <button class="create-btn">Crear</button>
+            </div>
+        </div>
+        <!-- Nuevo Grupo Section -->
+        <div class="nuevo-grupo">
+            <div class="title">
+                <h2>Nuevo Grupo</h2>
+            </div>
+            <div class="opciones">
+                <div class="opcion">
+                    <select (change)="onCourseSelect($event)">
+                        <option value="">Seleccionar por un curso - Sección</option>
+                        <option *ngFor="let curso of cursos" [value]="curso">{{curso}}</option>
+                    </select>
+                </div>
+                <div class="opcion">
+                    <input type="text" placeholder="Busca por nombre" [(ngModel)]="searchText" (input)="filterItems()">
+                    <button>
+                        <i class="fas fa-search"></i> <!-- Ícono de búsqueda -->
+                    </button>
+                </div>
+            </div>
+            <div class="list" *ngIf="selectedCourse">
+                <div class="card" *ngFor="let item of filteredItems">
+                    <div class="card-icon">
+                        <img src="assets/img_usuario.png" alt="">
+                    </div>
+                    <div class="card-content">
+                        <span>{{ item.name }}</span>
+                    </div>
+                    <div class="actions">
+                        <button mat-icon-button (click)="add(item)"><mat-icon>add_circle</mat-icon></button>
+                        <button mat-icon-button (click)="openProfile(item)"><mat-icon>visibility</mat-icon></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,181 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.body {
+    margin: 20px auto;
+    max-width: 90%; /* Adjust as needed */
+    max-height: 90vh;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.container {
+    display: flex;
+    gap: 40px; /* Add some gap between sections */
+}
+
+.crear-grupo, .nuevo-grupo {
+    flex: 1;
+    padding: 15px;
+    margin: 5px;
+    background-color: white;
+    overflow: hidden; /* Remove this line */
+    height: 650px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.title {
+    margin: 20px 0;
+}
+
+.opciones {
+    display: flex;
+    gap: 10px; 
+    margin: 20px 0;
+    padding-bottom: 20px;
+    border-bottom: #ccc 1px solid;
+}
+
+.opcion {
+    display: flex;
+    align-items: center;
+}
+
+select, input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button i {
+    font-size: 20px;
+}
+
+.list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribute space between elements */
+    background-color: #e0f7ff;
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    width: 275px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    flex-shrink: 0; /* Prevent icon from shrinking */
+    margin-right: 15px;
+}
+
+.card-icon img {
+    width: 50px;
+    padding: 5px;
+}
+
+.card-content {
+    flex-grow: 1;
+    font-size: 16px;
+    color: #333;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+}
+
+.actions button {
+    background: none;
+    border-radius: 90px;
+    cursor: pointer;
+}
+
+.actions i {
+    font-size: 20px;
+    color: #0661FC;
+}
+
+.actions button:hover {
+    background-color: #EFF6FF;
+}
+
+/* Styles for Crear Grupo section */
+.crear-grupo-form input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.crear-grupo-form table {
+    width: 100%;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.crear-grupo-form th, .crear-grupo-form td {
+    padding: 8px;
+    text-align: left;
+}
+
+.crear-grupo-form th {
+    background-color: #f2f2f2;
+}
+
+.create-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #0661FC;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.create-btn:hover {
+    background-color: #0554d3;
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}

@@ -1,0 +1,71 @@
+<div class="body">
+    <div class="section">
+        <div class="list">
+            <div *ngFor="let grupo of grupos" class="group-item" (click)="selectGroup(grupo)">
+                <img src="assets/img_grupo.png" alt="Grupo Icono" class="group-icon">
+                <div class="group-details">
+                    <p class="group-name">{{ grupo.name }}</p>
+                    <p *ngIf="grupo.alerta" class="group-alert">{{ grupo.alerta }}</p>
+                </div>
+                <button mat-button class="eliminar-icon" matTooltip="Eliminar" (click)="eliminarGrupo(grupo)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chat">
+            <div class="chat-header">
+                <img *ngIf="selectedGroup" src="assets/img_grupo.png" alt="Imagen de Grupo" class="group-image">
+                <h2>{{ selectedGroup?.name }}</h2>
+            </div>
+            <div class="chat-content" #chatContent>
+                <div *ngIf="alertMessage" class="alert-message">
+                    <p><strong>Alerta:</strong> {{ alertMessage.contenido }}</p>
+                    <p class="fecha">{{ alertMessage.fecha | date:'shortTime' }}</p>
+                </div>
+                <!-- Aquí se mostrarán los mensajes del grupo seleccionado -->
+                <div *ngFor="let mensaje of mensajes"
+                    [ngClass]="{'mensaje-autor': mensaje.autor === 'Yo', 'mensaje-otro': mensaje.autor !== 'Yo'}"
+                    class="mensaje">
+                    <p><strong>{{ mensaje.autor }}:</strong> {{ mensaje.contenido }}</p>
+                    <p class="fecha">{{ mensaje.fecha | date:'shortTime' }}</p>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Escribir mensaje" [(ngModel)]="newMessage">
+                <button class="enviar" (click)="sendMessage()">Enviar</button>
+                <button class="alert" (click)="openAlertDialog()">Crear Alerta</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="integrantes">
+        <h2>Integrantes</h2>
+        <table mat-table [dataSource]="integrantes">
+            <ng-container matColumnDef="nombres">
+                <th mat-header-cell *matHeaderCellDef> Nombres </th>
+                <td mat-cell *matCellDef="let element"> {{element.nombres}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="rol">
+                <th mat-header-cell *matHeaderCellDef> Rol </th>
+                <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-button class="editar-button" matTooltip="Editar" (click)="openEditDialog(element)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button mat-button class="eliminar-button" matTooltip="Eliminar"
+                        (click)="eliminarIntegrante(element)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

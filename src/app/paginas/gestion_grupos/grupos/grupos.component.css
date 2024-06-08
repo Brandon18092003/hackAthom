@@ -1,0 +1,30 @@
+.body{
+    background-color: #F0F7FF;
+    height: 1000px;
+    margin: 25px;
+}
+nav {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
+
+nav .item-active{
+    cursor: pointer;
+    padding: 10px 20px;
+    position: relative;
+    text-decoration: none;
+    color: black;
+    border-bottom: 2px solid blue;
+}
+
+nav .item {
+    cursor: pointer;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: black;
+    position: relative;
+}
+
+
+
+

@@ -1,0 +1,224 @@
+.body {
+    margin: 25px;
+}
+
+.section {
+    display: flex;
+    height: 60vh;
+    width: 100%;
+}
+
+.list {
+    width: 25%;
+    background-color: white;
+    padding: 10px;
+    overflow: auto;
+    max-height: 100%;
+}
+
+.group-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #d0eaff;
+    margin: 5px 0;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+}
+
+.group-item:hover {
+    background-color: #b0d4ff;
+}
+
+.group-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.group-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+}
+
+.group-name {
+    margin: 0; /* Remove default margin */
+    padding-top: 0; /* Remove default padding */
+}
+
+.group-alert {
+    color: red;
+    margin-top: 0px; /* Add some space above the alert */
+    font-size: 0.9em; /* Slightly smaller font size for the alert */
+}
+
+
+.eliminar-icon {
+    background-color: red;
+    color: white !important;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.eliminar-icon:hover {
+    background-color: #c82333;
+}
+
+.chat {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+}
+
+.chat-header {
+    display: flex;
+    background-color: #ffffff;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.chat-header .group-image {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+}
+
+.chat-header h2 {
+    margin: 10px;
+}
+
+.chat-content {
+    flex: 1;
+    background-color: #F5F5F5 !important;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.alert-message {
+    display: flex;
+    color: white;
+    background-color: red; /* Color amarillo para destacar */
+    padding: 10px;
+    margin-bottom: 0px;
+    border-radius: 5px;
+    width: 100%; /* Ocupa todo el ancho */
+    box-sizing: border-box; /* Asegura que el padding no sobrepase el ancho */
+    position: sticky;
+    top: 0;
+    z-index: 10; /* Asegura que se superpone a otros elementos */
+}
+
+
+
+.mensaje {
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 60%;
+}
+
+.mensaje-autor {
+    background-color: #B7E4FF;
+    align-self: flex-end;
+}
+
+.mensaje-otro {
+    background-color: white;
+    align-self: flex-start;
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.chat-input button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-input .alert{
+    background-color: red !important;
+}
+
+.chat-input button:hover {
+    background-color: #0056b3;
+}
+
+.integrantes {
+    margin-top: 20px;
+    background-color: white;
+}
+
+.integrantes h2 {
+    margin: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th.mat-header-cell {
+    background-color: #f44336 !;
+    color: white;
+}
+
+td.mat-cell,
+th.mat-header-cell {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.eliminar-button {
+    background-color: red;
+    /* Color rojo */
+    margin: 1px;
+    color: white !important;
+    /* Texto blanco */
+}
+
+.eliminar-button:hover {
+    background-color: #c82333;
+    /* Color rojo más oscuro al pasar el mouse */
+    border-color: darkred;
+}
+
+/* Estilos para el botón Crear */
+.editar-button {
+    background-color: black;
+    /* Color azul */
+    margin: 1px;
+    color: white !important;
+    /* Texto blanco */
+}
+
+.editar-button:hover {
+    background-color: #333;
+    /* Color azul más oscuro al pasar el mouse */
+}

@@ -1,0 +1,15 @@
+<div class="body">
+    <nav>
+        <a class="item" [ngClass]="{'item-active': currentView === 'page3'}" (click)="setView('page3')">Grupos</a>
+        <a class="item" [ngClass]="{'item-active': currentView === 'page4'}" (click)="setView('page4')">Crear Grupos</a>
+    </nav>
+
+    <div class="content">
+        <div *ngIf="currentView === 'page3'">
+            <app-group></app-group>
+        </div>
+        <div *ngIf="currentView === 'page4'">
+            <app-crear-group></app-crear-group>
+        </div>
+    </div>
+</div>
