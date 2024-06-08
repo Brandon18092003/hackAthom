@@ -42,18 +42,23 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
+    justify-content: center;
+    /* Center content vertically */
 }
 
 .group-name {
-    margin: 0; /* Remove default margin */
-    padding-top: 0; /* Remove default padding */
+    margin: 0;
+    /* Remove default margin */
+    padding-top: 0;
+    /* Remove default padding */
 }
 
 .group-alert {
     color: red;
-    margin-top: 0px; /* Add some space above the alert */
-    font-size: 0.9em; /* Slightly smaller font size for the alert */
+    margin-top: 0px;
+    /* Add some space above the alert */
+    font-size: 0.9em;
+    /* Slightly smaller font size for the alert */
 }
 
 
@@ -105,15 +110,19 @@
 .alert-message {
     display: flex;
     color: white;
-    background-color: red; /* Color amarillo para destacar */
+    background-color: red;
+    /* Color amarillo para destacar */
     padding: 10px;
     margin-bottom: 0px;
     border-radius: 5px;
-    width: 100%; /* Ocupa todo el ancho */
-    box-sizing: border-box; /* Asegura que el padding no sobrepase el ancho */
+    width: 100%;
+    /* Ocupa todo el ancho */
+    box-sizing: border-box;
+    /* Asegura que el padding no sobrepase el ancho */
     position: sticky;
     top: 0;
-    z-index: 10; /* Asegura que se superpone a otros elementos */
+    z-index: 10;
+    /* Asegura que se superpone a otros elementos */
 }
 
 
@@ -161,15 +170,20 @@
     cursor: pointer;
 }
 
-.chat-input .alert{
-    background-color: red !important;
-}
-
 .chat-input button:hover {
     background-color: #0056b3;
 }
 
+.section2 {
+    display: flex;
+    height: 50vh;
+}
+
+
+
+
 .integrantes {
+    width: 50%;
     margin-top: 20px;
     background-color: white;
 }
@@ -221,4 +235,74 @@ th.mat-header-cell {
 .editar-button:hover {
     background-color: #333;
     /* Color azul más oscuro al pasar el mouse */
+}
+
+
+
+
+.notificaciones {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-top: 20px;
+    margin-left: 10px;
+    background-color: white;
+    max-height: 400px; /* Fija la altura máxima del contenedor */
+    overflow-y: auto; /* Añade desplazamiento vertical */
+}
+
+.headerNot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.notificaciones h2 {
+    margin: 20px;
+}
+
+.notificaciones .alert {
+    color: white !important;
+    background-color: red !important;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.alert-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: red;
+    margin: 10px;
+}
+
+.alert-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.alert-details {
+    flex-grow: 1;
+    color: white !important;
+}
+
+.alert-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.alert-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.alert-actions button i {
+    font-size: 1em;
 }

@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { EditarGrupoComponent } from './editar-grupo/editar-grupo.component';
-import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
+import { AlertDialogComponent, AlertDialogData } from './alert-dialog/alert-dialog.component';
+import { EditAlertComponent, EditAlertDialogData } from './edit-alert/edit-alert.component';
 import Swal from 'sweetalert2';
 
 interface Grupo {
@@ -24,7 +25,7 @@ interface Integrante {
 @Component({
   selector: 'app-group',
   templateUrl: './group.component.html',
-  styleUrl: './group.component.css'
+  styleUrls: ['./group.component.css']
 })
 export class GroupComponent implements OnInit {
 
@@ -50,6 +51,7 @@ export class GroupComponent implements OnInit {
   newMessage: string = '';
   mensajes: Mensaje[] = [];
   alertMessage: Mensaje | null = null;
+  alertas: AlertDialogData[] = [];  // Array para almacenar las alertas
 
   constructor(public dialog: MatDialog) {}
 
@@ -163,19 +165,59 @@ export class GroupComponent implements OnInit {
       data: { asunto: '', fecha: new Date(), hora: '' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: AlertDialogData | undefined) => {
       if (result) {
-        // Lógica para manejar la creación del mensaje de alerta
-        this.alertMessage = {
-          contenido: `${result.asunto}. Entrega para el ${result.fecha.toLocaleDateString()} a las ${result.hora}`,
-          autor: 'Sistema', // O cualquier otro autor predeterminado
-          fecha: new Date()
-        };
+        // Guardar la alerta en el array de alertas
+        this.alertas.push(result);
+      }
+    });
+  }
 
-        if (this.selectedGroup) {
-          this.selectedGroup.alerta = this.alertMessage.contenido;
+  editarAlerta(alerta: AlertDialogData): void {
+    const dialogRef = this.dialog.open(EditAlertComponent, {
+      width: '500px',
+      data: { ...alerta }
+    });
+
+    dialogRef.afterClosed().subscribe((result: EditAlertDialogData | undefined) => {
+      if (result) {
+        // Actualiza la alerta en el array de alertas
+        const index = this.alertas.findIndex(a => a === alerta);
+        if (index !== -1) {
+          this.alertas[index] = result;
         }
       }
+    });
+  }
+
+  eliminarAlerta(alerta: AlertDialogData): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Deseas eliminar la alerta ${alerta.asunto}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.alertas = this.alertas.filter(a => a !== alerta);
+        Swal.fire(
+          'Eliminado!',
+          `La alerta ${alerta.asunto} ha sido eliminada.`,
+          'success'
+        );
+      }
+    });
+  }
+
+  anclarAlerta(alerta: AlertDialogData): void {
+    // Aquí puedes agregar la lógica para anclar la alerta, si es necesario
+    Swal.fire({
+      icon: 'info',
+      title: 'Alerta anclada',
+      text: `La alerta ${alerta.asunto} ha sido anclada.`
     });
   }
 }

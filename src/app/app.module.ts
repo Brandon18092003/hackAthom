@@ -31,6 +31,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { AlertDialogComponent } from './paginas/grupos/group/alert-dialog/alert-dialog.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { LoginComponent } from './paginas/login/login.component';
+import { EditAlertComponent } from './paginas/grupos/group/edit-alert/edit-alert.component';
 
 
 @NgModule({
@@ -44,7 +46,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     CrearGroupComponent,
     EditarGrupoComponent,
     VerPerfilComponent,
-    AlertDialogComponent
+    AlertDialogComponent,
+    LoginComponent,
+    EditAlertComponent
   ],
   imports: [
     BrowserModule,

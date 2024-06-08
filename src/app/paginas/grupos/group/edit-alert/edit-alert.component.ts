@@ -2,38 +2,35 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 
-export interface AlertDialogData {
+export interface EditAlertDialogData {
   asunto: string;
   fecha: Date;
   hora: string;
 }
 
 @Component({
-  selector: 'app-alert-dialog',
-  templateUrl: './alert-dialog.component.html',
-  styleUrls: ['./alert-dialog.component.css']
+  selector: 'app-edit-alert',
+  templateUrl: './edit-alert.component.html',
+  styleUrls: ['./edit-alert.component.css']
 })
-export class AlertDialogComponent implements OnInit {
+export class EditAlertComponent implements OnInit {
 
   minDate: string;
 
   constructor(
-    public dialogRef: MatDialogRef<AlertDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AlertDialogData
+    public dialogRef: MatDialogRef<EditAlertComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: EditAlertDialogData
   ) {
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
   }
 
   ngOnInit(): void {
-    this.data.fecha = new Date();
+    this.data.fecha = new Date(this.data.fecha);
   }
 
   onSaveClick(): void {
-    // Crear un objeto Date para la fecha seleccionada y la hora seleccionada en la zona horaria local
     const selectedDate = new Date(`${this.data.fecha}T${this.data.hora}:00`);
-    
-    // Obtener la fecha y hora actuales
     const now = new Date();
 
     // Verificación de que todos los campos están llenos
@@ -46,7 +43,7 @@ export class AlertDialogComponent implements OnInit {
       return;
     }
 
-    // Verificación de que la fecha y hora sean futuras
+    // Verificar si la fecha y hora seleccionadas son futuras
     if (selectedDate <= now) {
       Swal.fire({
         icon: 'error',
@@ -58,7 +55,6 @@ export class AlertDialogComponent implements OnInit {
 
     this.dialogRef.close(this.data);
   }
-
 
   onCancelClick(): void {
     this.dialogRef.close();

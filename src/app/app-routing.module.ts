@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { InicioComponent } from './paginas/inicio/inicio.component'
 import { IndexComponent } from './paginas/index/index.component';
-import { GruposComponent } from './paginas/grupos/grupos.component';
+import { LoginComponent } from './paginas/login/login.component';
 
 const routes: Routes = [
-  {path: '', redirectTo:'/index',pathMatch: 'full'},
+  {path: '', redirectTo:'/login',pathMatch: 'full'},
   {path: 'inicio', component: InicioComponent},
   {path: 'index', component: IndexComponent},
-  {path: 'grupos', component: GruposComponent},
+  {path: 'login', component: LoginComponent}
 ];
 
 @NgModule({
