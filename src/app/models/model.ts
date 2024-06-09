@@ -94,3 +94,17 @@ export interface CrearGrupoDTO {
   nombregrupo: string;
   codigosMiembros: string[];
 }
+
+export interface PersonaDTO {
+  nombres: string;
+  ap_paterno: string;
+  ap_materno: string;
+  codigo: string;
+  rol: string;
+}
+
+
+
+
+
+

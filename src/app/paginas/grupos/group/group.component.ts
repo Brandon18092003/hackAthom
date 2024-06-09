@@ -8,10 +8,11 @@ import { AlertService } from '../../../services/alert.service';
 import { AgregarIntegranteComponent } from './agregar-integrante/agregar-integrante.component';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
-import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal } from '../../../models/model';
+import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal, PersonaDTO } from '../../../models/model';
 import { GroupService } from '../../../services/grupo/grupo-service.service';
 import { WebSocketService } from '../../../services/web-socket.service';
 import { ConversacionGrupalService } from '../../../services/conversacion-grupal.service';
+import { PersonaService } from '../../../services/persona/persona.service';
 
 
 interface Integrante {
@@ -32,11 +33,8 @@ export class GroupComponent implements OnInit {
   mensajes: MensajeConversacionGrupal[] = [];
   alertMessage: any = null;
   alertas: any[] = []; // Array para almacenar las alertas
-  integrantes: Integrante[] = [
-    { nombres: 'Jorge Armando Bonifaz Campos', rol: 'Lider' },
-    { nombres: 'Jack Aymar Perez De La Borda', rol: 'Estudiante' },
-    { nombres: 'Brandon Mark Huallca Anyosa', rol: 'Estudiante' },
-  ];
+  
+  integrantes: PersonaDTO[] = [];
 
   displayedColumns: string[] = ['nombres', 'rol', 'acciones'];
   dataSource = new MatTableDataSource(this.integrantes);
@@ -48,11 +46,12 @@ export class GroupComponent implements OnInit {
     private groupService: GroupService,
     private conversacionGrupalService: ConversacionGrupalService,
     public authService: AuthService,  // Cambiar a public
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private personaService: PersonaService
   ) { }
 
   ngOnInit(): void {
-    const codigoUsuario = this.authService.getCodigo();
+    const codigoUsuario = this.authService.getCodigo(); // Obtener el código de usuario del localStorage
     if (codigoUsuario) {
       this.groupService.getGruposByCodPersona(codigoUsuario).subscribe(grupos => {
         this.grupos = grupos;
@@ -93,6 +92,8 @@ export class GroupComponent implements OnInit {
 
   selectGroup(grupo: Grupo): void {
     this.cargarMensajesDeGrupo(grupo);
+    this.obtenerPersonasPorGrupo(grupo.id);
+    this.scrollToBottom();
   }
 
   sendMessage(): void {
@@ -135,12 +136,23 @@ export class GroupComponent implements OnInit {
   openAddDialog(): void {
     const dialogRef = this.dialog.open(AgregarIntegranteComponent, {
       width: '800px',
-      height: '490px'
+      height: '490px',
+      data: {
+        integrantes: this.integrantes,
+        selectedGroup: this.selectedGroup
+      }
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.integrantes.push({ nombres: result.nombre, rol: result.rol });
+        const nuevoIntegrante: PersonaDTO = {
+          nombres: result.nombres,
+          ap_paterno: result.ap_paterno,
+          ap_materno: result.ap_materno,
+          codigo: result.codigo,
+          rol: result.rol
+        };
+        this.integrantes.push(nuevoIntegrante);
         this.dataSource.data = this.integrantes;
       }
     });
@@ -310,4 +322,14 @@ export class GroupComponent implements OnInit {
   isAlertaAnclada(alerta: any): boolean {
     return this.alertMessage === alerta;
   }
+
+    //Obtener personas del grupo
+  obtenerPersonasPorGrupo(idGrupo:number){
+      this.personaService.getPersonasByGrupo(idGrupo).subscribe(response=>{
+        this.integrantes=response;
+        this.dataSource.data=this.integrantes;
+        console.log(this.dataSource.data);
+      })
+  }
+  
 }

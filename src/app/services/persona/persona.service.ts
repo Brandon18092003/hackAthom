@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Persona } from '../../models/model';
+import { Persona, PersonaDTO } from '../../models/model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,5 +14,10 @@ export class PersonaService {
   getPersonasByCurso(idCurso: number): Observable<Persona[]> {
     return this.http.get<Persona[]>(`${this.apiUrl}/lista/cursos/${idCurso}`);
   }
+
+  getPersonasByGrupo(idGrupo: number): Observable<PersonaDTO[]> {
+    return this.http.get<PersonaDTO[]>(`${this.apiUrl}/lista/grupos/${idGrupo}`);
+  }
+
 
 }
