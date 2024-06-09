@@ -14,12 +14,6 @@ import { WebSocketService } from '../../../services/web-socket.service';
 import { ConversacionGrupalService } from '../../../services/conversacion-grupal.service';
 
 
-interface Mensaje {
-  contenido: string;
-  autor: string;
-  fecha: Date;
-}
-
 interface Integrante {
   nombres: string;
   rol: string;
@@ -52,7 +46,8 @@ export class GroupComponent implements OnInit {
     public dialog: MatDialog,
     private alertService: AlertService,
     private groupService: GroupService,
-    public authService: AuthService,
+    private conversacionGrupalService: ConversacionGrupalService,
+    public authService: AuthService,  // Cambiar a public
     private webSocketService: WebSocketService
   ) { }
 
@@ -81,9 +76,22 @@ export class GroupComponent implements OnInit {
     });
   }
 
+  cargarMensajesDeGrupo(grupo: Grupo): void {
+    this.conversacionGrupalService.obtenerConversacionPorGrupo(grupo.id).subscribe(conversacion => {
+      if (conversacion) {
+        this.selectedGroup = grupo;
+        this.conversacionGrupalService.obtenerMensajes(conversacion.id).subscribe(mensajes => {
+          this.mensajes = mensajes;
+          this.scrollToBottom();
+        });
+      } else {
+        console.error('Conversación no encontrada para el grupo:', grupo.nombre);
+      }
+    });
+  }
 
   selectGroup(grupo: Grupo): void {
-    this.selectedGroup = grupo;
+    this.cargarMensajesDeGrupo(grupo);
     this.scrollToBottom();
   }
 
