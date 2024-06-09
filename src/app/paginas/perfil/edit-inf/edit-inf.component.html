@@ -1,0 +1,13 @@
+<div class="edit-description-container">
+  <h2>Editar Informacion</h2>
+  <form>
+    <div class="form-group">
+      <label for="informacion">Informacion Adicional</label>
+      <textarea id="informacion" name="informacion" [(ngModel)]="informacion" rows="5" placeholder="Escribe tu descripción aquí...">{{ informacion }}</textarea>
+    </div>
+    <div class="form-actions">
+      <button type="button" class="cancel-button" (click)="close()">Cancelar</button>
+      <button type="button" class="save-button" (click)="save()">Guardar</button>
+    </div>
+  </form>
+</div>

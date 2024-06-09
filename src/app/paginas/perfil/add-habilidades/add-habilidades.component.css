@@ -1,0 +1,61 @@
+.add-habilidades-container {
+  display:block;
+  background-color: #ffffff; /* Fondo claro para integrarse con la página */
+  border: 1px solid #e0e0e0; /* Borde sutil */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 20px;
+  width: 100%;
+  max-width: 600px; /* Control sobre el ancho máximo */
+}
+
+h2 {
+  color: #4CAF50; /* Color del tema para el título */
+  margin-bottom: 10px;
+}
+
+p {
+  color: #666;
+  font-size: 14px; /* Ajuste del tamaño de fuente para la nota sobre obligatoriedad */
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.input-container label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333; /* Color oscuro para etiquetas */
+}
+
+
+.input-container input {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.save-button-container {
+  display: flex;
+  justify-content: flex-end; /* Alinea el botón a la derecha */
+}
+
+.save-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  width: 30%; /* Ancho reducido para el botón */
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.save-button:hover {
+  background-color: #369636; /* Color ligeramente más oscuro al hacer hover */
+}

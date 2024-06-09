@@ -1,0 +1,14 @@
+<div class="add-habilidades-container">
+  <h2>Añadir Hobbies</h2>
+  <p>*El asterisco indica que es obligatorio</p>
+
+  <form [formGroup]="hobbiesForm" (ngSubmit)="onSave()">
+    <div class="input-container">
+      <label for="habilidad">Nuevo Hobbie</label>
+      <input id="habilidad" type="text" formControlName="habilidad" placeholder="Hobbies (p.ej. Gestoin de proyectos)" />
+    </div>
+    <div class="save-button-container">
+      <button class="save-button" type="submit">Guardar</button>
+    </div>
+  </form>
+</div>
