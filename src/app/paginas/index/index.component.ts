@@ -7,7 +7,7 @@ import { AlertService } from '../../services/alert.service';
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
-  styleUrls: ['./index.component.css']
+  styleUrl: './index.component.css'
 })
 export class IndexComponent implements OnInit {
   currentView: string = 'link1';
@@ -19,17 +19,13 @@ export class IndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (typeof window !== 'undefined') {
-      const saveView = localStorage.getItem('IndexcurrentView');
-      if (saveView) {
-        this.currentView = saveView;
+      if (typeof window !== 'undefined'){
+        const saveView = localStorage.getItem('IndexcurrentView');
+        if(saveView){
+          this.currentView = saveView;
+        }
       }
-    }
-    /*this.notifications = [];*/
   }
-
-
-  //********Notificaciones******/
 
   showNotifications = false;
   notifications = [
@@ -43,18 +39,14 @@ export class IndexComponent implements OnInit {
 
   openNotification(notification: any) {
     console.log('Notificación abierta:', notification);
-    // Eliminar la notificación del arreglo
+    // Eliminar la notificación abierta o limpiar todas si se desea
     this.notifications = this.notifications.filter(n => n !== notification);
-    // Cambiar la vista actual a 'link2'
     this.setView('link2');
-    // Opcionalmente, cerrar el menú de notificaciones
-    this.showNotifications = false;
+    if (this.notifications.length === 0) {
+      this.showNotifications = false; // Cierra el menú si no quedan notificaciones
+    }
   }
 
-
-
-
-  //****************/
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -63,10 +55,10 @@ export class IndexComponent implements OnInit {
     );
 
 
-  setView(view: string) {
-    this.currentView = view;
-    localStorage.setItem('IndexcurrentView', view);
-  }
+    setView(view: string){
+      this.currentView = view;
+      localStorage.setItem('IndexcurrentView', view);
+    }
 
   goToProfile() {
     // Lógica para ir a la página de perfil

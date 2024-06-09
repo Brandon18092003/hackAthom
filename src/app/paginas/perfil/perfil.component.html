@@ -1,65 +1,54 @@
 <div class="body">
     <div class="profile-container">
-        <div class="profile-header">
-            <img src="assets/img_usuario.png" alt="Foto de perfil">
-            <div class="profile-info">
-                <h1>Christopher Walken Gutierrez Redolfo</h1>
-                <p>{{ descripcion }}</p>
-                <button class="edit-description" (click)="openEditDescriptionModal()"><i class="fas fa-edit"></i> Editar
-                    descripción</button>
-            </div>
+      <div class="profile-header">
+        <img src="assets/img_usuario.png" alt="Foto de perfil">
+        <div class="profile-info">
+          <h1>{{ nombres }} {{ ap_paterno }} {{ ap_materno }}</h1>
+          <p>{{ descripcion }}</p>
+          <button class="edit-description" (click)="openEditDescriptionModal()"><i class="fas fa-edit"></i> Editar descripción</button>
         </div>
-        <div class="profile-body">
-            <div class="skills">
-                <h2>
-                    <img src="assets/habilidades.png" alt="Habilidades" class="icon"> Habilidades
-                    <button class="add-button" (click)="openAddSkillModal()"><i class="fas fa-plus"></i>
-                        Agregar</button>
-                </h2>
-                <ul>
-                    <li *ngFor="let habilidad of habilidades; let i = index">
-                        {{ habilidad }}
-                        <button class="delete-button" (click)="eliminarHabilidad(i)"><i
-                                class="fas fa-trash-alt"></i></button>
-                    </li>
-                </ul>
-            </div>
-            <div class="hobbies">
-                <h2><img src="assets/skill-development_5776922.png" alt="Hobbies" class="icon"> Hobbies
-                    <button class="add-button" (click)="openAddHobbyModal()"><i class="fas fa-plus"></i>
-                        Agregar</button>
-                </h2>
-                <ul>
-                    <li *ngFor="let hobby of hobbies; let i = index">
-                        {{ hobby }}
-                        <button class="delete-button" (click)="eliminarHobby(i)"><i
-                                class="fas fa-trash-alt"></i></button>
-                    </li>
-                </ul>
-            </div>
-            <div class="additional-info">
-                <h2><img src="assets/adicional.png" alt="Información Adicional" class="icon"> Información Adicional
-                    <button class="edit-button" (click)="openEditAdditionalInfoModal()"><i class="fas fa-edit"></i>
-                        Editar</button>
-                </h2>
-                <p>{{ informacion }}</p>
-            </div>
-            <div class="classmates">
-                <h2><img src="assets/companero-de-equipo.png" alt="Compañeros" class="icon"> Mis Últimos Compañeros</h2>
-                <ul>
-                    <li *ngFor="let companero of companeros">{{ companero }}</li>
-                </ul>
-            </div>
-            <div class="courses">
-                <h2><img src="assets/aprender-en-linea.png" alt="Cursos" class="icon"> Cursos Matriculados</h2>
-                <ul>
-                    <li *ngFor="let curso of cursos">{{ curso.nombre }} - {{ curso.codigo }}</li>
-                </ul>
-            </div>
+      </div>
+      <div class="profile-body">
+        <div class="skills">
+          <h2>
+            <img src="assets/habilidades.png" alt="Habilidades" class="icon"> Habilidades
+            <button class="add-button" (click)="openAddSkillModal()"><i class="fas fa-plus"></i> Agregar</button>
+          </h2>
+          <ul>
+            <li *ngFor="let habilidad of habilidades; let i = index">
+              {{ habilidad.nombre }}
+              <button class="delete-button" (click)="eliminarHabilidad(i)"><i class="fas fa-trash-alt"></i></button>
+            </li>
+          </ul>
         </div>
-        <div class="rating">
-            <label for="rating-bar">Calificación:</label>
-            <progress id="rating-bar" value="70" max="100"></progress>
+        <div class="hobbies">
+          <h2><img src="assets/skill-development_5776922.png" alt="Hobbies" class="icon"> Hobbies
+            <button class="add-button" (click)="openAddHobbyModal()"><i class="fas fa-plus"></i> Agregar</button>
+          </h2>
+          <ul>
+            <li *ngFor="let hobby of hobbies; let i = index">
+              {{ hobby.nombre }}
+              <button class="delete-button" (click)="eliminarHobby(i)"><i class="fas fa-trash-alt"></i></button>
+            </li>
+          </ul>
         </div>
+        <div class="additional-info">
+          <h2><img src="assets/adicional.png" alt="Información Adicional" class="icon"> Información Adicional
+            <button class="edit-button" (click)="openEditAdditionalInfoModal()"><i class="fas fa-edit"></i> Editar</button>
+          </h2>
+          <p>{{ informacion }}</p>
+        </div>
+        <div class="courses">
+          <h2><img src="assets/aprender-en-linea.png" alt="Cursos" class="icon"> Cursos Matriculados</h2>
+          <ul>
+            <li *ngFor="let curso of cursos">{{ curso.nombre }} - {{ curso.codigo }}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rating">
+        <label for="rating-bar">Calificación:</label>
+        <progress id="rating-bar" value="70" max="100"></progress>
+      </div>
     </div>
-</div>
+  </div>
+  

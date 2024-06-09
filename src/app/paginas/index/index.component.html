@@ -73,14 +73,10 @@
         </div>
       </div>
     </mat-toolbar>
-    <div *ngIf="currentView === 'link1'">
-      <app-inicio></app-inicio>
-    </div>
-    <div *ngIf="currentView === 'link2'">
-      <app-grupos></app-grupos>
-    </div>
-    <div *ngIf="currentView === 'link3'">
-      <app-perfil></app-perfil>
+    <div [ngSwitch]="currentView">
+      <app-inicio *ngSwitchCase="'link1'"></app-inicio>
+      <app-grupos *ngSwitchCase="'link2'"></app-grupos>
+      <app-perfil *ngSwitchCase="'link3'"></app-perfil>
     </div>
 
   </mat-sidenav-content>

@@ -1,13 +1,14 @@
 export interface CredsDTO {
-    codUsuario: string;
-    password: string;
-  }
-
-export interface Curso{
-    id: number;
-    nombre: string;
-    codigo: string;
+  codUsuario: string;
+  password: string;
 }
+
+export interface Curso {
+  id: number;
+  nombre: string;
+  codigo: string;
+}
+
 export interface Grupo {
   id: number;
   nombre: string;
@@ -15,7 +16,6 @@ export interface Grupo {
   curso: any;
   alerta?: string;
 }
-
 
 export interface MensajeRequest {
   conversacionId: number;
@@ -90,7 +90,7 @@ export interface MensajeConversacionGrupal {
 
 export interface CrearGrupoDTO {
   codigoUsuario: string; // Código del líder
-  idCurso: number; 
+  idCurso: number;
   nombregrupo: string;
   codigosMiembros: string[];
 }
@@ -103,8 +103,38 @@ export interface PersonaDTO {
   rol: string;
 }
 
+export interface Habilidad {
+  id: number;
+  nombre: string;
+}
 
+export interface Hobby {
+  id: number;
+  nombre: string;
+}
 
+export interface CrearHabilidadDTO {
+  codigoPersona: string;
+  nom_habilidad: string;
+}
 
+export interface EliminarHabilidadDTO {
+  id_perfil_habilidad: number;
+}
 
+export interface CrearHobbyDTO {
+  codigoPersona: string;
+  nom_hobby: string;
+}
 
+export interface EliminarHobbyDTO {
+  id_perfil_hobby: number;
+}
+
+export interface InfoDTO {
+  nombres: string;
+  ap_paterno: string;
+  ap_materno: string;
+  info_adicional: string;
+  descripcion: string;
+}
