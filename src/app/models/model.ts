@@ -63,7 +63,7 @@ export interface CrearGrupoDTO {
 }
 
 export interface MiembroDTO {
-  CodMiembro: string;
+  codMiembro: string;
   idGrupo: number;
 }
 
@@ -103,6 +103,12 @@ export interface PersonaDTO {
   rol: string;
 }
 
+export interface UpdateMiembroDTO {
+  codigoUsuario: string;
+  idGrupo: number;
+  rolGrupo: string;
+}
+
 export interface Habilidad {
   id: number;
   nombre: string;
@@ -138,3 +144,15 @@ export interface InfoDTO {
   info_adicional: string;
   descripcion: string;
 }
+
+export interface MiembroGrupo {
+  id: number;
+  rol: string;
+  es_lider: boolean;
+  grupo: Grupo;
+  persona: Persona;
+}
+
+
+
+

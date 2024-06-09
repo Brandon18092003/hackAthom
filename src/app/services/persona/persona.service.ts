@@ -19,5 +19,9 @@ export class PersonaService {
     return this.http.get<PersonaDTO[]>(`${this.apiUrl}/lista/grupos/${idGrupo}`);
   }
 
+  getRolUsuarioEnGrupo(idGrupo: number, codigoUsuario: string): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/rol/${idGrupo}/${codigoUsuario}`);
+  }
+
 
 }

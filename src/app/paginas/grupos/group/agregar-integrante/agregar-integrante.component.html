@@ -5,7 +5,7 @@
         <div class="form-group">
             <select id="salon" [(ngModel)]="selectedSalon" (change)="onSalonChange()">
                 <option value="">Seleccionar por un curso - Sección</option>
-                <option *ngFor="let salon of salones" [value]="salon">{{ salon }}</option>
+                <option *ngFor="let salon of salones" [value]="salon.id">{{ salon.nombre }}</option>
             </select>
         </div>
         <div class="form-group">
@@ -20,7 +20,7 @@
                 <img src="assets/img_usuario.png" alt="">
             </div>
             <div class="card-content">
-                <span>{{ alumno.nombre }}</span>
+                <span >{{ alumno.nombres }}</span>
             </div>
             <div class="actions">
                 <button mat-icon-button (click)="selectAlumno(alumno)"><mat-icon>add_circle</mat-icon></button>
@@ -44,6 +44,6 @@
 
     <div class="dialog-actions">
         <button (click)="onNoClick()" class="cancelar">Cancelar</button>
-        <button (click)="onSave()" class="guardar">Guardar</button>
+        <button (click)="agregarMiembro()" class="guardar">Guardar</button>
     </div>
 </div>

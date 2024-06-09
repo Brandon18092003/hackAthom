@@ -8,11 +8,13 @@ import { AlertService } from '../../../services/alert.service';
 import { AgregarIntegranteComponent } from './agregar-integrante/agregar-integrante.component';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
-import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal, PersonaDTO } from '../../../models/model';
+import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal, PersonaDTO, MiembroDTO } from '../../../models/model';
 import { GroupService } from '../../../services/grupo/grupo-service.service';
 import { WebSocketService } from '../../../services/web-socket.service';
 import { ConversacionGrupalService } from '../../../services/conversacion-grupal.service';
 import { PersonaService } from '../../../services/persona/persona.service';
+import { MiembroService } from '../../../services/miembro/miembro.service';
+import { error } from 'console';
 
 
 interface Integrante {
@@ -27,6 +29,9 @@ interface Integrante {
 })
 export class GroupComponent implements OnInit {
   @ViewChild('chatContent') private chatContent: ElementRef | undefined;
+  
+  gruposeleccionado?:Grupo;
+
   grupos: Grupo[] = [];
   selectedGroup: Grupo | null = null;
   newMessage: string = '';
@@ -41,6 +46,8 @@ export class GroupComponent implements OnInit {
   dataSource = new MatTableDataSource(this.integrantes);
   isPanelOpen: boolean = false; // Estado del panel deslizante
 
+  miembroDTO?:MiembroDTO;
+
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,
@@ -48,7 +55,8 @@ export class GroupComponent implements OnInit {
     private conversacionGrupalService: ConversacionGrupalService,
     public authService: AuthService,  // Cambiar a public
     private webSocketService: WebSocketService,
-    private personaService: PersonaService
+    private personaService: PersonaService,
+    private miembroService: MiembroService
   ) { }
 
   ngOnInit(): void {
@@ -100,6 +108,7 @@ export class GroupComponent implements OnInit {
     this.cargarMensajesDeGrupo(grupo);
     this.obtenerPersonasPorGrupo(grupo.id);
     this.scrollToBottom();
+    this.gruposeleccionado=grupo;
   }
 
   sendMessage(): void {
@@ -126,15 +135,21 @@ export class GroupComponent implements OnInit {
     this.isPanelOpen = !this.isPanelOpen;
   }
 
-  openEditDialog(element: { nombres: string, rol: string }): void {
+  openEditDialog(element: PersonaDTO): void {
     const dialogRef = this.dialog.open(EditarGrupoComponent, {
       width: '400px',
-      data: { name: element.nombres, role: element.rol }
+      data: { 
+        nombre: element.nombres,
+        rol: element.rol,
+        codigo: element.codigo,
+        nombre_grupo: this.gruposeleccionado?.nombre,
+        grupo: this.gruposeleccionado?.id,
+       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        element.rol = result.role;
+        element.rol = result.rol;
       }
     });
   }
@@ -144,27 +159,31 @@ export class GroupComponent implements OnInit {
       width: '800px',
       height: '490px',
       data: {
-        integrantes: this.integrantes,
-        selectedGroup: this.selectedGroup
+        selectedGroup: this.gruposeleccionado?.id
       }
     });
   
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const nuevoIntegrante: PersonaDTO = {
-          nombres: result.nombres,
-          ap_paterno: result.ap_paterno,
-          ap_materno: result.ap_materno,
-          codigo: result.codigo,
-          rol: result.rol
-        };
-        this.integrantes.push(nuevoIntegrante);
-        this.dataSource.data = this.integrantes;
+    dialogRef.afterClosed().subscribe(nuevoMiembro => {
+      if (nuevoMiembro && this.gruposeleccionado) {
+
+        const miembroExistente = this.integrantes.find(miembro => miembro.codigo === nuevoMiembro.codMiembro);
+
+        if (miembroExistente) {
+          // El miembro ya existe
+          Swal.fire("El estudiante ya ha sido agregado al grupo")
+        } else {
+          // El miembro no existe, así que lo agregamos
+          if (nuevoMiembro.codMiembro) {
+            this.obtenerPersonasPorGrupo(this.gruposeleccionado.id);
+            this.integrantes.push(nuevoMiembro);
+            this.dataSource.data = this.integrantes;
+          }
+        }
       }
     });
   }
 
-  eliminarIntegrante(element: Integrante): void {
+  eliminarIntegrante(element: PersonaDTO): void {
     Swal.fire({
       title: '¿Estás seguro?',
       text: `¿Deseas eliminar a ${element.nombres} del grupo?`,
@@ -175,7 +194,15 @@ export class GroupComponent implements OnInit {
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      if (result.isConfirmed) {
+      const codigo = element.codigo;
+      console.log(codigo);
+      if (result.isConfirmed && codigo && this.gruposeleccionado) {
+        this.miembroDTO={
+          codMiembro: codigo,
+          idGrupo: this.gruposeleccionado.id,
+        }
+        console.log(this.miembroDTO);
+        this.miembroService.deleteMiembro(this.miembroDTO).subscribe(response=>{
         this.integrantes = this.integrantes.filter(integrante => integrante !== element);
         this.dataSource.data = this.integrantes;
         Swal.fire(
@@ -183,7 +210,13 @@ export class GroupComponent implements OnInit {
           `${element.nombres} ha sido eliminado del grupo.`,
           'success'
         );
-      }
+        },error=>{
+          Swal.fire("No se pudo eliminar el estudiante")
+        })
+        
+      }else(
+        Swal.fire("No se pudo eliminar el estudiante")
+      )
     });
   }
 
@@ -304,6 +337,7 @@ export class GroupComponent implements OnInit {
       title: 'Alerta anclada',
       text: `La alerta ${alerta.asunto} ha sido anclada.`
     });
+
   }
 
   desanclarAlerta(): void {

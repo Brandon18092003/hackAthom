@@ -16,7 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PerfilComponent } from './paginas/perfil/perfil.component';
 import { GroupComponent } from './paginas/grupos/group/group.component';
 import { CrearGroupComponent } from './paginas/grupos/crear-group/crear-group.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { EditarGrupoComponent } from './paginas/grupos/group/editar-grupo/editar-grupo.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -38,21 +38,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { withFetch } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'; // Importar CommonModule
 import { EditDescripcionComponent } from './paginas/perfil/edit-descripcion/edit-descripcion.component';
 import { AddHabilidadesComponent } from './paginas/perfil/add-habilidades/add-habilidades.component';
 import { AddHobbiesComponent } from './paginas/perfil/add-hobbies/add-hobbies.component';
 import { EditInfComponent } from './paginas/perfil/edit-inf/edit-inf.component'; // Importar CommonModule
-import { ReactiveFormsModule } from '@angular/forms';
-
-
-
-
-
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -72,7 +62,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     EditDescripcionComponent,
     AddHabilidadesComponent,
     AddHobbiesComponent,
-    EditInfComponent,
+    EditInfComponent
   ],
   imports: [
     BrowserModule,
@@ -96,7 +86,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDatepickerModule,
     MatNativeDateModule,
     HttpClientModule,
-    NgbModule,
+    HttpClientModule,
     CommonModule,
     ReactiveFormsModule
   ],

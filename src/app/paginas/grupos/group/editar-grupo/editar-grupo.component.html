@@ -3,15 +3,15 @@
     <div class="dialog-content">
         <div class="form-group">
             <label for="groupName">Nombre del Grupo</label>
-            <input type="text" id="groupName" [value]="data.name" readonly>
+            <input type="text" id="groupName" [(ngModel)]="nombre_grupo" readonly>
         </div>
         <div class="form-group">
             <label for="role">Rol</label>
-            <input type="text" id="role" [(ngModel)]="data.role">
+            <input type="text" id="role" [(ngModel)]="miembroDTO.rolGrupo">
         </div>
     </div>
     <div class="dialog-actions">
         <button class="btn btn-cancel" (click)="onNoClick()">Cancelar</button>
-        <button class="btn btn-save">Guardar</button>
+        <button class="btn btn-save" (click)="guardarRol()">Guardar</button>
     </div>
 </div>
