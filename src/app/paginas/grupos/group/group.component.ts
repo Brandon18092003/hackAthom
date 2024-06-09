@@ -7,11 +7,9 @@ import { EditAlertComponent, EditAlertDialogData } from './edit-alert/edit-alert
 import { AlertService } from '../../../services/alert.service';
 import { AgregarIntegranteComponent } from './agregar-integrante/agregar-integrante.component';
 import Swal from 'sweetalert2';
-
-interface Grupo {
-  name: string;
-  alerta?: string;
-}
+import { AuthService } from '../../../services/auth.service';
+import { Grupo } from '../../../models/model';
+import { GroupService } from '../../../services/grupo/grupo-service.service';
 
 interface Mensaje {
   contenido: string;
@@ -32,13 +30,12 @@ interface Integrante {
 export class GroupComponent implements OnInit {
 
   @ViewChild('chatContent') private chatContent: ElementRef | undefined;
-  grupos: Grupo[] = [
-    { name: 'Grupo Taller I' },
-    { name: 'Grupo Taller II' },
-    { name: 'Grupo Taller III' },
-    { name: 'Grupo Taller IV' },
-    { name: 'Grupo Taller V' }
-  ];
+  grupos: Grupo[] = [];
+  selectedGroup: Grupo | null = null;
+  newMessage: string = '';
+  mensajes: Mensaje[] = [];
+  alertMessage: AlertDialogData | null = null;
+  alertas: AlertDialogData[] = [];  // Array para almacenar las alertas
 
   integrantes: Integrante[] = [
     { nombres: 'Jorge Armando Bonifaz Campos', rol: 'Lider' },
@@ -49,22 +46,33 @@ export class GroupComponent implements OnInit {
   displayedColumns: string[] = ['nombres', 'rol', 'acciones'];
   dataSource = new MatTableDataSource(this.integrantes);
 
-  selectedGroup: Grupo | null = null;
-  newMessage: string = '';
-  mensajes: Mensaje[] = [];
-  alertMessage: AlertDialogData | null = null;
-  alertas: AlertDialogData[] = [];  // Array para almacenar las alertas
-
   isPanelOpen: boolean = false; // Estado del panel deslizante
 
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,
+    private groupService: GroupService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.selectedGroup = this.grupos[0]; // Selecciona el primer grupo por defecto
-    this.cargarMensajesDeGrupo(this.selectedGroup);
+    const codigoUsuario = this.authService.getCodigo(); // Obtener el código de usuario del localStorage
+    if (codigoUsuario) {
+      this.groupService.getGruposByCodPersona(codigoUsuario).subscribe(grupos => {
+        this.grupos = grupos;
+        if (this.grupos.length > 0) {
+          this.selectGroup(this.grupos[0]); // Selecciona el primer grupo por defecto
+        }
+      }, error => {
+        if (error.status === 401) {
+          console.error('Unauthorized access - 401');
+          // Manejar el error 401 aquí (redireccionar al login, mostrar mensaje, etc.)
+        }
+      });
+    } else {
+      console.error('No user code found in localStorage');
+      // Manejar el caso donde no se encuentra el código de usuario en localStorage
+    }
   }
 
   cargarMensajesDeGrupo(grupo: Grupo): void {
@@ -86,7 +94,6 @@ export class GroupComponent implements OnInit {
 
   sendMessage(): void {
     if (this.newMessage.trim()) {
-      // Lógica para enviar el mensaje
       const nuevoMensaje: Mensaje = {
         contenido: this.newMessage,
         autor: 'Yo', // Cambia esto por el nombre del usuario actual
@@ -118,7 +125,6 @@ export class GroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Aquí puedes actualizar la información del integrante
         element.rol = result.role;
       }
     });
@@ -132,12 +138,12 @@ export class GroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Agregar el nuevo integrante a la lista
         this.integrantes.push({ nombres: result.nombre, rol: result.rol });
         this.dataSource.data = this.integrantes;
       }
     });
   }
+
   eliminarIntegrante(element: Integrante): void {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -165,7 +171,7 @@ export class GroupComponent implements OnInit {
     if (grupo) {
       Swal.fire({
         title: '¿Estás seguro?',
-        text: `¿Deseas eliminar ${grupo.name}?`,
+        text: `¿Deseas eliminar ${grupo.nombre}?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -178,7 +184,7 @@ export class GroupComponent implements OnInit {
           this.selectedGroup = null; // Deja el selectedGroup en null
           Swal.fire(
             'Eliminado!',
-            `${grupo.name} ha sido eliminado.`,
+            `${grupo.nombre} ha sido eliminado.`,
             'success'
           );
           this.togglePanel();  // Cierra el panel deslizante después de eliminar el grupo
@@ -191,7 +197,7 @@ export class GroupComponent implements OnInit {
     if (grupo) {
       Swal.fire({
         title: '¿Estás seguro?',
-        text: `¿Deseas salir del grupo ${grupo.name}?`,
+        text: `¿Deseas salir del grupo ${grupo.nombre}?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -204,7 +210,7 @@ export class GroupComponent implements OnInit {
           this.selectedGroup = null; // Deja el selectedGroup en null
           Swal.fire(
             'Salido!',
-            `Has salido del grupo ${grupo.name}.`,
+            `Has salido del grupo ${grupo.nombre}.`,
             'success'
           );
           this.togglePanel();  // Cierra el panel deslizante después de salir del grupo
@@ -221,7 +227,6 @@ export class GroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: AlertDialogData | undefined) => {
       if (result) {
-        // Guardar la alerta en el array de alertas
         this.alertas.push(result);
       }
     });
@@ -235,7 +240,6 @@ export class GroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: EditAlertDialogData | undefined) => {
       if (result) {
-        // Actualiza la alerta en el array de alertas
         const index = this.alertas.findIndex(a => a === alerta);
         if (index !== -1) {
           this.alertas[index] = result;

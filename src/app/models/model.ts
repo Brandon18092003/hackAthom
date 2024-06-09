@@ -8,3 +8,11 @@ export interface Curso{
     nombre: string;
     codigo: string;
 }
+
+export interface Grupo {
+  id: number;
+  nombre: string;
+  fecha_creacion: Date;
+  curso: any;
+  alerta?: string;
+}

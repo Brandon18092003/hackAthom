@@ -8,7 +8,7 @@
                 (click)="selectGroup(grupo)">
                 <img src="assets/img_grupo.png" alt="Grupo Icono" class="group-icon">
                 <div class="group-details">
-                    <p class="group-name">{{ grupo.name }}</p>
+                    <p class="group-name">{{ grupo.nombre }}</p>
                     <p *ngIf="grupo.alerta" class="group-alert">{{ grupo.alerta }}</p>
                 </div>
             </div>
@@ -16,7 +16,7 @@
         <div class="chat">
             <div class="chat-header">
                 <img *ngIf="selectedGroup" src="assets/img_grupo.png" alt="Imagen de Grupo" class="group-image">
-                <h2>{{ selectedGroup?.name || '' }}</h2>
+                <h2>{{ selectedGroup?.nombre || '' }}</h2>
                 <button class="ellipsis-icon" (click)="togglePanel()">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
