@@ -60,7 +60,7 @@ export class GroupComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.selectedGroup = this.grupos[0]; // Selecciona el primer grupo por defecto
@@ -129,7 +129,7 @@ export class GroupComponent implements OnInit {
       width: '800px',
       height: '490px'
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // Agregar el nuevo integrante a la lista
@@ -161,27 +161,56 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  eliminarGrupo(grupo: Grupo): void {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: `¿Deseas eliminar ${grupo.name}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.grupos = this.grupos.filter(g => g !== grupo);
-        this.selectedGroup = this.grupos.length ? this.grupos[0] : null;
-        Swal.fire(
-          'Eliminado!',
-          `${grupo.name} ha sido eliminado.`,
-          'success'
-        );
-      }
-    });
+  eliminarGrupo(grupo: Grupo | null): void {
+    if (grupo) {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: `¿Deseas eliminar ${grupo.name}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.grupos = this.grupos.filter(g => g !== grupo);
+          this.selectedGroup = null; // Deja el selectedGroup en null
+          Swal.fire(
+            'Eliminado!',
+            `${grupo.name} ha sido eliminado.`,
+            'success'
+          );
+          this.togglePanel();  // Cierra el panel deslizante después de eliminar el grupo
+        }
+      });
+    }
+  }
+
+  salirDelGrupo(grupo: Grupo | null): void {
+    if (grupo) {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: `¿Deseas salir del grupo ${grupo.name}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, salir',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.grupos = this.grupos.filter(g => g !== grupo);
+          this.selectedGroup = null; // Deja el selectedGroup en null
+          Swal.fire(
+            'Salido!',
+            `Has salido del grupo ${grupo.name}.`,
+            'success'
+          );
+          this.togglePanel();  // Cierra el panel deslizante después de salir del grupo
+        }
+      });
+    }
   }
 
   openAlertDialog(): void {

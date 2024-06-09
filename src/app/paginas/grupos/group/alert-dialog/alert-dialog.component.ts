@@ -22,7 +22,7 @@ export class AlertDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: AlertDialogData
   ) {
     const today = new Date();
-    this.minDate = today.toISOString().split('T')[0];
+    this.minDate = today.toISOString().split('T')[0]; // Esto asegura que minDate esté en el formato 'YYYY-MM-DD'
   }
 
   ngOnInit(): void {
@@ -35,7 +35,7 @@ export class AlertDialogComponent implements OnInit {
     
     // Obtener la fecha y hora actuales
     const now = new Date();
-
+  
     // Verificación de que todos los campos están llenos
     if (!this.data.asunto || !this.data.fecha || !this.data.hora) {
       Swal.fire({
@@ -45,9 +45,21 @@ export class AlertDialogComponent implements OnInit {
       });
       return;
     }
-
-    // Verificación de que la fecha y hora sean futuras
-    if (selectedDate <= now) {
+  
+    // Convertir this.data.fecha a una cadena en formato 'YYYY-MM-DD'
+    const selectedDateString = new Date(this.data.fecha).toISOString().split('T')[0];
+  
+    // Verificación de que la fecha seleccionada es hoy o en el futuro
+    if (selectedDateString === this.minDate && selectedDate < now) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'La hora seleccionada debe ser futura si la fecha es hoy.'
+      });
+      return;
+    }
+  
+    if (selectedDate < now) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -55,10 +67,10 @@ export class AlertDialogComponent implements OnInit {
       });
       return;
     }
-
+  
     this.dialogRef.close(this.data);
   }
-
+  
 
   onCancelClick(): void {
     this.dialogRef.close();

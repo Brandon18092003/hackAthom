@@ -8,12 +8,17 @@
     width: 100%;
 }
 
-.list {
+.list{
     width: 25%;
     background-color: white;
     padding: 10px;
     overflow: auto;
     max-height: 100%;
+}
+
+.list .header-list{
+    border-bottom: 1px solid #d0eaff;
+    margin-bottom: 8px;
 }
 
 .group-item {
@@ -30,6 +35,10 @@
 
 .group-item:hover {
     background-color: #b0d4ff;
+}
+
+.group-item.selected {
+    background-color: #a0c4ff;
 }
 
 .group-icon {
@@ -56,19 +65,34 @@
     font-size: 0.9em;
 }
 
+.eliminar-grupo, .salir-grupo {
+    background-color: transparent;
+    color: red;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.eliminar-grupo:hover, .salir-grupo:hover {
+    background-color: rgb(255, 215, 215);
+}
+
 .eliminar-icon {
     width: 40px;
     height: 40px;
-    background-color: red;
-    color: white !important;
+    color: red !important;
+    background-color: transparent;
     margin-left: auto;
     cursor: pointer;
-    border: none;
+    border: 2px solid red;
     border-radius: 50%;
 }
 
 .eliminar-icon:hover {
-    background-color: #c82333;
+    background-color: #c85863;
 }
 
 .chat {
@@ -97,11 +121,29 @@
 }
 
 .ellipsis-icon {
+    width: 50px;
+    height: 50px;
     font-size: 20px;
     margin-left: auto;
     cursor: pointer;
+    background-color: transparent;
+    border-radius: 50%;
+    border: none;
+    color: #0056b3;
 }
 
+.ellipsis-icon:hover{
+    background-color: #e3e3e3;
+}
+
+
+
+.header-Opciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 .chat-content {
     flex: 1;
     background-color: #F5F5F5 !important;
@@ -145,16 +187,19 @@
     padding: 10px;
     border-radius: 5px;
     max-width: 60%;
+    word-wrap: break-word;
 }
 
 .mensaje-autor {
     background-color: #B7E4FF;
     align-self: flex-end;
+    text-align: right;
 }
 
 .mensaje-otro {
     background-color: white;
     align-self: flex-start;
+    text-align: left;
 }
 
 .chat-input {
@@ -219,9 +264,9 @@
 }
 
 .close-panel {
-    align-self: flex-end;
-    background-color: #007bff;
-    color: white;
+    align-self: flex-start;
+    background-color: transparent;
+    color: #0661FC !important;
     border: none;
     padding: 10px;
     cursor: pointer;
@@ -229,7 +274,12 @@
 }
 
 .close-panel:hover {
-    background-color: #0056b3;
+    background-color: #e3eefd;
+}
+
+.action-buttons{
+    display: flex;
+    gap: 10px;
 }
 
 .integrantes, .notificaciones {
@@ -252,16 +302,17 @@
 }
 
 .añadir, .alert {
-    background-color: #2FBD46;
-    color: white;
+    background-color: transparent;
+    color: #2FBD46;
     padding: 5px 10px;
-    border: none;
+    border: #2FBD46 1px solid;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .añadir:hover, .alert:hover {
-    background-color: green;
+    background-color: #2FBD46;
+    color: white;
 }
 
 .table-container {
@@ -291,24 +342,28 @@ td.mat-cell, th.mat-header-cell {
     border: none;
     border-radius: 5px;
     margin: 1px;
-    color: white !important;
 }
 
 .eliminar-button {
-    background-color: red;
+    background-color: transparent;
+    color: red !important;
+    border-color: red;
 }
 
 .eliminar-button:hover {
-    background-color: #c82333;
-    border-color: darkred;
+    background-color: red;
+    color: white !important;
 }
 
 .editar-button {
-    background-color: #007BFF;
+    background-color: transparent;
+    color: #007BFF !important;
+    border-color: #007BFF !important;
 }
 
 .editar-button:hover {
-    background-color: #0056B3;
+    background-color: #007BFF;
+    color: white !important;
 }
 
 .alert-cards {

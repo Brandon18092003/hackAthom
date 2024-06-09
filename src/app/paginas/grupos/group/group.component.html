@@ -1,24 +1,25 @@
 <div class="body">
     <div class="section">
         <div class="list">
-            <div *ngFor="let grupo of grupos" class="group-item" (click)="selectGroup(grupo)">
+            <div class="header-list">
+                <h1>Chat</h1>
+            </div>
+            <div *ngFor="let grupo of grupos" class="group-item" [ngClass]="{'selected': grupo === selectedGroup}"
+                (click)="selectGroup(grupo)">
                 <img src="assets/img_grupo.png" alt="Grupo Icono" class="group-icon">
                 <div class="group-details">
                     <p class="group-name">{{ grupo.name }}</p>
                     <p *ngIf="grupo.alerta" class="group-alert">{{ grupo.alerta }}</p>
                 </div>
-                <button class="eliminar-icon" matTooltip="Eliminar" (click)="eliminarGrupo(grupo)">
-                    <i class="fas fa-trash"></i>
-                </button>
             </div>
         </div>
         <div class="chat">
             <div class="chat-header">
                 <img *ngIf="selectedGroup" src="assets/img_grupo.png" alt="Imagen de Grupo" class="group-image">
-                <h2>{{ selectedGroup?.name }}</h2>
-                <div class="ellipsis-icon" (click)="togglePanel()">
+                <h2>{{ selectedGroup?.name || '' }}</h2>
+                <button class="ellipsis-icon" (click)="togglePanel()">
                     <i class="fas fa-ellipsis-v"></i>
-                </div>
+                </button>
             </div>
             <div class="chat-content" #chatContent>
                 <div *ngIf="alertMessage" class="alert-message">
@@ -32,12 +33,17 @@
                     </button>
                 </div>
                 <!-- Aquí se mostrarán los mensajes del grupo seleccionado -->
+
                 <div *ngFor="let mensaje of mensajes"
                     [ngClass]="{'mensaje-autor': mensaje.autor === 'Yo', 'mensaje-otro': mensaje.autor !== 'Yo'}"
                     class="mensaje">
                     <p><strong>{{ mensaje.autor }}:</strong> {{ mensaje.contenido }}</p>
                     <p class="fecha">{{ mensaje.fecha | date:'shortTime' }}</p>
                 </div>
+
+                <ng-template #noGroupSelected>
+                    <p>Selecciona un grupo para ver los mensajes</p>
+                </ng-template>
             </div>
             <div class="chat-input">
                 <input type="text" placeholder="Escribir mensaje" [(ngModel)]="newMessage">
@@ -47,15 +53,24 @@
             <div class="slide-panel" [ngClass]="{'open': isPanelOpen}">
 
                 <div class="header-Opciones">
-
+                    <button class="close-panel" (click)="togglePanel()">
+                        <i class="fas fa-arrow-left"></i> Cerrar
+                    </button>
+                    <div class="action-buttons">
+                        <button class="eliminar-grupo" (click)="eliminarGrupo(selectedGroup)">
+                            <i class="fas fa-trash"></i> Eliminar Grupo
+                        </button>
+                        <button class="salir-grupo" (click)="salirDelGrupo(selectedGroup)">
+                            <i class="fas fa-sign-out-alt"></i> Salir del Grupo
+                        </button>
+                    </div>
                 </div>
-                <button class="close-panel" (click)="togglePanel()">Cerrar</button>
                 <!-- Contenido del panel deslizante -->
                 <div class="integrantes">
                     <div class="headerInt">
                         <h2>Integrantes</h2>
                         <button matTooltip="Agregar" class="añadir" (click)="openAddDialog()">
-                            <i class="fas fa-add"></i>
+                            <i class="fas fa-add"></i> Añadir
                         </button>
                     </div>
 
@@ -93,7 +108,9 @@
                 <div class="notificaciones">
                     <div class="headerNot">
                         <h2>Notificaciones</h2>
-                        <button class="alert" (click)="openAlertDialog()">Crear Alerta</button>
+                        <button class="alert" (click)="openAlertDialog()">
+                            <i class="fas fa-info-circle"></i> Crear
+                        </button>
                     </div>
                     <div class="alert-cards">
                         <div *ngFor="let alerta of alertas" class="alert-card">
