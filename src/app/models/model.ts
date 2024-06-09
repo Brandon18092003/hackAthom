@@ -94,10 +94,3 @@ export interface CrearGrupoDTO {
   nombregrupo: string;
   codigosMiembros: string[];
 }
-
-
-
-
-
-
-

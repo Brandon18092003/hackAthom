@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Client } from '@stomp/stompjs';
+import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { MensajeConversacionGrupal, MensajeRequest } from '../models/model';
 
 @Injectable({
@@ -10,6 +10,8 @@ import { MensajeConversacionGrupal, MensajeRequest } from '../models/model';
 export class WebSocketService {
   private client: Client;
   private messages: Subject<MensajeConversacionGrupal> = new Subject<MensajeConversacionGrupal>();
+  private currentSubscription: any;
+  private connectionPromise: Promise<void>;
 
   constructor() {
     this.client = new Client({
@@ -23,33 +25,57 @@ export class WebSocketService {
       heartbeatOutgoing: 4000,
     });
 
-    this.client.onConnect = (frame) => {
-      console.log('Connected: ' + frame);
-      this.client.subscribe('/topic/mensajes', e => {
-        this.messages.next(JSON.parse(e.body));
-      });
-    };
+    this.connectionPromise = new Promise<void>((resolve, reject) => {
+      this.client.onConnect = (frame) => {
+        console.log('Connected: ' + frame);
+        resolve();
+      };
 
-    this.client.onDisconnect = (frame) => {
-      console.log('Disconnected: ' + frame);
-    };
+      this.client.onDisconnect = (frame) => {
+        console.log('Disconnected: ' + frame);
+        reject('Disconnected');
+      };
 
-    this.client.onStompError = (frame) => {
-      console.error('Broker reported error: ' + frame.headers['message']);
-      console.error('Additional details: ' + frame.body);
-    };
+      this.client.onStompError = (frame) => {
+        console.error('Broker reported error: ' + frame.headers['message']);
+        console.error('Additional details: ' + frame.body);
+        reject(frame.headers['message']);
+      };
 
-    this.client.activate();
-  }
-
-  sendMessage(mensajeRequest: MensajeRequest) {
-    this.client.publish({
-      destination: '/app/enviarMensaje',
-      body: JSON.stringify(mensajeRequest),
+      this.client.activate();
     });
   }
 
-  getMessages() {
+  subscribeToGroupMessages(conversacionId: number) {
+    this.connectionPromise.then(() => {
+      if (this.currentSubscription) {
+        this.currentSubscription.unsubscribe();
+        console.log(`Unsubscribed from topic: /topic/mensajes/${conversacionId}`);
+      }
+
+      this.currentSubscription = this.client.subscribe(`/topic/mensajes/${conversacionId}`, (message: Message) => {
+        this.messages.next(JSON.parse(message.body));
+      });
+
+      console.log(`Subscribed to topic: /topic/mensajes/${conversacionId}`);
+    }).catch(error => {
+      console.error('Failed to subscribe:', error);
+    });
+  }
+
+  sendMessage(mensajeRequest: MensajeRequest) {
+    this.connectionPromise.then(() => {
+      this.client.publish({
+        destination: '/app/enviarMensaje',
+        body: JSON.stringify(mensajeRequest),
+      });
+      console.log(`Message sent to /app/enviarMensaje for conversacionId: ${mensajeRequest.conversacionId}`);
+    }).catch(error => {
+      console.error('Failed to send message:', error);
+    });
+  }
+
+  getMessages(): Observable<MensajeConversacionGrupal> {
     return this.messages.asObservable();
   }
 }

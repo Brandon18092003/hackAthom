@@ -52,22 +52,20 @@ export class GroupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const codigoUsuario = this.authService.getCodigo(); // Obtener el código de usuario del localStorage
+    const codigoUsuario = this.authService.getCodigo();
     if (codigoUsuario) {
       this.groupService.getGruposByCodPersona(codigoUsuario).subscribe(grupos => {
         this.grupos = grupos;
         if (this.grupos.length > 0) {
-          this.selectGroup(this.grupos[0]); // Selecciona el primer grupo por defecto
+          this.selectGroup(this.grupos[0]);
         }
       }, error => {
         if (error.status === 401) {
           console.error('Unauthorized access - 401');
-          // Manejar el error 401 aquí (redireccionar al login, mostrar mensaje, etc.)
         }
       });
     } else {
       console.error('No user code found in localStorage');
-      // Manejar el caso donde no se encuentra el código de usuario en localStorage
     }
 
     this.webSocketService.getMessages().subscribe((mensaje: MensajeConversacionGrupal) => {
@@ -77,9 +75,12 @@ export class GroupComponent implements OnInit {
   }
 
   cargarMensajesDeGrupo(grupo: Grupo): void {
+    console.log(`Selected group id: ${grupo.id}`);
     this.conversacionGrupalService.obtenerConversacionPorGrupo(grupo.id).subscribe(conversacion => {
       if (conversacion) {
+        console.log(`Conversation id: ${conversacion.id}`);
         this.selectedGroup = grupo;
+        this.webSocketService.subscribeToGroupMessages(conversacion.id);
         this.conversacionGrupalService.obtenerMensajes(conversacion.id).subscribe(mensajes => {
           this.mensajes = mensajes;
           this.scrollToBottom();
@@ -92,14 +93,13 @@ export class GroupComponent implements OnInit {
 
   selectGroup(grupo: Grupo): void {
     this.cargarMensajesDeGrupo(grupo);
-    this.scrollToBottom();
   }
 
   sendMessage(): void {
     if (this.newMessage.trim() && this.selectedGroup) {
       const mensajeRequest: MensajeRequest = {
         conversacionId: this.selectedGroup.id,
-        codigoPersona: this.authService.getCodigo()!, // Obtén el código del usuario actual
+        codigoPersona: this.authService.getCodigo()!,
         mensaje: this.newMessage
       };
       this.webSocketService.sendMessage(mensajeRequest);
