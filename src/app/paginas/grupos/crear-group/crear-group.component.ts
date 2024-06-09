@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { VerPerfilComponent } from './ver-perfil/ver-perfil.component';
+import { Curso } from '../../../models/model';
+import { CursoService } from '../../../services/curso/curso.service';
+import { AuthService } from '../../../services/auth.service';
 
 interface CardItem {
   name: string;
@@ -21,11 +24,15 @@ interface GroupMember {
   templateUrl: './crear-group.component.html',
   styleUrls: ['./crear-group.component.css']
 })
-export class CrearGroupComponent {
+export class CrearGroupComponent implements OnInit{
   searchText: string = '';
   selectedCourse: string = '';
   groupName: string = ''; // Añadir propiedad para el nombre del grupo
-  cursos: string[] = ['Curso 1 - Sección A', 'Curso 2 - Sección B', 'Curso 3 - Sección C'];
+
+  cursos?: Curso[];//listar cursos matriculados
+
+
+
   items: CardItem[] = [
     { name: 'Cristopher Walken Gutiérrez Redolfo', course: 'Curso 1 - Sección A', code: 'U20217372' },
     { name: 'ALUMNOS 2', course: 'Curso 1 - Sección A', code: 'U23451281' },
@@ -43,7 +50,13 @@ export class CrearGroupComponent {
   displayedColumns: string[] = ['integrantes', 'codigo', 'accion'];
   dataSource = new MatTableDataSource<GroupMember>([]);
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog,private authService:AuthService, private cursoService:CursoService) {}
+
+  ngOnInit(): void {
+    this.listarCursos();
+  }
+
+  
 
   onCourseSelect(event: MatSelectChange) {
     const newCourse = event.value;
@@ -104,5 +117,21 @@ export class CrearGroupComponent {
     this.dialog.open(VerPerfilComponent, {
       data: { name: item.name }
     });
+  }
+
+  //Datos
+  listarCursos(){
+    const codigo= this.authService.getCodigo();
+    if(codigo){
+      this.cursoService.getCursosByCod(codigo).subscribe(response=>{
+        this.cursos = response;
+      },error=>{
+        Swal.fire("No se pudo encontrar los cursos matriculados")
+      })
+    }else{
+      Swal.fire("No se encontro al usuario")
+    }
+
+
   }
 }

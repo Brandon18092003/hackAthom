@@ -14,7 +14,7 @@
                             <mat-label>Seleccionar curso - sección</mat-label>
                             <mat-select (selectionChange)="onCourseSelect($event)">
                                 <mat-option value="">Seleccionar por un curso - Sección</mat-option>
-                                <mat-option *ngFor="let curso of cursos" [value]="curso">{{curso}}</mat-option>
+                                <mat-option *ngFor="let curso of cursos" [value]="curso">{{curso.nombre}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>

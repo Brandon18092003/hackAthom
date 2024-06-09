@@ -1,20 +1,30 @@
 // login.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CredsDTO } from '../../models/model';
+import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+
+  creds: CredsDTO ={
+    codUsuario:'',
+    password:''
+  };
+  errorMessage: string='';
+
   showPassword: boolean = false;
   usernameTouched: boolean = false;
   passwordTouched: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService:AuthService) {}
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
@@ -33,13 +43,21 @@ export class LoginComponent {
     this.passwordTouched = true;
   }
 
-  onSubmit(): void {
-    if (this.username && this.password) {
-      // Simulate login process
-      console.log('Username:', this.username);
-      console.log('Password:', this.password);
-      // Navigate to the dashboard component
-      this.router.navigate(['/index']);
+  login(form: NgForm): void {
+
+    if(this.creds){
+      console.log(this.creds);
+      this.authService.login(this.creds).subscribe({
+        next:(rol) =>{
+          console.log("Logueado con rol "+rol);
+          //Redirige a Index
+          this.router.navigate(['/index']);
+        },
+        error:(err) =>{
+          this.errorMessage = err.message;
+          Swal.fire("Credenciales incorrectas")
+        }
+      })
     }
   }
 }
