@@ -1,14 +1,65 @@
 <div class="body">
     <div class="container">
+
+        <!-- Agregar Miembros al Grupo Section -->
+        <div class="nuevo-grupo mat-elevation-z4">
+            <div class="title">
+                <h2>Agregar Miembros al Grupo</h2>
+            </div>
+            <div class="opciones">
+                <div class="opcion-container">
+                    <div class="opcion">
+                        <p class="step-number">Paso 1: Seleccionar curso - sección</p>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Seleccionar curso - sección</mat-label>
+                            <mat-select (selectionChange)="onCourseSelect($event)">
+                                <mat-option value="">Seleccionar por un curso - Sección</mat-option>
+                                <mat-option *ngFor="let curso of cursos" [value]="curso">{{curso}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="opcion">
+                        <p class="step-number">Paso 2: Buscar por nombre</p>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Buscar por nombre</mat-label>
+                            <input matInput [(ngModel)]="searchText" (input)="filterItems()" placeholder="Buscar por nombre">
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <p class="step-number">Paso 3: Agregar integrante</p>
+            <div class="list" *ngIf="selectedCourse">
+                <div class="card mat-elevation-z8" *ngFor="let item of filteredItems">
+                    <div class="card-icon">
+                        <img src="assets/img_usuario.png" alt="Usuario">
+                    </div>
+                    <div class="card-content">
+                        <span>{{ item.name }}</span>
+                    </div>
+                    <div class="actions">
+                        <button mat-icon-button color="primary" (click)="add(item)"><mat-icon>add_circle</mat-icon></button>
+                        <button mat-icon-button (click)="openProfile(item)"><mat-icon>visibility</mat-icon></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Crear Grupo Section -->
-        <div class="crear-grupo">
+        <div class="crear-grupo mat-elevation-z4">
             <div class="title">
                 <h2>Crear Grupo</h2>
             </div>
             <div class="crear-grupo-form">
-                <input type="text" placeholder="INGRESA NOMBRE DEL GRUPO">
+                <p class="step-number">Paso 4: Ingresa el nombre del grupo</p>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Nombre del grupo</mat-label>
+                    <input matInput [(ngModel)]="groupName" placeholder="Nombre del grupo">
+                </mat-form-field>
 
-                <table mat-table [dataSource]="dataSource">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                     <!-- Integrantes Column -->
                     <ng-container matColumnDef="integrantes">
                         <th mat-header-cell *matHeaderCellDef> Integrantes </th>
@@ -35,40 +86,10 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
 
-                <button class="create-btn">Crear</button>
-            </div>
-        </div>
-        <!-- Nuevo Grupo Section -->
-        <div class="nuevo-grupo">
-            <div class="title">
-                <h2>Nuevo Grupo</h2>
-            </div>
-            <div class="opciones">
-                <div class="opcion">
-                    <select (change)="onCourseSelect($event)">
-                        <option value="">Seleccionar por un curso - Sección</option>
-                        <option *ngFor="let curso of cursos" [value]="curso">{{curso}}</option>
-                    </select>
-                </div>
-                <div class="opcion">
-                    <input type="text" placeholder="Busca por nombre" [(ngModel)]="searchText" (input)="filterItems()">
-                    <button>
-                        <i class="fas fa-search"></i> <!-- Ícono de búsqueda -->
-                    </button>
-                </div>
-            </div>
-            <div class="list" *ngIf="selectedCourse">
-                <div class="card" *ngFor="let item of filteredItems">
-                    <div class="card-icon">
-                        <img src="assets/img_usuario.png" alt="">
-                    </div>
-                    <div class="card-content">
-                        <span>{{ item.name }}</span>
-                    </div>
-                    <div class="actions">
-                        <button mat-icon-button (click)="add(item)"><mat-icon>add_circle</mat-icon></button>
-                        <button mat-icon-button (click)="openProfile(item)"><mat-icon>visibility</mat-icon></button>
-                    </div>
+                <div class="create-btn-container">
+                    <p class="step-number">Paso 5: Crear grupo</p>
+
+                    <button mat-raised-button color="primary" class="create-btn full-width" [disabled]="!groupName">Crear</button>
                 </div>
             </div>
         </div>

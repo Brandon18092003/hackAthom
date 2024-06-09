@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { VerPerfilComponent } from './ver-perfil/ver-perfil.component';
@@ -7,6 +8,7 @@ import { VerPerfilComponent } from './ver-perfil/ver-perfil.component';
 interface CardItem {
   name: string;
   course: string;
+  code: string; // Añadir el código del estudiante
 }
 
 interface GroupMember {
@@ -22,29 +24,29 @@ interface GroupMember {
 export class CrearGroupComponent {
   searchText: string = '';
   selectedCourse: string = '';
+  groupName: string = ''; // Añadir propiedad para el nombre del grupo
   cursos: string[] = ['Curso 1 - Sección A', 'Curso 2 - Sección B', 'Curso 3 - Sección C'];
   items: CardItem[] = [
-    { name: 'Cristopher Walken Gutiérrez Redolfo', course: 'Curso 1 - Sección A' },
-    { name: 'Brandon Mark Hualcca Anyosa', course: 'Curso 2 - Sección B' },
-    { name: 'Jorge Armando Bonifaz Campos', course: 'Curso 3 - Sección C' },
-    // ...más items con sus respectivos cursos
+    { name: 'Cristopher Walken Gutiérrez Redolfo', course: 'Curso 1 - Sección A', code: 'U20217372' },
+    { name: 'ALUMNOS 2', course: 'Curso 1 - Sección A', code: 'U23451281' },
+    { name: 'ALUMNOS 3', course: 'Curso 1 - Sección A', code: 'U17347161' },
+    { name: 'ALUMNOS 3', course: 'Curso 1 - Sección A', code: 'U17347161' },
+
+    { name: 'Brandon Mark Hualcca Anyosa', course: 'Curso 2 - Sección B', code: 'U20217373' },
+    { name: 'AYMAR DE LA BRODA', course: 'Curso 2 - Sección B', code: 'U18648191' },
+    { name: 'ARAM AN SALSA', course: 'Curso 2 - Sección B', code: 'U17825151' },
+    { name: 'Jorge Armando Bonifaz Campos', course: 'Curso 3 - Sección C', code: 'U20217374' },
+    // ...más items con sus respectivos cursos y códigos
   ];
   filteredItems: CardItem[] = [];
 
   displayedColumns: string[] = ['integrantes', 'codigo', 'accion'];
-  dataSource = new MatTableDataSource<GroupMember>([
-    { integrantes: 'Cristopher Walken', codigo: 'U20217372' },
-    { integrantes: 'Cristopher Walken', codigo: 'U20217372' },
-    { integrantes: 'Cristopher Walken', codigo: 'U20217372' },
-    { integrantes: 'Brandon Mark', codigo: 'U20217373' },
-    { integrantes: 'Jorge Armando', codigo: 'U20217374' }
-  ]);
+  dataSource = new MatTableDataSource<GroupMember>([]);
 
   constructor(public dialog: MatDialog) {}
 
-  onCourseSelect(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const newCourse = selectElement.value;
+  onCourseSelect(event: MatSelectChange) {
+    const newCourse = event.value;
 
     if (this.dataSource.data.length > 0) {
       Swal.fire({
@@ -61,7 +63,7 @@ export class CrearGroupComponent {
           this.filterItems();
         } else {
           // Reset the select element to the previous value
-          selectElement.value = this.selectedCourse;
+          event.source.writeValue(this.selectedCourse);
         }
       });
     } else {
@@ -78,8 +80,20 @@ export class CrearGroupComponent {
   }
 
   add(item: CardItem) {
-    const newMember: GroupMember = { integrantes: item.name, codigo: 'N/A' }; // Assume a default or generated code
-    this.dataSource.data = [...this.dataSource.data, newMember];
+    // Verificar si el estudiante ya está en el grupo usando su código
+    const exists = this.dataSource.data.some(member => member.codigo === item.code);
+
+    if (!exists) {
+      const newMember: GroupMember = { integrantes: item.name, codigo: item.code }; // Añadir el código del estudiante
+      this.dataSource.data = [...this.dataSource.data, newMember];
+    } else {
+      // Mostrar una alerta si el estudiante ya está en el grupo
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El estudiante ya está en el grupo'
+      });
+    }
   }
 
   remove(element: GroupMember) {
