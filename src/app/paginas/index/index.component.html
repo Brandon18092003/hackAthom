@@ -31,25 +31,21 @@
   </mat-sidenav>
   <mat-sidenav-content class="content">
     <mat-toolbar class="toolbar">
-      @if (isHandset$ | async) {
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+      <button *ngIf="isHandset$ | async" type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      }
       <img src="assets/logo.JPG" alt="">
       <div class="toolbar-right">
         <div class="notificaciones" (click)="toggleNotifDropdown()">
           <i class="fas fa-bell"></i>
-          <!-- El punto rojo solo se muestra si hay elementos en el arreglo de notificaciones -->
           <span class="numerito" *ngIf="notifications.length > 0"></span>
-      </div>
+        </div>
         <div class="separator"></div>
         <div class="perfil" [matMenuTriggerFor]="menu">
           <div class="dato">
             <div class="nombre">
-              <p>Hola, <span>Persona</span></p>
+              <p><span>{{ codigoPersona || 'Código' }}</span></p>
             </div>
-            <p class="rol">Rol</p>
           </div>
           <img src="assets/img_usuario.png" alt="">
         </div>
@@ -64,7 +60,6 @@
           </button>
         </mat-menu>
 
-        <!-- Notification Menu -->
         <div class="notification-dropdown" *ngIf="showNotifications">
           <div class="notification-item" *ngFor="let notification of notifications" (click)="openNotification(notification)">
             <i class="{{notification.icon}}"></i>
@@ -78,6 +73,5 @@
       <app-grupos *ngSwitchCase="'link2'"></app-grupos>
       <app-perfil *ngSwitchCase="'link3'"></app-perfil>
     </div>
-
   </mat-sidenav-content>
 </mat-sidenav-container>

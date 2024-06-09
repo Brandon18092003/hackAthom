@@ -1,29 +1,47 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HabilidadService } from '../../../../services/habilidad.service';
+
+import { Habilidad, Hobby, InfoDTO, Curso } from '../../../../models/model';
+import { HobbyService } from '../../../../services/hobby.service';
+import { PerfilService } from '../../../../services/perfil.service';
+import { CursoService } from '../../../../services/curso/curso.service';
 
 @Component({
   selector: 'app-ver-perfil',
   templateUrl: './ver-perfil.component.html',
   styleUrls: ['./ver-perfil.component.css']
 })
-export class VerPerfilComponent {
-  data = {
-    name: 'Cristopher Walken Gutierrez Redolfo',
-    description: 'Hola, soy Cristopher, estudiante del IX ciclo de la carrera de Ingeniería de Sistemas e Informática, aquí te contaré un poco más sobre mi :D',
-    habilidades: ['Liderazgo', 'Trabajo en equipo', 'Comunicación asertiva'],
-    buenoEn: ['Programación Back-End', 'Base de datos', 'Scrum'],
-    informacionAdicional: 'Actualmente me encuentro trabajando, por lo que mi horario de disponibilidad podría variar.',
-    ultimosCompaneros: ['Camila Lisset Taype Sumen', 'Camila Lisset Taype Sumen', 'Camila Lisset Taype Sumen'],
-    calificacionesRecientes: [
-        'Programación web - 1456',
-        'Arquitectura Orientada al Servicio - 5202',
-        'Sistemas Distribuidos - 5202'
-    ]
-  };
+export class VerPerfilComponent implements OnInit {
+  habilidades: Habilidad[] = [];
+  hobbies: Hobby[] = [];
+  cursos: Curso[] = [];
+  descripcion: string = '';
+  informacion: string = '';
+  nombres: string = '';
+  ap_paterno: string = '';
+  ap_materno: string = '';
 
-  /*constructor(@Inject(MAT_DIALOG_DATA) public inputData: any) {
-    if (inputData) {
-      this.data = inputData;
-    }
-  }*/
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { codigoPersona: string },
+    private habilidadService: HabilidadService,
+    private hobbyService: HobbyService,
+    private perfilService: PerfilService,
+    private cursoService: CursoService
+  ) {}
+
+  ngOnInit(): void {
+    const codigoPersona = this.data.codigoPersona;
+
+    this.habilidadService.getHabilidades(codigoPersona).subscribe(habilidades => this.habilidades = habilidades);
+    this.hobbyService.getHobbies(codigoPersona).subscribe(hobbies => this.hobbies = hobbies);
+    this.perfilService.getInfo(codigoPersona).subscribe(info => {
+      this.descripcion = info.descripcion;
+      this.informacion = info.info_adicional;
+      this.nombres = info.nombres;
+      this.ap_paterno = info.ap_paterno;
+      this.ap_materno = info.ap_materno;
+    });
+    this.cursoService.getCursosByCod(codigoPersona).subscribe(cursos => this.cursos = cursos);
+  }
 }

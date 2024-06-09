@@ -3,35 +3,41 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
-  styleUrl: './index.component.css'
+  styleUrls: ['./index.component.css']
 })
 export class IndexComponent implements OnInit {
   currentView: string = 'link1';
   private breakpointObserver = inject(BreakpointObserver);
   hasPinnedAlert$: Observable<boolean>;
+  codigoPersona: string | null = '';
+  nombreCompleto: string | null = '';
 
-  constructor(private alertService: AlertService,) {
+  constructor(private alertService: AlertService, private authService: AuthService) {
     this.hasPinnedAlert$ = this.alertService.hasPinnedAlert$;
   }
 
   ngOnInit(): void {
-      if (typeof window !== 'undefined'){
-        const saveView = localStorage.getItem('IndexcurrentView');
-        if(saveView){
-          this.currentView = saveView;
-        }
+    if (typeof window !== 'undefined'){
+      const saveView = localStorage.getItem('IndexcurrentView');
+      if(saveView){
+        this.currentView = saveView;
       }
+
+      // Obtener el código y nombre completo desde AuthService
+      this.codigoPersona = this.authService.getCodigo();
+    }
   }
 
   showNotifications = false;
   notifications = [
     { icon: 'fas fa-warning', title: 'Te han añadido a un nuevo grupo' },
     { icon: 'fas fa-warning', title: 'Te han añadido a un nuevo grupo' },
-  ];  // Asumimos que este es el arreglo que representa tu "base de datos estática"
+  ];
 
   toggleNotifDropdown() {
     this.showNotifications = !this.showNotifications;
@@ -39,14 +45,12 @@ export class IndexComponent implements OnInit {
 
   openNotification(notification: any) {
     console.log('Notificación abierta:', notification);
-    // Eliminar la notificación abierta o limpiar todas si se desea
     this.notifications = this.notifications.filter(n => n !== notification);
     this.setView('link2');
     if (this.notifications.length === 0) {
-      this.showNotifications = false; // Cierra el menú si no quedan notificaciones
+      this.showNotifications = false;
     }
   }
-
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -54,20 +58,16 @@ export class IndexComponent implements OnInit {
       shareReplay()
     );
 
-
-    setView(view: string){
-      this.currentView = view;
-      localStorage.setItem('IndexcurrentView', view);
-    }
+  setView(view: string) {
+    this.currentView = view;
+    localStorage.setItem('IndexcurrentView', view);
+  }
 
   goToProfile() {
-    // Lógica para ir a la página de perfil
     console.log('Ir a perfil');
   }
 
   logout() {
-    // Lógica para cerrar sesión
     console.log('Cerrar sesión');
   }
-
 }

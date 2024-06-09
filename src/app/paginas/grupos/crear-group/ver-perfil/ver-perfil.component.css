@@ -1,117 +1,132 @@
 .body {
-    font-family: Arial, sans-serif;
-    background-color: #EFF6FF;
-    margin: 0;
-    padding: 20px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    min-height: 80vh;
-}
-
-.profile-container {
-    width: 90%;
-    max-width: 800px;
-    background-color: white;
+    align-items: center;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.profile-header {
+    background-color: #f0f2f5; /* Color de fondo claro */
+  }
+  
+  .profile-container {
+    max-width: 1000px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 12px; /* Aumenta el borde redondeado */
+    overflow: hidden;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombras más suaves */
+  }
+  
+  .profile-header {
     display: flex;
     align-items: center;
+    padding: 20px;
+    background-color: #3f51b5;
+    color: #fff;
+    border-radius: 12px 12px 0 0; /* Bordes superiores redondeados */
     margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
-}
-
-.profile-image {
-    width: 80px;
-    height: 80px;
+  }
+  
+  .profile-image {
+    width: 120px; /* Imagen más grande */
+    height: 120px;
     border-radius: 50%;
     margin-right: 20px;
-}
-
-.profile-info h1 {
-    margin: 0 0 10px;
-    font-size: 22px;
-}
-
-.profile-info p {
+  }
+  
+  .profile-info h1 {
     margin: 0;
-    color: #666;
-}
-
-.profile-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.left-column,
-.right-column {
+    font-size: 26px; /* Fuente más grande */
+  }
+  
+  .profile-info p {
+    margin: 5px 0 0;
+    font-size: 16px; /* Fuente más grande */
+  }
+  
+  .profile-content {
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-.profile-section {
-    background-color: #f9f9f9;
-    padding: 15px;
+  }
+  
+  @media (min-width: 768px) {
+    .profile-content {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  
+  .left-column,
+  .right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .profile-section {
+    padding: 20px;
     border-radius: 8px;
-}
-
-.profile-section h2 {
+    background-color: #fafafa; /* Fondo más claro */
+    transition: background-color 0.3s; /* Transición suave */
+  }
+  
+  .profile-section:hover {
+    background-color: #e0e0e0; /* Color de fondo al pasar el ratón */
+  }
+  
+  .profile-section h2 {
     display: flex;
     align-items: center;
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.section-icon {
-    width: 20px;
-    height: 20px;
+    margin: 0 0 15px 0;
+  }
+  
+  .section-icon {
+    width: 28px; /* Icono más grande */
+    height: 28px;
     margin-right: 10px;
-}
-
-.profile-section ul {
-    list-style-type: none;
+  }
+  
+  .profile-section ul {
+    list-style: none;
     padding: 0;
     margin: 0;
-}
-
-.profile-section li {
-    background: #fff;
-    margin-bottom: 5px;
-    padding: 8px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.progress-bar-container {
+  }
+  
+  .profile-section ul li {
+    margin-bottom: 10px;
+  }
+  
+  .progress-bar-container {
     display: flex;
     align-items: center;
     margin-top: 20px;
-}
-
-.progress-bar-container span {
+  }
+  
+  .progress-bar-container span {
     margin-right: 10px;
-    font-weight: bold;
-    color: #333;
-}
-
-.profile-footer {
-    text-align: center;
+    font-weight: bold; /* Texto en negrita */
+  }
+  
+  .profile-footer {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    background-color: #e0e0e0;
+    border-radius: 0 0 12px 12px; /* Bordes inferiores redondeados */
     margin-top: 20px;
-}
-
-button {
-    margin: 5px;
-}
-
-button.btnhistorial {
-    background-color: #000F37 !important;
-    color: white !important;
-}
+  }
+  
+  .btnhistorial {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px; /* Botón redondeado */
+    transition: background-color 0.3s; /* Transición suave */
+  }
+  
+  .btnhistorial:hover {
+    background-color: #303f9f; /* Color al pasar el ratón */
+  }
+  

@@ -133,7 +133,7 @@ export class CrearGroupComponent implements OnInit{
 
   openProfile(item: Persona) {
     this.dialog.open(VerPerfilComponent, {
-      data: { name: item.nombres }
+      data: { codigoPersona: item.codigo }
     });
   }
 
