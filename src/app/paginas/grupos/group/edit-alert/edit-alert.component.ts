@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 
 export interface EditAlertDialogData {
@@ -26,7 +27,15 @@ export class EditAlertComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.data.fecha = new Date(this.data.fecha);
+    if (!this.data.fecha) {
+      this.data.fecha = new Date(); // Inicializa la fecha en hoy
+    }
+  }
+  toDate(dateStruct: NgbDateStruct | null): Date | null {
+    if (!dateStruct) {
+      return null;
+    }
+    return new Date(dateStruct.year, dateStruct.month - 1, dateStruct.day);
   }
 
   onSaveClick(): void {

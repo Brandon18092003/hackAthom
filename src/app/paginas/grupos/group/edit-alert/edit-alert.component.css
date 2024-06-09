@@ -1,80 +1,106 @@
 .dialog-container {
-    width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-  }
-  
-  .dialog-title {
-    background-color: red;
-    color: white;
-    padding: 15px;
-    margin: -20px -20px 20px;
-    text-align: center;
-    font-size: 1.5em;
-  }
-  
-  .dialog-content {
-    padding: 0 20px 20px;
-    background-color: white;
-  }
-  
-  .error-message {
-    color: red;
-    margin-bottom: 10px;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .dialog-actions {
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px 20px;
-    background-color: white;
-    border-top: 1px solid #ccc;
-    margin: 20px -20px -20px;
-    border-radius: 0 0 8px 8px;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 10px;
-    font-size: 1em;
-  }
-  
-  .cancel-btn {
-    background-color: #6c757d;
-    color: white;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #5a6268;
-  }
-  
-  .save-btn {
-    background-color: red;
-    color: white;
-  }
-  
-  .save-btn:hover {
-    background-color: brown !important;
-  }
-  
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+}
+
+.dialog-title {
+  background-color: red;
+  color: white;
+  padding: 15px;
+  margin: -20px -20px 20px;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.dialog-content {
+  padding: 0 20px 20px;
+  background-color: white;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+mat-form-field.full-width {
+  width: 100%;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+
+.mat-form-field-underline {
+  display: none;
+}
+
+.mat-form-field-flex {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: transparent;
+}
+
+.mat-form-field-label {
+  top: -1.2em;
+  left: 0.8em;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px;
+  background-color: white;
+  border-top: 1px solid #ccc;
+  margin: 20px -20px -20px;
+  border-radius: 0 0 8px 8px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 1em;
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+}
+
+.save-btn {
+  background-color: red;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: brown !important;
+}

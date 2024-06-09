@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 
 export interface AlertDialogData {
   asunto: string;
-  fecha: Date;
+  fecha: Date | null;
   hora: string;
 }
 
@@ -15,28 +15,20 @@ export interface AlertDialogData {
 })
 export class AlertDialogComponent implements OnInit {
 
-  minDate: string;
+  minDate: Date;
 
   constructor(
     public dialogRef: MatDialogRef<AlertDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AlertDialogData
   ) {
-    const today = new Date();
-    this.minDate = today.toISOString().split('T')[0]; // Esto asegura que minDate esté en el formato 'YYYY-MM-DD'
+    this.minDate = new Date();
   }
 
   ngOnInit(): void {
-    this.data.fecha = new Date();
+    this.data.fecha = null; // Inicializa la fecha como null para que el campo esté vacío
   }
 
   onSaveClick(): void {
-    // Crear un objeto Date para la fecha seleccionada y la hora seleccionada en la zona horaria local
-    const selectedDate = new Date(`${this.data.fecha}T${this.data.hora}:00`);
-    
-    // Obtener la fecha y hora actuales
-    const now = new Date();
-  
-    // Verificación de que todos los campos están llenos
     if (!this.data.asunto || !this.data.fecha || !this.data.hora) {
       Swal.fire({
         icon: 'error',
@@ -45,32 +37,21 @@ export class AlertDialogComponent implements OnInit {
       });
       return;
     }
-  
-    // Convertir this.data.fecha a una cadena en formato 'YYYY-MM-DD'
-    const selectedDateString = new Date(this.data.fecha).toISOString().split('T')[0];
-  
-    // Verificación de que la fecha seleccionada es hoy o en el futuro
-    if (selectedDateString === this.minDate && selectedDate < now) {
+
+    const selectedDate = new Date(`${this.data.fecha.toISOString().split('T')[0]}T${this.data.hora}:00`);
+    const now = new Date();
+
+    if (selectedDate <= now) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'La hora seleccionada debe ser futura si la fecha es hoy.'
+        text: 'La fecha y hora deben ser futuras. Si es hoy, la hora debe ser futura.'
       });
       return;
     }
-  
-    if (selectedDate < now) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'La fecha y hora deben ser futuras.'
-      });
-      return;
-    }
-  
+
     this.dialogRef.close(this.data);
   }
-  
 
   onCancelClick(): void {
     this.dialogRef.close();

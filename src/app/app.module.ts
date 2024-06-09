@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -35,6 +35,9 @@ import { LoginComponent } from './paginas/login/login.component';
 import { EditAlertComponent } from './paginas/grupos/group/edit-alert/edit-alert.component';
 import { AgregarIntegranteComponent } from './paginas/grupos/group/agregar-integrante/agregar-integrante.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+
 
 
 @NgModule({
@@ -51,7 +54,7 @@ import { HttpClientModule } from '@angular/common/http';
     AlertDialogComponent,
     LoginComponent,
     EditAlertComponent,
-    AgregarIntegranteComponent
+    AgregarIntegranteComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,9 +77,13 @@ import { HttpClientModule } from '@angular/common/http';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    HttpClientModule  
+    HttpClientModule,
+    NgbModule
+    
   ],
   providers: [
+    MatDatepickerModule,
+    MatNativeDateModule,
     provideClientHydration(),
     provideAnimationsAsync(),
   ],
