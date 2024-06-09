@@ -35,6 +35,7 @@ export class GroupComponent implements OnInit {
   alertas: any[] = []; // Array para almacenar las alertas
   
   integrantes: PersonaDTO[] = [];
+  currentConversacionId: number | null = null;
 
   displayedColumns: string[] = ['nombres', 'rol', 'acciones'];
   dataSource = new MatTableDataSource(this.integrantes);
@@ -68,8 +69,12 @@ export class GroupComponent implements OnInit {
     }
 
     this.webSocketService.getMessages().subscribe((mensaje: MensajeConversacionGrupal) => {
-      this.mensajes.push(mensaje);
-      this.scrollToBottom();
+      if (mensaje.id) {
+        this.mensajes.push(mensaje);
+        this.scrollToBottom();
+      } else {
+        console.error('Invalid message structure or conversation id mismatch', mensaje);
+      }
     });
   }
 
@@ -79,6 +84,7 @@ export class GroupComponent implements OnInit {
       if (conversacion) {
         console.log(`Conversation id: ${conversacion.id}`);
         this.selectedGroup = grupo;
+        this.currentConversacionId = conversacion.id;
         this.webSocketService.subscribeToGroupMessages(conversacion.id);
         this.conversacionGrupalService.obtenerMensajes(conversacion.id).subscribe(mensajes => {
           this.mensajes = mensajes;
@@ -99,7 +105,7 @@ export class GroupComponent implements OnInit {
   sendMessage(): void {
     if (this.newMessage.trim() && this.selectedGroup) {
       const mensajeRequest: MensajeRequest = {
-        conversacionId: this.selectedGroup.id,
+        conversacionId: this.currentConversacionId!,
         codigoPersona: this.authService.getCodigo()!,
         mensaje: this.newMessage
       };

@@ -54,7 +54,12 @@ export class WebSocketService {
       }
 
       this.currentSubscription = this.client.subscribe(`/topic/mensajes/${conversacionId}`, (message: Message) => {
-        this.messages.next(JSON.parse(message.body));
+        const parsedMessage = JSON.parse(message.body);
+        if (parsedMessage && parsedMessage.id) {
+          this.messages.next(parsedMessage);
+        } else {
+          console.error('Invalid message structure', parsedMessage);
+        }
       });
 
       console.log(`Subscribed to topic: /topic/mensajes/${conversacionId}`);
