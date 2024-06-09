@@ -1,54 +1,54 @@
 <div class="body">
-    <div class="profile-container">
+    <div class="profile-container mat-elevation-z4">
         <div class="profile-header">
-            <div class="profile-header-content">
-                <img src="assets/img_usuario.png" alt="Profile Picture" class="profile-image">
-                <div class="profile-info">
-                    <h1>{{ data.name }}</h1>
-                    <p>{{ data.description }}</p>
-                </div>
+            <img src="assets/img_usuario.png" alt="Profile Picture" class="profile-image">
+            <div class="profile-info">
+                <h1>{{ data.name }}</h1>
+                <p>{{ data.description }}</p>
             </div>
         </div>
 
         <div class="profile-content">
-            <div class="profile-section">
-                <h2><img src="assets/habilidades.png" class="section-icon"> HABILIDADES</h2>
-                <ul>
-                    <li *ngFor="let habilidad of data.habilidades">{{ habilidad }}</li>
-                </ul>
+            <div class="left-column">
+                <div class="profile-section mat-elevation-z2">
+                    <h2><img src="assets/habilidades.png" class="section-icon"> HABILIDADES</h2>
+                    <ul>
+                        <li *ngFor="let habilidad of data.habilidades">{{ habilidad }}</li>
+                    </ul>
+                </div>
+                <div class="profile-section mat-elevation-z2">
+                    <h2><img src="assets/skill-development_5776922.png" class="section-icon">HOBBIES</h2>
+                    <ul>
+                        <li *ngFor="let item of data.buenoEn">{{ item }}</li>
+                    </ul>
+                </div>
+                <div class="profile-section mat-elevation-z2">
+                    <h2><img src="assets/adicional.png" class="section-icon"> INFORMACIÓN ADICIONAL</h2>
+                    <p>{{ data.informacionAdicional }}</p>
+                </div>
             </div>
-            <div class="profile-section">
-                <h2><img src="assets/skill-development_5776922.png" class="section-icon"> SOY BUENO EN</h2>
-                <ul>
-                    <li *ngFor="let item of data.buenoEn">{{ item }}</li>
-                </ul>
+            <div class="right-column">
+                <div class="profile-section mat-elevation-z2">
+                    <h2><img src="assets/companero-de-equipo.png" class="section-icon"> MIS ÚLTIMOS COMPAÑEROS</h2>
+                    <ul>
+                        <li *ngFor="let companero of data.ultimosCompaneros">{{ companero }}</li>
+                    </ul>
+                </div>
+                <div class="profile-section mat-elevation-z2">
+                    <h2><img src="assets/aprender-en-linea.png" class="section-icon"> CURSOS MATRICULADOS</h2>
+                    <ul>
+                        <li *ngFor="let calificacion of data.calificacionesRecientes">{{ calificacion }}</li>
+                    </ul>
+                </div>
+                <div class="progress-bar-container">
+                    <span>Calificación:</span>
+                    <mat-progress-bar mode="determinate" [value]="75" color="primary"></mat-progress-bar>
+                </div>
             </div>
-            <div class="profile-section">
-                <h2><img src="assets/adicional.png" class="section-icon"> INFORMACIÓN ADICIONAL</h2>
-                <p>{{ data.informacionAdicional }}</p>
-            </div>
-            <div class="profile-section">
-                <h2><img src="assets/companero-de-equipo.png" class="section-icon"> MIS ÚLTIMOS COMPAÑEROS</h2>
-                <ul>
-                    <li *ngFor="let companero of data.ultimosCompaneros">{{ companero }}</li>
-                </ul>
-            </div>
-            <div class="profile-section">
-                <h2><img src="assets/calificaciones.png" class="section-icon"> CALIFICACIONES RECIENTES</h2>
-                <ul>
-                    <li *ngFor="let calificacion of data.calificacionesRecientes">{{ calificacion }}</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="progress-bar-container">
-            <span>Calificación:</span>
-            <mat-progress-bar mode="determinate" [value]="75" color="primary"></mat-progress-bar>
         </div>
 
         <div class="profile-footer">
-            <button mat-raised-button class="btnhistorial">Historial notas grupales</button>
-            <button mat-raised-button color="accent">Historial notas individuales</button>
+            <button mat-raised-button class="btnhistorial">Enviar Mensaje</button>
         </div>
     </div>
 </div>

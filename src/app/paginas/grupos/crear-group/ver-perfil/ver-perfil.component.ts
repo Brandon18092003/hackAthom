@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-ver-perfil',
   templateUrl: './ver-perfil.component.html',
-  styleUrl: './ver-perfil.component.css'
+  styleUrls: ['./ver-perfil.component.css']
 })
 export class VerPerfilComponent {
   data = {
@@ -15,9 +15,9 @@ export class VerPerfilComponent {
     informacionAdicional: 'Actualmente me encuentro trabajando, por lo que mi horario de disponibilidad podría variar.',
     ultimosCompaneros: ['Camila Lisset Taype Sumen', 'Camila Lisset Taype Sumen', 'Camila Lisset Taype Sumen'],
     calificacionesRecientes: [
-        'PC02 - Gestión del Conocimiento -> 17',
-        'Avance 02 - Arquitectura Orientada al Servicio -> 15',
-        'Avance 02 - Curso Integrador II: Sistemas -> 15'
+        'Programación web - 1456',
+        'Arquitectura Orientada al Servicio - 5202',
+        'Sistemas Distribuidos - 5202'
     ]
   };
 
@@ -25,5 +25,5 @@ export class VerPerfilComponent {
     if (inputData) {
       this.data = inputData;
     }
-  }4*/
+  }*/
 }
