@@ -28,7 +28,8 @@ export class ConversacionGrupalService {
     this.client.onConnect = (frame) => {
       console.log('Connected: ' + frame);
       this.client.subscribe('/topic/mensajes', e => {
-        this.messages.next(JSON.parse(e.body));
+        const mensaje: MensajeConversacionGrupal = JSON.parse(e.body);
+        this.messages.next(mensaje);
       });
     };
 
@@ -61,6 +62,10 @@ export class ConversacionGrupalService {
       destination: '/app/enviarMensaje',
       body: JSON.stringify(mensajeRequest),
     });
+  }
+
+  obtenerConversacionPorGrupo(grupoId: number): Observable<ConversacionGrupal> {
+    return this.http.get<ConversacionGrupal>(`${this.apiUrl}/grupo/${grupoId}`);
   }
 
   getMessages(): Observable<MensajeConversacionGrupal> {

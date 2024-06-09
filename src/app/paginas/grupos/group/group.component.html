@@ -35,10 +35,10 @@
                 <!-- Aquí se mostrarán los mensajes del grupo seleccionado -->
 
                 <div *ngFor="let mensaje of mensajes"
-                    [ngClass]="{'mensaje-autor': mensaje.autor === 'Yo', 'mensaje-otro': mensaje.autor !== 'Yo'}"
+                    [ngClass]="{'mensaje-autor': mensaje.persona.codigo === authService.getCodigo(), 'mensaje-otro': mensaje.persona.codigo !== authService.getCodigo()}"
                     class="mensaje">
-                    <p><strong>{{ mensaje.autor }}:</strong> {{ mensaje.contenido }}</p>
-                    <p class="fecha">{{ mensaje.fecha | date:'shortTime' }}</p>
+                    <p><strong>{{ mensaje.persona.nombres }}:</strong> {{ mensaje.mensaje }}</p>
+                    <p class="fecha">{{ mensaje.fechaEnvio | date:'shortTime' }}</p>
                 </div>
 
                 <ng-template #noGroupSelected>

@@ -8,8 +8,11 @@ import { AlertService } from '../../../services/alert.service';
 import { AgregarIntegranteComponent } from './agregar-integrante/agregar-integrante.component';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
-import { Grupo } from '../../../models/model';
+import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal } from '../../../models/model';
 import { GroupService } from '../../../services/grupo/grupo-service.service';
+import { WebSocketService } from '../../../services/web-socket.service';
+import { ConversacionGrupalService } from '../../../services/conversacion-grupal.service';
+
 
 interface Mensaje {
   contenido: string;
@@ -28,15 +31,13 @@ interface Integrante {
   styleUrls: ['./group.component.css']
 })
 export class GroupComponent implements OnInit {
-
   @ViewChild('chatContent') private chatContent: ElementRef | undefined;
   grupos: Grupo[] = [];
   selectedGroup: Grupo | null = null;
   newMessage: string = '';
-  mensajes: Mensaje[] = [];
-  alertMessage: AlertDialogData | null = null;
-  alertas: AlertDialogData[] = [];  // Array para almacenar las alertas
-
+  mensajes: MensajeConversacionGrupal[] = [];
+  alertMessage: any = null;
+  alertas: any[] = []; // Array para almacenar las alertas
   integrantes: Integrante[] = [
     { nombres: 'Jorge Armando Bonifaz Campos', rol: 'Lider' },
     { nombres: 'Jack Aymar Perez De La Borda', rol: 'Estudiante' },
@@ -45,14 +46,14 @@ export class GroupComponent implements OnInit {
 
   displayedColumns: string[] = ['nombres', 'rol', 'acciones'];
   dataSource = new MatTableDataSource(this.integrantes);
-
   isPanelOpen: boolean = false; // Estado del panel deslizante
 
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,
     private groupService: GroupService,
-    private authService: AuthService
+    public authService: AuthService,
+    private webSocketService: WebSocketService
   ) { }
 
   ngOnInit(): void {
@@ -73,35 +74,28 @@ export class GroupComponent implements OnInit {
       console.error('No user code found in localStorage');
       // Manejar el caso donde no se encuentra el código de usuario en localStorage
     }
+
+    this.webSocketService.getMessages().subscribe((mensaje: MensajeConversacionGrupal) => {
+      this.mensajes.push(mensaje);
+      this.scrollToBottom();
+    });
   }
 
-  cargarMensajesDeGrupo(grupo: Grupo): void {
-    // Lógica para cargar los mensajes del grupo seleccionado
-    // Aquí estamos usando datos estáticos para la demostración
-    this.mensajes = [
-      { contenido: 'Hola a todos', autor: 'Usuario1', fecha: new Date() },
-      { contenido: 'Hola, ¿cómo están?', autor: 'Usuario2', fecha: new Date() },
-      { contenido: 'Todo bien, gracias', autor: 'Usuario1', fecha: new Date() }
-    ];
-    this.scrollToBottom();
-  }
 
   selectGroup(grupo: Grupo): void {
     this.selectedGroup = grupo;
-    this.cargarMensajesDeGrupo(grupo);
     this.scrollToBottom();
   }
 
   sendMessage(): void {
-    if (this.newMessage.trim()) {
-      const nuevoMensaje: Mensaje = {
-        contenido: this.newMessage,
-        autor: 'Yo', // Cambia esto por el nombre del usuario actual
-        fecha: new Date()
+    if (this.newMessage.trim() && this.selectedGroup) {
+      const mensajeRequest: MensajeRequest = {
+        conversacionId: this.selectedGroup.id,
+        codigoPersona: this.authService.getCodigo()!, // Obtén el código del usuario actual
+        mensaje: this.newMessage
       };
-      this.mensajes.push(nuevoMensaje);
+      this.webSocketService.sendMessage(mensajeRequest);
       this.newMessage = '';
-      this.scrollToBottom();
     }
   }
 
@@ -225,20 +219,20 @@ export class GroupComponent implements OnInit {
       data: { asunto: '', fecha: new Date(), hora: '' }
     });
 
-    dialogRef.afterClosed().subscribe((result: AlertDialogData | undefined) => {
+    dialogRef.afterClosed().subscribe((result: any | undefined) => {
       if (result) {
         this.alertas.push(result);
       }
     });
   }
 
-  editarAlerta(alerta: AlertDialogData): void {
+  editarAlerta(alerta: any): void {
     const dialogRef = this.dialog.open(EditAlertComponent, {
       width: '500px',
       data: { ...alerta }
     });
 
-    dialogRef.afterClosed().subscribe((result: EditAlertDialogData | undefined) => {
+    dialogRef.afterClosed().subscribe((result: any | undefined) => {
       if (result) {
         const index = this.alertas.findIndex(a => a === alerta);
         if (index !== -1) {
@@ -248,7 +242,7 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  eliminarAlerta(alerta: AlertDialogData): void {
+  eliminarAlerta(alerta: any): void {
     Swal.fire({
       title: '¿Estás seguro?',
       text: `¿Deseas eliminar la alerta ${alerta.asunto}?`,
@@ -270,7 +264,7 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  anclarAlerta(alerta: AlertDialogData): void {
+  anclarAlerta(alerta: any): void {
     this.alertMessage = alerta;
 
     if (this.selectedGroup) {
@@ -305,7 +299,7 @@ export class GroupComponent implements OnInit {
     }
   }
 
-  isAlertaAnclada(alerta: AlertDialogData): boolean {
+  isAlertaAnclada(alerta: any): boolean {
     return this.alertMessage === alerta;
   }
 }
