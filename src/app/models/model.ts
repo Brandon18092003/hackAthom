@@ -8,7 +8,6 @@ export interface Curso{
     nombre: string;
     codigo: string;
 }
-
 export interface Grupo {
   id: number;
   nombre: string;
@@ -23,7 +22,6 @@ export interface MensajeRequest {
   codigoPersona: string;
   mensaje: string;
 }
-
 
 export interface Persona {
   id: number;
@@ -89,3 +87,17 @@ export interface MensajeConversacionGrupal {
   mensaje: string;
   fechaEnvio: Date;
 }
+
+export interface CrearGrupoDTO {
+  codigoUsuario: string; // Código del líder
+  idCurso: number; 
+  nombregrupo: string;
+  codigosMiembros: string[];
+}
+
+
+
+
+
+
+

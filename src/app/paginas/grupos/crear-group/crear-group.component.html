@@ -14,10 +14,12 @@
                             <mat-label>Seleccionar curso - sección</mat-label>
                             <mat-select (selectionChange)="onCourseSelect($event)">
                                 <mat-option value="">Seleccionar por un curso - Sección</mat-option>
-                                <mat-option *ngFor="let curso of cursos" [value]="curso">{{curso.nombre}}</mat-option>
+                                <mat-option *ngFor="let curso of cursos" [value]="curso.id">{{curso.nombre}}</mat-option>
+                                
                             </mat-select>
                         </mat-form-field>
                     </div>
+                    
                     <div class="opcion">
                         <p class="step-number">Paso 2: Buscar por nombre</p>
                         <mat-form-field appearance="outline" class="full-width">
@@ -30,6 +32,7 @@
                     </div>
                 </div>
             </div>
+
             <p class="step-number">Paso 3: Agregar integrante</p>
             <div class="list" *ngIf="selectedCourse">
                 <div class="card mat-elevation-z8" *ngFor="let item of filteredItems">
@@ -37,7 +40,7 @@
                         <img src="assets/img_usuario.png" alt="Usuario">
                     </div>
                     <div class="card-content">
-                        <span>{{ item.name }}</span>
+                        <span>{{item.nombres}} {{item.ap_paterno}} {{item.ap_materno}}</span>
                     </div>
                     <div class="actions">
                         <button mat-icon-button color="primary" (click)="add(item)"><mat-icon>add_circle</mat-icon></button>
@@ -56,7 +59,7 @@
                 <p class="step-number">Paso 4: Ingresa el nombre del grupo</p>
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Nombre del grupo</mat-label>
-                    <input matInput [(ngModel)]="groupName" placeholder="Nombre del grupo">
+                    <input matInput [(ngModel)]="crearGrupoDTO.nombregrupo" placeholder="Nombre del grupo">
                 </mat-form-field>
 
                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -89,7 +92,7 @@
                 <div class="create-btn-container">
                     <p class="step-number">Paso 5: Crear grupo</p>
 
-                    <button mat-raised-button color="primary" class="create-btn full-width" [disabled]="!groupName">Crear</button>
+                    <button mat-raised-button color="primary" class="create-btn full-width" (click)="crearGrupo()" [disabled]="!crearGrupoDTO.nombregrupo">Crear</button>
                 </div>
             </div>
         </div>

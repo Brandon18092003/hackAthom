@@ -4,9 +4,14 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { VerPerfilComponent } from './ver-perfil/ver-perfil.component';
-import { Curso } from '../../../models/model';
+import { CrearGrupoDTO, Curso, Persona } from '../../../models/model';
 import { CursoService } from '../../../services/curso/curso.service';
 import { AuthService } from '../../../services/auth.service';
+import { PersonaService } from '../../../services/persona/persona.service';
+import { response } from 'express';
+import { error, group } from 'console';
+import { MiembroService } from '../../../services/miembro/miembro.service';
+import { Router } from '@angular/router';
 
 interface CardItem {
   name: string;
@@ -19,6 +24,8 @@ interface GroupMember {
   codigo: string;
 }
 
+
+
 @Component({
   selector: 'app-crear-group',
   templateUrl: './crear-group.component.html',
@@ -26,40 +33,42 @@ interface GroupMember {
 })
 export class CrearGroupComponent implements OnInit{
   searchText: string = '';
-  selectedCourse: string = '';
-  groupName: string = ''; // Añadir propiedad para el nombre del grupo
+  selectedCourse?: number;
 
   cursos?: Curso[];//listar cursos matriculados
+  crearGrupoDTO: CrearGrupoDTO;
 
 
-
-  items: CardItem[] = [
-    { name: 'Cristopher Walken Gutiérrez Redolfo', course: 'Curso 1 - Sección A', code: 'U20217372' },
-    { name: 'ALUMNOS 2', course: 'Curso 1 - Sección A', code: 'U23451281' },
-    { name: 'ALUMNOS 3', course: 'Curso 1 - Sección A', code: 'U17347161' },
-    { name: 'ALUMNOS 3', course: 'Curso 1 - Sección A', code: 'U17347161' },
-
-    { name: 'Brandon Mark Hualcca Anyosa', course: 'Curso 2 - Sección B', code: 'U20217373' },
-    { name: 'AYMAR DE LA BRODA', course: 'Curso 2 - Sección B', code: 'U18648191' },
-    { name: 'ARAM AN SALSA', course: 'Curso 2 - Sección B', code: 'U17825151' },
-    { name: 'Jorge Armando Bonifaz Campos', course: 'Curso 3 - Sección C', code: 'U20217374' },
-    // ...más items con sus respectivos cursos y códigos
-  ];
-  filteredItems: CardItem[] = [];
+  items: Persona[]=[];
+  filteredItems: Persona[] = [];
 
   displayedColumns: string[] = ['integrantes', 'codigo', 'accion'];
-  dataSource = new MatTableDataSource<GroupMember>([]);
-
-  constructor(public dialog: MatDialog,private authService:AuthService, private cursoService:CursoService) {}
+    dataSource = new MatTableDataSource<GroupMember>([]);
+  
+  constructor(
+    public dialog: MatDialog,
+    private authService:AuthService, 
+    private cursoService:CursoService,
+    private personaService:PersonaService,
+    private miembroService:MiembroService,
+    private router:Router
+  ) {
+    this.crearGrupoDTO={
+      codigoUsuario:'',
+      idCurso:0,
+      nombregrupo:'',
+      codigosMiembros:[]
+    }
+  }
 
   ngOnInit(): void {
     this.listarCursos();
   }
 
-  
-
   onCourseSelect(event: MatSelectChange) {
     const newCourse = event.value;
+
+    console.log(newCourse);
 
     if (this.dataSource.data.length > 0) {
       Swal.fire({
@@ -73,6 +82,7 @@ export class CrearGroupComponent implements OnInit{
         if (result.isConfirmed) {
           this.selectedCourse = newCourse;
           this.dataSource.data = [];
+          this.getPersonasPorCurso(newCourse);
           this.filterItems();
         } else {
           // Reset the select element to the previous value
@@ -81,24 +91,30 @@ export class CrearGroupComponent implements OnInit{
       });
     } else {
       this.selectedCourse = newCourse;
+      this.getPersonasPorCurso(newCourse);
       this.filterItems();
     }
   }
 
   filterItems() {
+  
     this.filteredItems = this.items.filter(item =>
-      item.name.toLowerCase().includes(this.searchText.toLowerCase()) &&
-      item.course === this.selectedCourse
-    );
+      item.nombres.toLowerCase().includes(this.searchText.toLowerCase()) //&&
+      //item.course === this.selectedCourse
+    )
   }
 
-  add(item: CardItem) {
+  add(item: Persona) {
     // Verificar si el estudiante ya está en el grupo usando su código
-    const exists = this.dataSource.data.some(member => member.codigo === item.code);
+    const exists = this.dataSource.data.some(member => member.codigo === item.codigo);
 
     if (!exists) {
-      const newMember: GroupMember = { integrantes: item.name, codigo: item.code }; // Añadir el código del estudiante
+      const newMember: GroupMember = { integrantes: item.nombres, codigo: item.codigo }; // Añadir el código del estudiante
       this.dataSource.data = [...this.dataSource.data, newMember];
+
+      // Agregar el código del estudiante al array codigosMiembros
+      this.crearGrupoDTO.codigosMiembros.push(item.codigo);
+
     } else {
       // Mostrar una alerta si el estudiante ya está en el grupo
       Swal.fire({
@@ -111,11 +127,13 @@ export class CrearGroupComponent implements OnInit{
 
   remove(element: GroupMember) {
     this.dataSource.data = this.dataSource.data.filter(member => member !== element);
+    
+    this.crearGrupoDTO.codigosMiembros = this.crearGrupoDTO.codigosMiembros.filter(codigo => codigo !== element.codigo);
   }
 
-  openProfile(item: CardItem) {
+  openProfile(item: Persona) {
     this.dialog.open(VerPerfilComponent, {
-      data: { name: item.name }
+      data: { name: item.nombres }
     });
   }
 
@@ -131,7 +149,45 @@ export class CrearGroupComponent implements OnInit{
     }else{
       Swal.fire("No se encontro al usuario")
     }
+  }
 
+  getPersonasPorCurso(idCurso: number) {
+    this.personaService.getPersonasByCurso(idCurso).subscribe(
+      (response: Persona[]) => {
+        const usuarioActual = this.authService.getCodigo();
+        
+        if (usuarioActual) {
+          this.items = response.filter(persona => persona.codigo !== usuarioActual); // Filtramos aquí
+          this.filteredItems = this.items; // Actualizamos filteredItems también
+        }
+      },
+      (error) => {
+        Swal.fire("No se pudo encontrar los estudiantes");
+      }
+    );
+  }
+  
+
+  crearGrupo(){
+    const codigo = this.authService.getCodigo();
+
+    if(codigo && this.selectedCourse){
+      if(this.crearGrupoDTO.codigosMiembros.length>0){
+        this.crearGrupoDTO.codigoUsuario=codigo;
+        this.crearGrupoDTO.idCurso = this.selectedCourse;
+        console.log(this.crearGrupoDTO);
+        this.miembroService.crearGrupo(this.crearGrupoDTO).subscribe(response=>{
+          Swal.fire("Grupo creado con éxito").then(() => {
+            window.location.reload();
+          });
+        },error=>{
+          Swal.fire("No se pudo crear el grupo")
+        })
+      }else(
+        Swal.fire("Necesitas agregar miembros")
+      )
+
+    }
 
   }
 }
