@@ -38,10 +38,11 @@
       }
       <img src="assets/logo.JPG" alt="">
       <div class="toolbar-right">
-        <div class="notificaciones">
+        <div class="notificaciones" (click)="toggleNotifDropdown()">
           <i class="fas fa-bell"></i>
-          <p class="numerito">0</p>
-        </div>
+          <!-- El punto rojo solo se muestra si hay elementos en el arreglo de notificaciones -->
+          <span class="numerito" *ngIf="notifications.length > 0"></span>
+      </div>
         <div class="separator"></div>
         <div class="perfil" [matMenuTriggerFor]="menu">
           <div class="dato">
@@ -62,6 +63,14 @@
             <span>Cerrar Sesión</span>
           </button>
         </mat-menu>
+
+        <!-- Notification Menu -->
+        <div class="notification-dropdown" *ngIf="showNotifications">
+          <div class="notification-item" *ngFor="let notification of notifications" (click)="openNotification(notification)">
+            <i class="{{notification.icon}}"></i>
+            <span>{{notification.title}}</span>
+          </div>
+        </div>
       </div>
     </mat-toolbar>
     <div *ngIf="currentView === 'link1'">

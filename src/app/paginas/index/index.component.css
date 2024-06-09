@@ -26,12 +26,13 @@
   margin-right: 40px;
 }
 
-.notificaciones{
-  display: flex;
-  width: 50px;
-  height: 50px;
-  position: relative;
-  padding-right: 0;
+.notificaciones {
+  cursor: pointer;
+  margin-right: 30px ;
+  position: relative; /* This ensures that absolute positioning inside it is relative to this div */
+  display: flex;      /* Keeps the icon and the dot aligned properly */
+  align-items: center; /* Center align items for visual balance */
+  justify-content: center; /* Center content for better control */
 }
 
 .notificaciones i{
@@ -39,17 +40,58 @@
   padding-left: 7px;
 }
 
-.notificaciones.numerito{
-  font-size: 12px;
-  background-color: yellow;
-  width: 15px;
-  height: 15px;
-  border-radius: 90px;
-  padding: 0px;
-  margin: -15px 0 0 30px;
+.notificaciones .numerito {
+  background-color: red; /* Red color for the notification dot */
+  width: 10px;           /* Dot size */
+  height: 10px;          /* Dot size */
+  border-radius: 50%;    /* Circular shape */
+  position: absolute;    /* Positioning relative to the parent */
+  top: 2px;              /* Adjust this to move the dot downward */
+  right: -5px;           /* Keeps the dot to the right of the bell icon */
+  display: block;        /* Ensure the dot is visible */
+}
+
+.notification-dropdown {
+  width: 300px;
+  height: 300px;  /* Altura igual al ancho para mantener un diseño cuadrado */
+  background-color: white;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
   position: absolute;
-  top: 0;
-  right: 5px;
+  z-index: 1000;  /* Asegúrate de que el menú esté por encima de otros elementos */
+  right: 250px;  /* Alinea el menú con el lado derecho del ícono de campana */
+  top: 65px; /* Espacio del menú debajo del ícono de campana */
+  overflow-y: auto;
+  border-radius: 4px; /* Opcional: Para bordes redondeados */
+}
+
+.notification-item {
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.notification-item:hover{
+  background-color: #F2F4F8;
+}
+
+.notification-item:last-child {
+  border-bottom: none; /* Elimina el borde del último elemento */
+}
+
+.notification-item i {
+  margin-right: 10px;
+  font-size: 20px;
+  color: #45A049; /* Color de los íconos */
+}
+
+.notification-item span {
+  flex: 1;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #000F37;
 }
 
 .separator {
