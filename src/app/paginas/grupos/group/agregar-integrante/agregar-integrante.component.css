@@ -10,8 +10,8 @@
     border-bottom: #ccc 1px solid;
 }
 .form-group {
-    display: flex;
     align-items: center;
+    margin: 10px;
 }
 
 label {
@@ -28,20 +28,55 @@ select {
 }
 
 .alumnos-list {
-    max-height: 200px;
+    height: 175px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
     overflow-y: auto;
-    margin-bottom: 15px;
 }
 
-.alumno-card {
+.card {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    justify-content: space-between;
+    background-color: #e0f7ff;
+    padding: 15px;
+    border-radius: 8px;
+    width: 275px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
 }
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-icon img {
+    width: 50px;
+    padding: 5px;
+}
+
+
+.card-content {
+    flex-grow: 1;
+    font-size: 16px;
+    color: #333;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+.inputs{
+    border-top: #ccc 1px solid;
+    display: flex;
+    padding-top: 10px;
+}
+
+
 
 .add-button {
     background-color: #007bff;
@@ -61,7 +96,21 @@ select {
     justify-content: flex-end;
 }
 
-.dialog-actions button {
+.dialog-actions .cancelar {
+    background-color: #6C757D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.dialog-actions .cancelar:hover {
+    background-color: #5A6268;
+}
+
+.dialog-actions .guardar {
     background-color: #007bff;
     color: white;
     border: none;
@@ -71,6 +120,6 @@ select {
     margin-left: 10px;
 }
 
-.dialog-actions button:hover {
+.dialog-actions .guardar:hover {
     background-color: #0056b3;
 }

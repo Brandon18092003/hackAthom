@@ -28,6 +28,8 @@ export class AgregarIntegranteComponent {
     ],
     'Salón 3': [
       { nombre: 'Alumno 3-1', rol: 'Estudiante' },
+      { nombre: 'Alumno 3-2', rol: 'Estudiante' },
+      { nombre: 'Alumno 3-2', rol: 'Estudiante' },
       { nombre: 'Alumno 3-2', rol: 'Estudiante' }
     ]
   };
