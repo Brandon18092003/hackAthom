@@ -34,8 +34,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { LoginComponent } from './paginas/login/login.component';
 import { EditAlertComponent } from './paginas/grupos/group/edit-alert/edit-alert.component';
 import { AgregarIntegranteComponent } from './paginas/grupos/group/agregar-integrante/agregar-integrante.component';
-import { HttpClientModule } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { withFetch } from '@angular/common/http';
+import { CommonModule } from '@angular/common'; // Importar CommonModule
+
+
+
 
 
 
@@ -78,14 +82,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatDatepickerModule,
     MatNativeDateModule,
     HttpClientModule,
-    NgbModule
-    
+    HttpClientModule,
+    CommonModule
   ],
   providers: [
     MatDatepickerModule,
     MatNativeDateModule,
     provideClientHydration(),
     provideAnimationsAsync(),
+    provideHttpClient(withFetch())
   ],
   bootstrap: [AppComponent],
 })
