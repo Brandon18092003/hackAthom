@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CrearHabilidadDTO, Habilidad, EliminarHabilidadDTO } from '../models/model';
 
@@ -20,7 +20,11 @@ export class HabilidadService {
   }
 
   eliminarHabilidad(habilidadDTO: EliminarHabilidadDTO): Observable<void> {
-    console.log('Llamando a eliminar habilidad con idPerfilHabilidad:', habilidadDTO.id_perfil_habilidad);
-    return this.http.delete<void>(`${this.apiUrl}/eliminar/${habilidadDTO.id_perfil_habilidad}`);
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: habilidadDTO
+    };
+    return this.http.delete<void>(`${this.apiUrl}/eliminar`, options);
   }
+
 }

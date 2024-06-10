@@ -120,14 +120,16 @@ export class PerfilComponent implements OnInit {
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      if (result.isConfirmed) {
-        const eliminarHabilidadDTO: EliminarHabilidadDTO = { id_perfil_habilidad: habilidad.id };
+      const codigo = this.authService.getCodigo()
+      if (result.isConfirmed && codigo) {
+        const eliminarHabilidadDTO: EliminarHabilidadDTO = { idHabilidad: habilidad.id,codigoPersona: codigo };
         this.habilidadService.eliminarHabilidad(eliminarHabilidadDTO).subscribe({
           next: () => {
             console.log('Habilidad eliminada con éxito:', habilidad);
             this.habilidades.splice(index, 1);
             Swal.fire('Eliminado!', 'La habilidad ha sido eliminada.', 'success');
           },
+          
           error: (error) => {
             console.error('Error al eliminar habilidad:', error);
             Swal.fire('Error!', 'No se pudo eliminar la habilidad.', 'error');

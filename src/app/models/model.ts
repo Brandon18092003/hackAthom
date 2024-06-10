@@ -125,7 +125,8 @@ export interface CrearHabilidadDTO {
 }
 
 export interface EliminarHabilidadDTO {
-  id_perfil_habilidad: number;
+  idHabilidad: number;
+  codigoPersona: string;
 }
 
 export interface CrearHobbyDTO {
