@@ -1,3 +1,5 @@
+import { Time } from "@angular/common";
+
 export interface CredsDTO {
   codUsuario: string;
   password: string;
@@ -152,6 +154,15 @@ export interface MiembroGrupo {
   es_lider: boolean;
   grupo: Grupo;
   persona: Persona;
+}
+
+export interface Notificacion{
+  id: number;
+  mensaje: string;
+  fecha: Date;
+  hora: Time;
+  grupo: Grupo;
+  
 }
 
 

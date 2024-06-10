@@ -104,7 +104,7 @@
                         <div *ngFor="let alerta of alertas" class="alert-card">
                             <div class="alert-content">
                                 <div class="alert-details">
-                                    <h3>{{ alerta.asunto }}</h3>
+                                    <h3>{{ alerta.mensaje }}</h3>
                                     <p>Fecha: {{ alerta.fecha | date:'mediumDate' }} - {{ alerta.hora }}</p>
                                 </div>
                                 <div class="alert-actions">

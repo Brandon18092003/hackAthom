@@ -8,13 +8,14 @@ import { AlertService } from '../../../services/alert.service';
 import { AgregarIntegranteComponent } from './agregar-integrante/agregar-integrante.component';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
-import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal, PersonaDTO, MiembroDTO, Persona } from '../../../models/model';
+import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal, PersonaDTO, MiembroDTO, Persona, Notificacion } from '../../../models/model';
 import { GroupService } from '../../../services/grupo/grupo-service.service';
 import { WebSocketService } from '../../../services/web-socket.service';
 import { ConversacionGrupalService } from '../../../services/conversacion-grupal.service';
 import { PersonaService } from '../../../services/persona/persona.service';
 import { MiembroService } from '../../../services/miembro/miembro.service';
 import { Console, error } from 'console';
+import { NotificacionService } from '../../../services/notificacion/notificacion.service';
 
 
 interface Integrante {
@@ -34,12 +35,13 @@ export class GroupComponent implements OnInit {
   personaActual?:Persona;
   gruposeleccionado?:Grupo;
 
+
   grupos: Grupo[] = [];
   selectedGroup: Grupo | null = null;
   newMessage: string = '';
   mensajes: MensajeConversacionGrupal[] = [];
   alertMessage: any = null;
-  alertas: any[] = []; // Array para almacenar las alertas
+  alertas: Notificacion[] = []; // Array para almacenar las alertas
   
   integrantes: PersonaDTO[] = [];
   currentConversacionId: number | null = null;
@@ -58,7 +60,8 @@ export class GroupComponent implements OnInit {
     public authService: AuthService,  // Cambiar a public
     private webSocketService: WebSocketService,
     private personaService: PersonaService,
-    private miembroService: MiembroService
+    private miembroService: MiembroService,
+    private notificacionService:NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -114,6 +117,7 @@ export class GroupComponent implements OnInit {
     this.scrollToBottom();
     this.gruposeleccionado=grupo;
     this.comprobarLider(this.gruposeleccionado.id);
+    this.obtenerAlertasDelGrupo(this.gruposeleccionado.id)
   }
 
   sendMessage(): void {
@@ -390,5 +394,13 @@ export class GroupComponent implements OnInit {
       },error=>{
         Swal.fire("No se pudo comprobar si es lider")
       })
+  }
+
+  obtenerAlertasDelGrupo(idGrupo:number){
+    this.notificacionService.getNotificationsByGrupo(idGrupo).subscribe(response=>{
+      this.alertas=response;
+    },error=>{
+      Swal.fire("No se pudieron obtener las notificaciones del grupo")
+    })
   }
 }
