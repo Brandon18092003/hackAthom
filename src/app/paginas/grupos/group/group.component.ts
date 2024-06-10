@@ -8,13 +8,13 @@ import { AlertService } from '../../../services/alert.service';
 import { AgregarIntegranteComponent } from './agregar-integrante/agregar-integrante.component';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
-import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal, PersonaDTO, MiembroDTO } from '../../../models/model';
+import { Grupo, MensajeRequest, MensajeConversacionGrupal, ConversacionGrupal, PersonaDTO, MiembroDTO, Persona } from '../../../models/model';
 import { GroupService } from '../../../services/grupo/grupo-service.service';
 import { WebSocketService } from '../../../services/web-socket.service';
 import { ConversacionGrupalService } from '../../../services/conversacion-grupal.service';
 import { PersonaService } from '../../../services/persona/persona.service';
 import { MiembroService } from '../../../services/miembro/miembro.service';
-import { error } from 'console';
+import { Console, error } from 'console';
 
 
 interface Integrante {
@@ -29,7 +29,9 @@ interface Integrante {
 })
 export class GroupComponent implements OnInit {
   @ViewChild('chatContent') private chatContent: ElementRef | undefined;
-  
+
+  eslider:boolean=false;
+  personaActual?:Persona;
   gruposeleccionado?:Grupo;
 
   grupos: Grupo[] = [];
@@ -60,6 +62,7 @@ export class GroupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     const codigoUsuario = this.authService.getCodigo(); // Obtener el código de usuario del localStorage
     if (codigoUsuario) {
       this.groupService.getGruposByCodPersona(codigoUsuario).subscribe(grupos => {
@@ -105,10 +108,12 @@ export class GroupComponent implements OnInit {
   }
 
   selectGroup(grupo: Grupo): void {
+    //Comprobar si el usuario es lider
     this.cargarMensajesDeGrupo(grupo);
     this.obtenerPersonasPorGrupo(grupo.id);
     this.scrollToBottom();
     this.gruposeleccionado=grupo;
+    this.comprobarLider(this.gruposeleccionado.id);
   }
 
   sendMessage(): void {
@@ -371,5 +376,19 @@ export class GroupComponent implements OnInit {
         console.log(this.dataSource.data);
       })
   }
-  
+
+  comprobarLider(idGrupo:number){
+      console.log(idGrupo);
+      this.personaService.getLiderByGroup(idGrupo).subscribe(response=>{
+        const codigoActual = this.authService.getCodigo();
+        this.personaActual=response
+        const codigoLider = this.personaActual.codigo;
+        console.log(codigoLider);
+        if(codigoLider==codigoActual){
+          this.eslider=true;
+        }
+      },error=>{
+        Swal.fire("No se pudo comprobar si es lider")
+      })
+  }
 }

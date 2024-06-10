@@ -23,5 +23,8 @@ export class PersonaService {
     return this.http.get<string>(`${this.apiUrl}/rol/${idGrupo}/${codigoUsuario}`);
   }
 
+  getLiderByGroup(idGrupo: number):Observable<Persona>{
+    return this.http.get<Persona>(`${this.apiUrl}/lider/${idGrupo}`);
+  }
 
 }
