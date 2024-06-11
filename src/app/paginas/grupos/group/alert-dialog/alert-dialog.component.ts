@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
+import { NotificacionService } from '../../../../services/notificacion/notificacion.service';
+import { response } from 'express';
+import { Notificacion } from '../../../../models/model';
+import { error } from 'console';
+import { Time } from '@angular/common';
 
 export interface AlertDialogData {
   asunto: string;
@@ -16,12 +21,16 @@ export interface AlertDialogData {
 export class AlertDialogComponent implements OnInit {
 
   minDate: Date;
+  notificacion?:Notificacion;
+  hora!:Time;
 
   constructor(
-    public dialogRef: MatDialogRef<AlertDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AlertDialogData
+    private notificacionService:NotificacionService,
+    public dialogRef: MatDialogRef<any>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.minDate = new Date();
+
   }
 
   ngOnInit(): void {
@@ -29,13 +38,15 @@ export class AlertDialogComponent implements OnInit {
   }
 
   onSaveClick(): void {
-    if (!this.data.asunto || !this.data.fecha || !this.data.hora) {
+    if (!this.data.asunto || !this.data.fecha ) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Todos los campos son obligatorios.'
       });
       return;
+    }else{
+      this.crearAlerta();
     }
 
     const selectedDate = new Date(`${this.data.fecha.toISOString().split('T')[0]}T${this.data.hora}:00`);
@@ -55,5 +66,23 @@ export class AlertDialogComponent implements OnInit {
 
   onCancelClick(): void {
     this.dialogRef.close();
+  }
+  crearAlerta(){
+    this.notificacion={
+      id:0,
+      mensaje: this.data.asunto,
+      fecha: this.data.fecha,
+      hora: this.hora,
+      grupo: this.data.grupo
+    }
+
+    if(this.notificacion){
+      this.notificacionService.crearAlerta(this.notificacion.grupo.id,this.notificacion).subscribe(response=>{
+        Swal.fire("Alerta creada exitosamente")
+      },error=>{
+      Swal.fire("No se pudo crear la alerta")
+      })
+    }
+
   }
 }

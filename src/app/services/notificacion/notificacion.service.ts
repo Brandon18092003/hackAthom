@@ -18,9 +18,9 @@ export class NotificacionService {
     return this.http.get<Notificacion[]>(`${this.apiUrl}/group/${idGrupo}`);
   }
 
-  crearAlerta(grupoId: number, mensaje: string): Observable<void> {
+  crearAlerta(grupoId: number, notificacion:Notificacion): Observable<void> {
     const url = `${this.apiUrl}/api/grupos/${grupoId}/alertas`;
-    return this.http.post<void>(url, mensaje);
+    return this.http.post<void>(url, notificacion);
   }
-  
+
 }

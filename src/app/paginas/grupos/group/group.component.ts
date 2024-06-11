@@ -116,8 +116,9 @@ export class GroupComponent implements OnInit {
     this.obtenerPersonasPorGrupo(grupo.id);
     this.scrollToBottom();
     this.gruposeleccionado=grupo;
-    this.comprobarLider(this.gruposeleccionado.id);
-    this.obtenerAlertasDelGrupo(this.gruposeleccionado.id)
+    console.log("grupo seleccionado",grupo)
+    this.comprobarLider(grupo.id);
+    this.obtenerAlertasDelGrupo(grupo.id)
   }
 
   sendMessage(): void {
@@ -284,7 +285,7 @@ export class GroupComponent implements OnInit {
   openAlertDialog(): void {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       width: '500px',
-      data: { asunto: '', fecha: new Date(), hora: '' }
+      data: { asunto: '', fecha: new Date(), hora: '',grupo: this.selectedGroup }
     });
 
     dialogRef.afterClosed().subscribe((result: any | undefined) => {
@@ -388,8 +389,11 @@ export class GroupComponent implements OnInit {
         this.personaActual=response
         const codigoLider = this.personaActual.codigo;
         console.log(codigoLider);
+        console.log(codigoActual);
         if(codigoLider==codigoActual){
           this.eslider=true;
+        }else{
+          this.eslider=false;
         }
       },error=>{
         Swal.fire("No se pudo comprobar si es lider")
