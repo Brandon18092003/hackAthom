@@ -61,7 +61,7 @@ export class AlertDialogComponent implements OnInit {
       return;
     }
 
-    this.dialogRef.close(this.data);
+    this.dialogRef.close(this.notificacion);
   }
 
   onCancelClick(): void {
