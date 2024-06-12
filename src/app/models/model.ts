@@ -15,10 +15,12 @@ export interface Curso {
 export interface Grupo {
   id: number;
   nombre: string;
+  nombreCurso: string;
   fecha_creacion: Date;
-  curso: any;
   alerta?: string;
 }
+
+
 
 export interface MensajeRequest {
   conversacionId: number;
