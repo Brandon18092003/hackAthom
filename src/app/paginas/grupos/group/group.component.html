@@ -1,128 +1,128 @@
 <div class="body">
     <div class="section">
-        <div class="list">
-            <div class="header-list">
-                <h1>Chat</h1>
-            </div>
-            <div *ngFor="let grupo of grupos" class="group-item" [ngClass]="{'selected': grupo === selectedGroup}" (click)="selectGroup(grupo)">
-                <img src="assets/img_grupo.png" alt="Grupo Icono" class="group-icon">
-                <div class="group-details">
-                    <p class="group-name">{{ grupo.nombre }}</p>
-                    <p *ngIf="grupo.alerta" class="group-alert">{{ grupo.alerta }}</p>
-                </div>
-            </div>
+      <div class="list">
+        <div class="header-list">
+          <h1>Chat</h1>
         </div>
-        <div class="chat">
-            <div class="chat-header">
-                <img *ngIf="selectedGroup" src="assets/img_grupo.png" alt="Imagen de Grupo" class="group-image">
-                <h2>{{ selectedGroup?.nombre || '' }}</h2>
-                <button class="ellipsis-icon" (click)="togglePanel()">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-            </div>
-            <div class="chat-content" #chatContent>
-                <div *ngIf="alertMessage" class="alert-message">
-                    <div class="alert-details">
-                        <p><strong>Alerta:</strong> {{ alertMessage.asunto }}</p>
-                        <p>Fecha: {{ alertMessage.fecha | date:'mediumDate' }} - {{ alertMessage.hora }}</p>
-                    </div>
-                    <button mat-icon-button matTooltip="Eliminar Alerta" (click)="desanclarAlerta()" class="close-button">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div *ngIf="!selectedGroup" class="no-group-selected">
-                    <p>Selecciona un grupo para ver los mensajes</p>
-                </div>
-                <div *ngFor="let mensaje of mensajes" [ngClass]="{'mensaje-autor': mensaje.persona.codigo === authService.getCodigo(), 'mensaje-otro': mensaje.persona.codigo !== authService.getCodigo()}" class="mensaje">
-                    <div class="mensaje-info" [ngClass]="{'mensaje-info-autor': mensaje.persona.codigo === authService.getCodigo(), 'mensaje-info-otro': mensaje.persona.codigo !== authService.getCodigo()}">
-                        <span class="nombre">{{ mensaje.persona.nombres }}</span>
-                    </div>
-                    <p class="mensaje-texto">{{ mensaje.mensaje }}</p>
-                    <p class="fecha">{{ mensaje.fechaEnvio | date:'shortTime' }}</p>
-                </div>
-            </div>
-            <div class="chat-input">
-                <input type="text" placeholder="Escribir mensaje" [(ngModel)]="newMessage">
-                <button class="enviar" (click)="sendMessage()">Enviar</button>
-            </div>
-            <div class="slide-panel" [ngClass]="{'open': isPanelOpen}">
-                <div class="header-Opciones">
-                    <button class="close-panel" (click)="togglePanel()">
-                        <i class="fas fa-arrow-left"></i> Cerrar
-                    </button>
-                    <div class="action-buttons">
-                        <button *ngIf="eslider" class="eliminar-grupo" (click)="eliminarGrupo(selectedGroup)">
-                            <i class="fas fa-trash"></i> Eliminar Grupo
-                        </button>
-                        <button class="salir-grupo" (click)="salirDelGrupo(selectedGroup)">
-                            <i class="fas fa-sign-out-alt"></i> Salir del Grupo
-                        </button>
-                    </div>
-                </div>
-                <div class="integrantes">
-                    <div class="headerInt">
-                        <h2>Integrantes</h2>
-                        <button *ngIf="eslider" matTooltip="Agregar" class="añadir" (click)="openAddDialog()">
-                            <i class="fas fa-plus"></i> Añadir
-                        </button>
-                    </div>
-                    <div class="table-container">
-                        <table mat-table [dataSource]="dataSource">
-                            <ng-container matColumnDef="nombres">
-                                <th mat-header-cell *matHeaderCellDef> Nombres </th>
-                                <td mat-cell *matCellDef="let element"> {{element.nombres}} </td>
-                            </ng-container>
-                            <ng-container matColumnDef="rol">
-                                <th mat-header-cell *matHeaderCellDef> Rol </th>
-                                <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
-                            </ng-container>
-                            <ng-container matColumnDef="acciones">
-                                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <button *ngIf="eslider" class="editar-button" matTooltip="Editar" (click)="openEditDialog(element)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button *ngIf="eslider" class="eliminar-button" matTooltip="Eliminar" (click)="eliminarIntegrante(element)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-            
-                            </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="notificaciones">
-                    <div class="headerNot">
-                        <h2>Notificaciones</h2>
-                        <button *ngIf="eslider" class="alert" (click)="openAlertDialog()">
-                            <i class="fas fa-info-circle"></i> Crear
-                        </button>
-                    </div>
-                    <div class="alert-cards">
-                        <div *ngFor="let alerta of alertas" class="alert-card">
-                            <div class="alert-content">
-                                <div class="alert-details">
-                                    <h3>{{ alerta.mensaje }}</h3>
-                                    <p>Fecha: {{ alerta.fecha | date:'mediumDate' }} - {{ alerta.hora }}</p>
-                                </div>
-                                <div class="alert-actions">
-                                    <button *ngIf="eslider" mat-icon-button matTooltip="Editar" (click)="editarAlerta(alerta)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button *ngIf="eslider" mat-icon-button matTooltip="Eliminar" (click)="eliminarAlerta(alerta)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                    <button *ngIf="eslider" mat-icon-button matTooltip="Anclar" (click)="anclarAlerta(alerta)" [disabled]="isAlertaAnclada(alerta)">
-                                        <i class="fas fa-thumbtack"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div *ngFor="let grupo of grupos" class="group-item" [ngClass]="{'selected': grupo === selectedGroup}" (click)="selectGroup(grupo)">
+          <img src="assets/img_grupo.png" alt="Grupo Icono" class="group-icon">
+          <div class="group-details">
+            <p class="group-name">{{ grupo.nombre }}</p>
+            <p *ngIf="grupo.alerta" class="group-alert">{{ grupo.alerta }}</p>
+          </div>
         </div>
+      </div>
+      <div class="chat">
+        <div class="chat-header">
+          <img *ngIf="selectedGroup" src="assets/img_grupo.png" alt="Imagen de Grupo" class="group-image">
+          <h2>{{ selectedGroup?.nombre || '' }}</h2>
+          <button class="ellipsis-icon" (click)="togglePanel()">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+        </div>
+        <div class="chat-content" #chatContent>
+          <div *ngIf="alertMessage" class="alert-message">
+            <div class="alert-details">
+              <p><strong>Alerta:</strong> {{ alertMessage.mensaje }}</p>
+              <p>Fecha: {{ alertMessage.fecha | date:'mediumDate' }} - {{ alertMessage.hora }}</p>
+            </div>
+            <button mat-icon-button matTooltip="Eliminar Alerta" (click)="desanclarAlerta()" class="close-button">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div *ngIf="!selectedGroup" class="no-group-selected">
+            <p>Selecciona un grupo para ver los mensajes</p>
+          </div>
+          <div *ngFor="let mensaje of mensajes" [ngClass]="{'mensaje-autor': mensaje.persona.codigo === authService.getCodigo(), 'mensaje-otro': mensaje.persona.codigo !== authService.getCodigo()}" class="mensaje">
+            <div class="mensaje-info" [ngClass]="{'mensaje-info-autor': mensaje.persona.codigo === authService.getCodigo(), 'mensaje-info-otro': mensaje.persona.codigo !== authService.getCodigo()}">
+              <span class="nombre">{{ mensaje.persona.nombres }}</span>
+            </div>
+            <p class="mensaje-texto">{{ mensaje.mensaje }}</p>
+            <p class="fecha">{{ mensaje.fechaEnvio | date:'shortTime' }}</p>
+          </div>
+        </div>
+        <div class="chat-input">
+          <input type="text" placeholder="Escribir mensaje" [(ngModel)]="newMessage">
+          <button class="enviar" (click)="sendMessage()">Enviar</button>
+        </div>
+        <div class="slide-panel" [ngClass]="{'open': isPanelOpen}">
+          <div class="header-Opciones">
+            <button class="close-panel" (click)="togglePanel()">
+              <i class="fas fa-arrow-left"></i> Cerrar
+            </button>
+            <div class="action-buttons">
+              <button *ngIf="eslider" class="eliminar-grupo" (click)="eliminarGrupo(selectedGroup)">
+                <i class="fas fa-trash"></i> Eliminar Grupo
+              </button>
+              <button class="salir-grupo" (click)="salirDelGrupo(selectedGroup)">
+                <i class="fas fa-sign-out-alt"></i> Salir del Grupo
+              </button>
+            </div>
+          </div>
+          <div class="integrantes">
+            <div class="headerInt">
+              <h2>Integrantes</h2>
+              <button *ngIf="eslider" matTooltip="Agregar" class="añadir" (click)="openAddDialog()">
+                <i class="fas fa-plus"></i> Añadir
+              </button>
+            </div>
+            <div class="table-container">
+              <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="nombres">
+                  <th mat-header-cell *matHeaderCellDef> Nombres </th>
+                  <td mat-cell *matCellDef="let element"> {{element.nombres}} </td>
+                </ng-container>
+                <ng-container matColumnDef="rol">
+                  <th mat-header-cell *matHeaderCellDef> Rol </th>
+                  <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
+                </ng-container>
+                <ng-container matColumnDef="acciones">
+                  <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                  <td mat-cell *matCellDef="let element">
+                    <button *ngIf="eslider" class="editar-button" matTooltip="Editar" (click)="openEditDialog(element)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button *ngIf="eslider" class="eliminar-button" matTooltip="Eliminar" (click)="eliminarIntegrante(element)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+          </div>
+          <div class="notificaciones">
+            <div class="headerNot">
+              <h2>Notificaciones</h2>
+              <button *ngIf="eslider" class="alert" (click)="openAlertDialog()">
+                <i class="fas fa-info-circle"></i> Crear
+              </button>
+            </div>
+            <div class="alert-cards">
+              <div *ngFor="let alerta of alertas" class="alert-card">
+                <div class="alert-content">
+                  <div class="alert-details">
+                    <h3>{{ alerta.mensaje }}</h3>
+                    <p>Fecha: {{ alerta.fecha | date:'mediumDate' }} - {{ alerta.hora }}</p>
+                  </div>
+                  <div class="alert-actions">
+                    <button *ngIf="eslider" mat-icon-button matTooltip="Editar" (click)="editarAlerta(alerta)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button *ngIf="eslider" mat-icon-button matTooltip="Eliminar" (click)="eliminarAlerta(alerta)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                    <button *ngIf="eslider" mat-icon-button matTooltip="Anclar" (click)="anclarAlerta(alerta)" [disabled]="isAlertaAnclada(alerta)">
+                      <i class="fas fa-thumbtack"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+  

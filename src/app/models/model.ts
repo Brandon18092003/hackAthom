@@ -1,3 +1,4 @@
+// model.ts
 import { Time } from "@angular/common";
 
 export interface CredsDTO {
@@ -156,15 +157,11 @@ export interface MiembroGrupo {
   persona: Persona;
 }
 
-export interface Notificacion{
+export interface Notificacion {
   id: number;
   mensaje: string;
   fecha: Date;
   hora: Time;
   grupo: Grupo;
-  
+  isPinned: boolean; // Nuevo campo
 }
-
-
-
-

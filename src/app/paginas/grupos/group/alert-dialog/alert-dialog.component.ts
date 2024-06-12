@@ -2,9 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { NotificacionService } from '../../../../services/notificacion/notificacion.service';
-import { response } from 'express';
 import { Notificacion } from '../../../../models/model';
-import { error } from 'console';
 import { Time } from '@angular/common';
 
 export interface AlertDialogData {
@@ -21,16 +19,15 @@ export interface AlertDialogData {
 export class AlertDialogComponent implements OnInit {
 
   minDate: Date;
-  notificacion?:Notificacion;
-  hora!:Time;
+  notificacion?: Notificacion;
+  hora!: Time;
 
   constructor(
-    private notificacionService:NotificacionService,
+    private notificacionService: NotificacionService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.minDate = new Date();
-
   }
 
   ngOnInit(): void {
@@ -38,14 +35,14 @@ export class AlertDialogComponent implements OnInit {
   }
 
   onSaveClick(): void {
-    if (!this.data.asunto || !this.data.fecha ) {
+    if (!this.data.asunto || !this.data.fecha) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Todos los campos son obligatorios.'
       });
       return;
-    }else{
+    } else {
       this.crearAlerta();
     }
 
@@ -67,22 +64,23 @@ export class AlertDialogComponent implements OnInit {
   onCancelClick(): void {
     this.dialogRef.close();
   }
-  crearAlerta(){
-    this.notificacion={
-      id:0,
+
+  crearAlerta() {
+    this.notificacion = {
+      id: 0,
       mensaje: this.data.asunto,
       fecha: this.data.fecha,
       hora: this.hora,
-      grupo: this.data.grupo
-    }
+      grupo: this.data.grupo,
+      isPinned: false // Inicialmente la alerta no está anclada
+    };
 
-    if(this.notificacion){
-      this.notificacionService.crearAlerta(this.notificacion.grupo.id,this.notificacion).subscribe(response=>{
-        Swal.fire("Alerta creada exitosamente")
-      },error=>{
-      Swal.fire("No se pudo crear la alerta")
-      })
+    if (this.notificacion) {
+      this.notificacionService.crearAlerta(this.notificacion.grupo.id, this.notificacion).subscribe(response => {
+        Swal.fire("Alerta creada exitosamente");
+      }, error => {
+        Swal.fire("No se pudo crear la alerta");
+      });
     }
-
   }
 }

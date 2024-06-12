@@ -14,14 +14,7 @@ import { WebSocketService } from '../../../services/web-socket.service';
 import { ConversacionGrupalService } from '../../../services/conversacion-grupal.service';
 import { PersonaService } from '../../../services/persona/persona.service';
 import { MiembroService } from '../../../services/miembro/miembro.service';
-import { Console, error } from 'console';
 import { NotificacionService } from '../../../services/notificacion/notificacion.service';
-
-
-interface Integrante {
-  nombres: string;
-  rol: string;
-}
 
 @Component({
   selector: 'app-group',
@@ -31,18 +24,17 @@ interface Integrante {
 export class GroupComponent implements OnInit {
   @ViewChild('chatContent') private chatContent: ElementRef | undefined;
 
-  eslider:boolean=false;
-  personaActual?:Persona;
-  gruposeleccionado?:Grupo;
-
+  eslider: boolean = false;
+  personaActual?: Persona;
+  gruposeleccionado?: Grupo;
 
   grupos: Grupo[] = [];
   selectedGroup: Grupo | null = null;
   newMessage: string = '';
   mensajes: MensajeConversacionGrupal[] = [];
-  alertMessage: any = null;
+  alertMessage: Notificacion | null = null;
   alertas: Notificacion[] = []; // Array para almacenar las alertas
-  
+
   integrantes: PersonaDTO[] = [];
   currentConversacionId: number | null = null;
 
@@ -50,7 +42,7 @@ export class GroupComponent implements OnInit {
   dataSource = new MatTableDataSource(this.integrantes);
   isPanelOpen: boolean = false; // Estado del panel deslizante
 
-  miembroDTO?:MiembroDTO;
+  miembroDTO?: MiembroDTO;
 
   constructor(
     public dialog: MatDialog,
@@ -61,11 +53,10 @@ export class GroupComponent implements OnInit {
     private webSocketService: WebSocketService,
     private personaService: PersonaService,
     private miembroService: MiembroService,
-    private notificacionService:NotificacionService
+    private notificacionService: NotificacionService
   ) { }
 
   ngOnInit(): void {
-
     const codigoUsuario = this.authService.getCodigo(); // Obtener el código de usuario del localStorage
     if (codigoUsuario) {
       this.groupService.getGruposByCodPersona(codigoUsuario).subscribe(grupos => {
@@ -111,14 +102,14 @@ export class GroupComponent implements OnInit {
   }
 
   selectGroup(grupo: Grupo): void {
-    //Comprobar si el usuario es lider
     this.cargarMensajesDeGrupo(grupo);
     this.obtenerPersonasPorGrupo(grupo.id);
     this.scrollToBottom();
-    this.gruposeleccionado=grupo;
-    console.log("grupo seleccionado",grupo)
+    this.gruposeleccionado = grupo;
+    console.log("grupo seleccionado", grupo);
     this.comprobarLider(grupo.id);
-    this.obtenerAlertasDelGrupo(grupo.id)
+    this.obtenerAlertasDelGrupo(grupo.id);
+    this.loadPinnedNotification(grupo.id); // Cargar la notificación anclada para el grupo seleccionado
   }
 
   sendMessage(): void {
@@ -154,7 +145,7 @@ export class GroupComponent implements OnInit {
         codigo: element.codigo,
         nombre_grupo: this.gruposeleccionado?.nombre,
         grupo: this.gruposeleccionado?.id,
-       }
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -175,14 +166,11 @@ export class GroupComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe(nuevoMiembro => {
       if (nuevoMiembro && this.gruposeleccionado) {
-
         const miembroExistente = this.integrantes.find(miembro => miembro.codigo === nuevoMiembro.codMiembro);
 
         if (miembroExistente) {
-          // El miembro ya existe
-          Swal.fire("El estudiante ya ha sido agregado al grupo")
+          Swal.fire("El estudiante ya ha sido agregado al grupo");
         } else {
-          // El miembro no existe, así que lo agregamos
           if (nuevoMiembro.codMiembro) {
             this.obtenerPersonasPorGrupo(this.gruposeleccionado.id);
             this.integrantes.push(nuevoMiembro);
@@ -205,28 +193,21 @@ export class GroupComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       const codigo = element.codigo;
-      console.log(codigo);
       if (result.isConfirmed && codigo && this.gruposeleccionado) {
-        this.miembroDTO={
+        this.miembroDTO = {
           codMiembro: codigo,
           idGrupo: this.gruposeleccionado.id,
-        }
-        console.log(this.miembroDTO);
-        this.miembroService.deleteMiembro(this.miembroDTO).subscribe(response=>{
-        this.integrantes = this.integrantes.filter(integrante => integrante !== element);
-        this.dataSource.data = this.integrantes;
-        Swal.fire(
-          'Eliminado!',
-          `${element.nombres} ha sido eliminado del grupo.`,
-          'success'
-        );
-        },error=>{
-          Swal.fire("No se pudo eliminar el estudiante")
-        })
-        
-      }else(
-        Swal.fire("No se pudo eliminar el estudiante")
-      )
+        };
+        this.miembroService.deleteMiembro(this.miembroDTO).subscribe(response => {
+          this.integrantes = this.integrantes.filter(integrante => integrante !== element);
+          this.dataSource.data = this.integrantes;
+          Swal.fire('Eliminado!', `${element.nombres} ha sido eliminado del grupo.`, 'success');
+        }, error => {
+          Swal.fire("No se pudo eliminar el estudiante");
+        });
+      } else {
+        Swal.fire("No se pudo eliminar el estudiante");
+      }
     });
   }
 
@@ -245,12 +226,8 @@ export class GroupComponent implements OnInit {
         if (result.isConfirmed) {
           this.grupos = this.grupos.filter(g => g !== grupo);
           this.selectedGroup = null; // Deja el selectedGroup en null
-          Swal.fire(
-            'Eliminado!',
-            `${grupo.nombre} ha sido eliminado.`,
-            'success'
-          );
-          this.togglePanel();  // Cierra el panel deslizante después de eliminar el grupo
+          Swal.fire('Eliminado!', `${grupo.nombre} ha sido eliminado.`, 'success');
+          this.togglePanel(); // Cierra el panel deslizante después de eliminar el grupo
         }
       });
     }
@@ -271,12 +248,8 @@ export class GroupComponent implements OnInit {
         if (result.isConfirmed) {
           this.grupos = this.grupos.filter(g => g !== grupo);
           this.selectedGroup = null; // Deja el selectedGroup en null
-          Swal.fire(
-            'Salido!',
-            `Has salido del grupo ${grupo.nombre}.`,
-            'success'
-          );
-          this.togglePanel();  // Cierra el panel deslizante después de salir del grupo
+          Swal.fire('Salido!', `Has salido del grupo ${grupo.nombre}.`, 'success');
+          this.togglePanel(); // Cierra el panel deslizante después de salir del grupo
         }
       });
     }
@@ -285,7 +258,7 @@ export class GroupComponent implements OnInit {
   openAlertDialog(): void {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       width: '500px',
-      data: { asunto: '', fecha: new Date(), hora: '',grupo: this.selectedGroup }
+      data: { asunto: '', fecha: new Date(), hora: '', grupo: this.selectedGroup }
     });
 
     dialogRef.afterClosed().subscribe((result: any | undefined) => {
@@ -314,7 +287,7 @@ export class GroupComponent implements OnInit {
   eliminarAlerta(alerta: any): void {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: `¿Deseas eliminar la alerta ${alerta.asunto}?`,
+      text: `¿Deseas eliminar la alerta ${alerta.mensaje}?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -324,47 +297,63 @@ export class GroupComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.alertas = this.alertas.filter(a => a !== alerta);
-        Swal.fire(
-          'Eliminado!',
-          `La alerta ${alerta.asunto} ha sido eliminada.`,
-          'success'
-        );
+        Swal.fire('Eliminado!', `La alerta ${alerta.mensaje} ha sido eliminada.`, 'success');
       }
     });
   }
 
-  anclarAlerta(alerta: any): void {
-    this.alertMessage = alerta;
-
-    if (this.selectedGroup) {
-      this.selectedGroup.alerta = alerta.asunto;
+  anclarAlerta(alerta: Notificacion): void {
+    if (this.alertMessage && this.alertMessage.id !== alerta.id) {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: `¿Deseas cambiar la alerta anclada a "${alerta.mensaje}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, cambiar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.cambiarAlertaAnclada(alerta);
+        }
+      });
+    } else {
+      this.cambiarAlertaAnclada(alerta);
     }
+  }
 
-    this.alertService.setPinnedAlert(true);
-
-    Swal.fire({
-      icon: 'info',
-      title: 'Alerta anclada',
-      text: `La alerta ${alerta.asunto} ha sido anclada.`
-    });
-
+  cambiarAlertaAnclada(alerta: Notificacion): void {
+    if (this.alertMessage) {
+      this.notificacionService.pinNotification(this.alertMessage.id, false).subscribe(() => {
+        this.notificacionService.pinNotification(alerta.id, true).subscribe(() => {
+          this.alertMessage = alerta;
+          if (this.selectedGroup) {
+            this.selectedGroup.alerta = alerta.mensaje;
+          }
+          Swal.fire('Alerta anclada', `La alerta ${alerta.mensaje} ha sido anclada.`, 'info');
+        });
+      });
+    } else {
+      this.notificacionService.pinNotification(alerta.id, true).subscribe(() => {
+        this.alertMessage = alerta;
+        if (this.selectedGroup) {
+          this.selectedGroup.alerta = alerta.mensaje;
+        }
+        Swal.fire('Alerta anclada', `La alerta ${alerta.mensaje} ha sido anclada.`, 'info');
+      });
+    }
   }
 
   desanclarAlerta(): void {
     if (this.alertMessage) {
       const alerta = this.alertMessage;
       this.alertMessage = null;
-
       if (this.selectedGroup) {
         this.selectedGroup.alerta = undefined;
       }
-
-      this.alertService.setPinnedAlert(false);
-
-      Swal.fire({
-        icon: 'info',
-        title: 'Alerta desanclada',
-        text: `La alerta ${alerta.asunto} ha sido desanclada.`
+      this.notificacionService.pinNotification(alerta.id, false).subscribe(() => {
+        Swal.fire('Alerta desanclada', `La alerta ${alerta.mensaje} ha sido desanclada.`, 'info');
       });
     }
   }
@@ -373,38 +362,45 @@ export class GroupComponent implements OnInit {
     return this.alertMessage === alerta;
   }
 
-    //Obtener personas del grupo
-  obtenerPersonasPorGrupo(idGrupo:number){
-      this.personaService.getPersonasByGrupo(idGrupo).subscribe(response=>{
-        this.integrantes=response;
-        this.dataSource.data=this.integrantes;
-        console.log(this.dataSource.data);
-      })
+  // Obtener personas del grupo
+  obtenerPersonasPorGrupo(idGrupo: number): void {
+    this.personaService.getPersonasByGrupo(idGrupo).subscribe(response => {
+      this.integrantes = response;
+      this.dataSource.data = this.integrantes;
+    });
   }
 
-  comprobarLider(idGrupo:number){
-      console.log(idGrupo);
-      this.personaService.getLiderByGroup(idGrupo).subscribe(response=>{
-        const codigoActual = this.authService.getCodigo();
-        this.personaActual=response
-        const codigoLider = this.personaActual.codigo;
-        console.log(codigoLider);
-        console.log(codigoActual);
-        if(codigoLider==codigoActual){
-          this.eslider=true;
-        }else{
-          this.eslider=false;
+  comprobarLider(idGrupo: number): void {
+    this.personaService.getLiderByGroup(idGrupo).subscribe(response => {
+      const codigoActual = this.authService.getCodigo();
+      this.personaActual = response;
+      const codigoLider = this.personaActual.codigo;
+      if (codigoLider === codigoActual) {
+        this.eslider = true;
+      } else {
+        this.eslider = false;
+      }
+    }, error => {
+      Swal.fire("No se pudo comprobar si es lider");
+    });
+  }
+
+  obtenerAlertasDelGrupo(idGrupo: number): void {
+    this.notificacionService.getNotificationsByGrupo(idGrupo).subscribe(response => {
+      this.alertas = response;
+    }, error => {
+      Swal.fire("No se pudieron obtener las notificaciones del grupo");
+    });
+  }
+
+  private loadPinnedNotification(groupId?: number): void {
+    if (groupId) {
+      this.notificacionService.getPinnedNotificationByGroup(groupId).subscribe(alerta => {
+        this.alertMessage = alerta || null;
+        if (this.alertMessage && this.selectedGroup) {
+          this.selectedGroup.alerta = this.alertMessage.mensaje;
         }
-      },error=>{
-        Swal.fire("No se pudo comprobar si es lider")
-      })
-  }
-
-  obtenerAlertasDelGrupo(idGrupo:number){
-    this.notificacionService.getNotificationsByGrupo(idGrupo).subscribe(response=>{
-      this.alertas=response;
-    },error=>{
-      Swal.fire("No se pudieron obtener las notificaciones del grupo")
-    })
+      });
+    }
   }
 }
