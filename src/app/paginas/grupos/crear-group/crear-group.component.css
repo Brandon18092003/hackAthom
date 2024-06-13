@@ -98,6 +98,14 @@ mat-form-field.full-width {
     gap: 10px;
 }
 
+.actions .add{
+    color: blue !important;
+}
+
+.actions .info{
+    color: #4CAF50;
+}
+
 .create-btn-container {
     margin-top: 20px;
 }

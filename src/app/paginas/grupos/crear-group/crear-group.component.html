@@ -43,8 +43,8 @@
                         <span>{{item.nombres}} {{item.ap_paterno}} {{item.ap_materno}}</span>
                     </div>
                     <div class="actions">
-                        <button mat-icon-button color="primary" (click)="add(item)"><mat-icon>add_circle</mat-icon></button>
-                        <button mat-icon-button (click)="openProfile(item)"><mat-icon>visibility</mat-icon></button>
+                        <button mat-icon-button class="add" (click)="add(item)" matTooltip="Agregar"><mat-icon>add_circle</mat-icon></button>
+                        <button mat-icon-button class="info" (click)="openProfile(item)" matTooltip="Informacion"><i class="fas fa-info-circle"></i></button>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                     <input matInput [(ngModel)]="crearGrupoDTO.nombregrupo" placeholder="Nombre del grupo">
                 </mat-form-field>
 
-                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" class="">
                     <!-- Integrantes Column -->
                     <ng-container matColumnDef="integrantes">
                         <th mat-header-cell *matHeaderCellDef> Integrantes </th>

@@ -131,8 +131,11 @@ export class CrearGroupComponent implements OnInit{
     this.crearGrupoDTO.codigosMiembros = this.crearGrupoDTO.codigosMiembros.filter(codigo => codigo !== element.codigo);
   }
 
+  //Visualizacion de perfil
   openProfile(item: Persona) {
     this.dialog.open(VerPerfilComponent, {
+      width: '800px',
+      height: '800px',
       data: { codigoPersona: item.codigo }
     });
   }

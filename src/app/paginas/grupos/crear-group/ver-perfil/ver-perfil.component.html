@@ -29,10 +29,13 @@
           <h2><img src="assets/adicional.png" class="section-icon"> INFORMACIÓN ADICIONAL</h2>
           <p>{{ informacion }}</p>
         </div>
-        <div class="profile-section mat-elevation-z2">
+        <div class="profile-section cursos mat-elevation-z2">
           <h2><img src="assets/aprender-en-linea.png" class="section-icon"> CURSOS MATRICULADOS</h2>
           <ul>
-            <li *ngFor="let curso of cursos.slice(0, 5)">{{ curso.nombre }} - {{ curso.codigo }}</li>
+            <li *ngFor="let curso of cursos.slice(0, 5)">
+              <p class="nombreC">{{ curso.nombre}}</p>
+              <p class="seccionC">{{ curso.codigo}}</p>
+            </li>
           </ul>
         </div>
         <div class="progress-bar-container">
