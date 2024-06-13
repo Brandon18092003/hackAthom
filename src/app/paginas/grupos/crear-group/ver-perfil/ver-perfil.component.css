@@ -1,24 +1,19 @@
 .body {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
   background-color: #EFF7FF;
   /* Color de fondo claro */
 }
 
 .profile-container {
-  max-width: 1000px;
-  width: 100%;
+  max-width: 800px;
   background-color: #fff;
   border-radius: 12px;
-  /* Aumenta el borde redondeado */
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   margin: 20px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  /* Sombras más suaves */
+  overflow-y: auto;
 }
 
 .profile-header {

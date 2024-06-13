@@ -15,6 +15,7 @@ import { ConversacionGrupalService } from '../../../services/conversacion-grupal
 import { PersonaService } from '../../../services/persona/persona.service';
 import { MiembroService } from '../../../services/miembro/miembro.service';
 import { NotificacionService } from '../../../services/notificacion/notificacion.service';
+import { VerPerfilComponent } from '../crear-group/ver-perfil/ver-perfil.component';
 
 @Component({
   selector: 'app-group',
@@ -36,6 +37,7 @@ export class GroupComponent implements OnInit {
   alertas: Notificacion[] = []; // Array para almacenar las alertas
 
   integrantes: PersonaDTO[] = [];
+  integrantesList: PersonaDTO[] = [];
   currentConversacionId: number | null = null;
 
   displayedColumns: string[] = ['nombres', 'rol', 'acciones'];
@@ -43,6 +45,7 @@ export class GroupComponent implements OnInit {
   isPanelOpen: boolean = false; // Estado del panel deslizante
 
   miembroDTO?: MiembroDTO;
+  
 
   constructor(
     public dialog: MatDialog,
@@ -175,6 +178,7 @@ export class GroupComponent implements OnInit {
             this.obtenerPersonasPorGrupo(this.gruposeleccionado.id);
             this.integrantes.push(nuevoMiembro);
             this.dataSource.data = this.integrantes;
+            this.integrantesList = this.dataSource.data.slice();
           }
         }
       }
@@ -201,6 +205,7 @@ export class GroupComponent implements OnInit {
         this.miembroService.deleteMiembro(this.miembroDTO).subscribe(response => {
           this.integrantes = this.integrantes.filter(integrante => integrante !== element);
           this.dataSource.data = this.integrantes;
+          this.integrantesList = this.dataSource.data.slice();
           Swal.fire('Eliminado!', `${element.nombres} ha sido eliminado del grupo.`, 'success');
         }, error => {
           Swal.fire("No se pudo eliminar el estudiante");
@@ -208,6 +213,14 @@ export class GroupComponent implements OnInit {
       } else {
         Swal.fire("No se pudo eliminar el estudiante");
       }
+    });
+  }
+
+  verPerfil(integrante: PersonaDTO) {
+    this.dialog.open(VerPerfilComponent, {
+      width: '800px',
+      height: '800px',
+      data: { codigoPersona: integrante.codigo }
     });
   }
 
@@ -367,6 +380,7 @@ export class GroupComponent implements OnInit {
     this.personaService.getPersonasByGrupo(idGrupo).subscribe(response => {
       this.integrantes = response;
       this.dataSource.data = this.integrantes;
+      this.integrantesList = this.dataSource.data.slice();
     });
   }
 

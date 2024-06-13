@@ -222,11 +222,9 @@
     color: #333;
 }
 
-.fecha {
-    font-size: 0.75em;
+.hora {
+    font-weight: normal;
     color: #666;
-    margin-top: 5px;
-    align-self: flex-end;
 }
 
 .mensaje-texto {
@@ -291,10 +289,6 @@
     display: flex;
 }
 
-.chat {
-    position: relative;
-}
-
 .close-panel {
     align-self: flex-start;
     background-color: transparent;
@@ -349,63 +343,13 @@
     color: white;
 }
 
-.table-container {
+
+.integrantes-cards, .alert-cards {
     max-height: 200px; /* Adjust as needed */
     overflow-y: auto;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th.mat-header-cell {
-    background-color: #f44336;
-    color: white;
-}
-
-td.mat-cell, th.mat-header-cell {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.eliminar-button, .editar-button {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
-    margin: 1px;
-}
-
-.eliminar-button {
-    background-color: transparent;
-    color: red !important;
-    border-color: red;
-}
-
-.eliminar-button:hover {
-    background-color: red;
-    color: white !important;
-}
-
-.editar-button {
-    background-color: transparent;
-    color: #007BFF !important;
-    border-color: #007BFF !important;
-}
-
-.editar-button:hover {
-    background-color: #007BFF;
-    color: white !important;
-}
-
-.alert-cards {
-    max-height: 200px; /* Adjust as needed */
-    overflow-y: auto;
-}
-
-.notificaciones .alert-card {
+.alert-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -414,6 +358,88 @@ td.mat-cell, th.mat-header-cell {
     background-color: #E2D9FF;
     margin: 10px 0;
 }
+
+.integrante-card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #D0EAFF;
+    margin: 10px 0;
+}
+
+
+.integrantes .integrante-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.integrantes .integrante-details {
+    flex-grow: 1;
+}
+
+.integrantes .integrante-details h3 {
+    color: #000 !important;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.integrantes .integrante-details p {
+    color: #000 !important;
+    margin-bottom: 0;
+}
+
+
+.integrantes .integrante-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.integrantes .integrante-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.integrantes .integrante-actions button i {
+    font-size: 1em;
+}
+
+.editar-button {
+    background-color: transparent; /* Azul */
+    color: blue !important; /* Blanco */
+}
+
+.editar-button:hover {
+    color: white !important;
+    background-color: #aac6e9 !important; /* Azul un poco más oscuro */
+}
+
+.eliminar-button {
+    background-color: transparent; /* Rojo */
+    color: red; /* Blanco */
+}
+
+.eliminar-button:hover {
+    color: red;
+    background-color: rgb(255, 215, 215) !important; /* Rojo un poco más oscuro */
+}
+
+.ver-perfil-button {
+    background-color: transparent !important; /* Fondo transparente */
+    color: #F1C40F !important; /* Amarillo */
+}
+
+.ver-perfil-button:hover {
+    background-color: #FFFFFF !important; /* Fondo blanco */
+}
+
+
+
 
 .notificaciones .alert-content {
     display: flex;
@@ -427,6 +453,7 @@ td.mat-cell, th.mat-header-cell {
 
 .notificaciones .alert-details h3 {
     color: #4A0097 !important;
+    font-size: 20px;
     margin: 0;
 }
 
