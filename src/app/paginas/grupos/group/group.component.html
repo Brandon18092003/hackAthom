@@ -27,7 +27,7 @@
             <p><strong>Alerta:</strong> {{ alertMessage.mensaje }}</p>
             <p>Fecha: {{ alertMessage.fecha | date:'mediumDate' }} - {{ alertMessage.hora }}</p>
           </div>
-          <button mat-icon-button matTooltip="Eliminar Alerta" (click)="desanclarAlerta()" class="close-button">
+          <button mat-icon-button *ngIf="eslider" matTooltip="Eliminar Alerta" (click)="desanclarAlerta()" class="close-button">
             <i class="fas fa-times"></i>
           </button>
         </div>

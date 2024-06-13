@@ -45,7 +45,7 @@ export class GroupComponent implements OnInit {
   isPanelOpen: boolean = false; // Estado del panel deslizante
 
   miembroDTO?: MiembroDTO;
-  
+
 
   constructor(
     public dialog: MatDialog,
@@ -64,6 +64,7 @@ export class GroupComponent implements OnInit {
     if (codigoUsuario) {
       this.groupService.getGruposByCodPersona(codigoUsuario).subscribe(grupos => {
         this.grupos = grupos;
+        this.grupos.forEach(grupo => this.loadPinnedNotification(grupo.id));
         if (this.grupos.length > 0) {
           this.selectGroup(this.grupos[0]);
         }
@@ -142,7 +143,7 @@ export class GroupComponent implements OnInit {
   openEditDialog(element: PersonaDTO): void {
     const dialogRef = this.dialog.open(EditarGrupoComponent, {
       width: '400px',
-      data: { 
+      data: {
         nombre: element.nombres,
         rol: element.rol,
         codigo: element.codigo,
@@ -166,7 +167,7 @@ export class GroupComponent implements OnInit {
         selectedGroup: this.gruposeleccionado?.id
       }
     });
-  
+
     dialogRef.afterClosed().subscribe(nuevoMiembro => {
       if (nuevoMiembro && this.gruposeleccionado) {
         const miembroExistente = this.integrantes.find(miembro => miembro.codigo === nuevoMiembro.codMiembro);
@@ -344,6 +345,7 @@ export class GroupComponent implements OnInit {
           if (this.selectedGroup) {
             this.selectedGroup.alerta = alerta.mensaje;
           }
+          this.alertService.setPinnedAlert(true);
           Swal.fire('Alerta anclada', `La alerta ${alerta.mensaje} ha sido anclada.`, 'info');
         });
       });
@@ -353,6 +355,7 @@ export class GroupComponent implements OnInit {
         if (this.selectedGroup) {
           this.selectedGroup.alerta = alerta.mensaje;
         }
+        this.alertService.setPinnedAlert(true);
         Swal.fire('Alerta anclada', `La alerta ${alerta.mensaje} ha sido anclada.`, 'info');
       });
     }
@@ -366,6 +369,7 @@ export class GroupComponent implements OnInit {
         this.selectedGroup.alerta = undefined;
       }
       this.notificacionService.pinNotification(alerta.id, false).subscribe(() => {
+        this.alertService.setPinnedAlert(false);// Notificación desanclada
         Swal.fire('Alerta desanclada', `La alerta ${alerta.mensaje} ha sido desanclada.`, 'info');
       });
     }
@@ -407,14 +411,15 @@ export class GroupComponent implements OnInit {
     });
   }
 
-  private loadPinnedNotification(groupId?: number): void {
-    if (groupId) {
-      this.notificacionService.getPinnedNotificationByGroup(groupId).subscribe(alerta => {
+  private loadPinnedNotification(groupId: number): void {
+    this.notificacionService.getPinnedNotificationByGroup(groupId).subscribe(alerta => {
+      const grupo = this.grupos.find(g => g.id === groupId);
+      if (grupo) {
+        grupo.alerta = alerta ? alerta.mensaje : undefined;
+      }
+      if (this.selectedGroup && this.selectedGroup.id === groupId) {
         this.alertMessage = alerta || null;
-        if (this.alertMessage && this.selectedGroup) {
-          this.selectedGroup.alerta = this.alertMessage.mensaje;
-        }
-      });
-    }
+      }
+    });
   }
 }
