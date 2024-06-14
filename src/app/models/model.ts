@@ -1,4 +1,3 @@
-// model.ts
 import { Time } from "@angular/common";
 
 export interface CredsDTO {
@@ -19,8 +18,6 @@ export interface Grupo {
   fecha_creacion: Date;
   alerta?: string;
 }
-
-
 
 export interface MensajeRequest {
   conversacionId: number;
@@ -140,15 +137,22 @@ export interface CrearHobbyDTO {
 }
 
 export interface EliminarHobbyDTO {
-  id_perfil_hobby: number;
+  idPerfilHobby: number;
+  codigoPersona: string;
 }
 
 export interface InfoDTO {
   nombres: string;
   ap_paterno: string;
   ap_materno: string;
-  info_adicional: string;
+  infoAdicional: string;  // Ensure it matches the field name in your backend DTO
   descripcion: string;
+}
+
+
+export interface ActualizarInfoAdicionalDTO {
+  codigoPersona: string;
+  infoAdicional: string;
 }
 
 export interface MiembroGrupo {

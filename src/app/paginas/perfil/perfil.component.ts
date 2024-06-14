@@ -48,7 +48,7 @@ export class PerfilComponent implements OnInit {
       this.hobbyService.getHobbies(codigoPersona).subscribe(hobbies => this.hobbies = hobbies);
       this.perfilService.getInfo(codigoPersona).subscribe(info => {
         this.descripcion = info.descripcion;
-        this.informacion = info.info_adicional;
+        this.informacion = info.infoAdicional;  // Make sure the field name matches the DTO
         this.nombres = info.nombres;
         this.ap_paterno = info.ap_paterno;
         this.ap_materno = info.ap_materno;
@@ -103,8 +103,25 @@ export class PerfilComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
         this.informacion = result;
+        this.actualizarInfoAdicional(result);
       }
     });
+  }
+
+  actualizarInfoAdicional(nuevaInformacion: string) {
+    const codigo = this.authService.getCodigo();
+    if (codigo) {
+      const actualizarInfoAdicionalDTO = { codigoPersona: codigo, infoAdicional: nuevaInformacion };
+      this.perfilService.actualizarInfoAdicional(codigo, actualizarInfoAdicionalDTO).subscribe({
+        next: () => {
+          Swal.fire('Actualizado!', 'La información adicional ha sido actualizada.', 'success');
+        },
+        error: (error) => {
+          console.error('Error al actualizar la información adicional:', error);
+          Swal.fire('Error!', 'No se pudo actualizar la información adicional.', 'error');
+        }
+      });
+    }
   }
 
   eliminarHabilidad(index: number) {
@@ -120,16 +137,15 @@ export class PerfilComponent implements OnInit {
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      const codigo = this.authService.getCodigo()
+      const codigo = this.authService.getCodigo();
       if (result.isConfirmed && codigo) {
-        const eliminarHabilidadDTO: EliminarHabilidadDTO = { idHabilidad: habilidad.id,codigoPersona: codigo };
+        const eliminarHabilidadDTO: EliminarHabilidadDTO = { idHabilidad: habilidad.id, codigoPersona: codigo };
         this.habilidadService.eliminarHabilidad(eliminarHabilidadDTO).subscribe({
           next: () => {
             console.log('Habilidad eliminada con éxito:', habilidad);
             this.habilidades.splice(index, 1);
             Swal.fire('Eliminado!', 'La habilidad ha sido eliminada.', 'success');
           },
-          
           error: (error) => {
             console.error('Error al eliminar habilidad:', error);
             Swal.fire('Error!', 'No se pudo eliminar la habilidad.', 'error');
@@ -152,8 +168,9 @@ export class PerfilComponent implements OnInit {
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      if (result.isConfirmed) {
-        const eliminarHobbyDTO: EliminarHobbyDTO = { id_perfil_hobby: hobby.id };
+      const codigo = this.authService.getCodigo();
+      if (result.isConfirmed && codigo) {
+        const eliminarHobbyDTO: EliminarHobbyDTO = { idPerfilHobby: hobby.id, codigoPersona: codigo };
         this.hobbyService.eliminarHobby(eliminarHobbyDTO).subscribe({
           next: () => {
             console.log('Hobby eliminado con éxito:', hobby);

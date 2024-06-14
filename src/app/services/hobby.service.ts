@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Hobby, EliminarHobbyDTO } from '../models/model';
+import { CrearHobbyDTO, Hobby, EliminarHobbyDTO } from '../models/model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +11,19 @@ export class HobbyService {
 
   constructor(private http: HttpClient) {}
 
-  getHobbies(codigoPersona: string): Observable<Hobby[]> {
-    return this.http.get<Hobby[]>(`${this.apiUrl}/lista/${codigoPersona}`);
+  getHobbies(codigo: string): Observable<Hobby[]> {
+    return this.http.get<Hobby[]>(`${this.apiUrl}/lista/${codigo}`);
+  }
+
+  crearHobby(codigo: string, hobby: CrearHobbyDTO): Observable<any> {
+    return this.http.post(`${this.apiUrl}/crear/${codigo}`, hobby);
   }
 
   eliminarHobby(hobbyDTO: EliminarHobbyDTO): Observable<void> {
-    console.log('Llamando a eliminar hobby con idPerfilHobby:', hobbyDTO.id_perfil_hobby);
-    return this.http.delete<void>(`${this.apiUrl}/eliminar/${hobbyDTO.id_perfil_hobby}`);
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: hobbyDTO
+    };
+    return this.http.delete<void>(`${this.apiUrl}/eliminar`, options);
   }
 }

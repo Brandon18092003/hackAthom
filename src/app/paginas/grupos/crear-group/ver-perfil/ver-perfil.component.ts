@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HabilidadService } from '../../../../services/habilidad.service';
-
 import { Habilidad, Hobby, InfoDTO, Curso } from '../../../../models/model';
 import { HobbyService } from '../../../../services/hobby.service';
 import { PerfilService } from '../../../../services/perfil.service';
@@ -35,9 +34,9 @@ export class VerPerfilComponent implements OnInit {
 
     this.habilidadService.getHabilidades(codigoPersona).subscribe(habilidades => this.habilidades = habilidades);
     this.hobbyService.getHobbies(codigoPersona).subscribe(hobbies => this.hobbies = hobbies);
-    this.perfilService.getInfo(codigoPersona).subscribe(info => {
+    this.perfilService.getInfo(codigoPersona).subscribe((info: InfoDTO) => {
       this.descripcion = info.descripcion;
-      this.informacion = info.info_adicional;
+      this.informacion = info.infoAdicional;
       this.nombres = info.nombres;
       this.ap_paterno = info.ap_paterno;
       this.ap_materno = info.ap_materno;
