@@ -1,14 +1,17 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { PerfilService } from '../../services/perfil.service';
-import { InfoDTO } from '../../models/model';
+import { Grupo, InfoDTO, NotificacionDTO } from '../../models/model';
 import Swal from 'sweetalert2';
 import { error } from 'console';
+import { NotificacionService } from '../../services/notificacion/notificacion.service';
+import { GroupService } from '../../services/grupo/grupo-service.service';
+import { response } from 'express';
 
 @Component({
   selector: 'app-index',
@@ -16,6 +19,11 @@ import { error } from 'console';
   styleUrls: ['./index.component.css']
 })
 export class IndexComponent implements OnInit {
+
+  //variables notificaciones web socket
+  private notificationSubscription: Subscription = new Subscription();
+  hayMensajesNuevos = false;
+
   currentView: string = 'link1';
   private breakpointObserver = inject(BreakpointObserver);
   hasPinnedAlert$: Observable<boolean>;
@@ -28,6 +36,8 @@ export class IndexComponent implements OnInit {
     private alertService: AlertService, 
     private authService: AuthService,
     private perfilService:PerfilService,
+    private notificacionService:NotificacionService,
+    private grupoService:GroupService,
     private router:Router
   ) 
     {
@@ -35,6 +45,8 @@ export class IndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.recibirNotificaciones();
+
     //Obtener nombres
     this.obtenerinfo();
 
@@ -64,10 +76,8 @@ export class IndexComponent implements OnInit {
   }
 
   showNotifications = false;
-  notifications = [
-    { icon: 'fas fa-warning', title: 'Te han añadido a un nuevo grupo' },
-    { icon: 'fas fa-warning', title: 'Te han añadido a un nuevo grupo' },
-  ];
+
+  notifications:NotificacionDTO[] = [];
 
   toggleNotifDropdown() {
     this.showNotifications = !this.showNotifications;
@@ -117,7 +127,35 @@ export class IndexComponent implements OnInit {
     }
   }
 
-  obtenerNombreyRol(){
+  recibirNotificaciones(){
+
+  const gruposUsuario:number[] = []; // Obtener grupos del usuario desde un servicio
+
+  const codigo = this.authService.getCodigo();
+  if (codigo) {
+    this.grupoService.getGruposByCodPersona(codigo)
+      .subscribe(response => {
+        gruposUsuario.push(...response.map(grupo => grupo.id));
+
+        gruposUsuario.forEach(grupo => this.notificacionService.joinRoom(grupo));
+
+        this.notificationSubscription = this.notificacionService.notification$.subscribe(
+          (notificacion) => {
+            this.notificacionService.addNotification(notificacion);
+            this.hayMensajesNuevos = true;
+          }
+        );
     
+        this.notificacionService.notifications$.subscribe(
+          (notificaciones) => {
+            this.notifications = notificaciones;
+          }
+        );
+      });
+  }
+  console.log("gruposUsuario: ",gruposUsuario);
+    
+
+   
   }
 }

@@ -166,3 +166,8 @@ export interface Notificacion {
   grupo: Grupo;
   isPinned: boolean; // Nuevo campo
 }
+
+export interface NotificacionDTO {
+  mensaje: String;
+  id_grupo: number;
+}

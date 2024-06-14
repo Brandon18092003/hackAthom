@@ -67,8 +67,8 @@
 
         <div class="notification-dropdown" *ngIf="showNotifications">
           <div class="notification-item" *ngFor="let notification of notifications" (click)="openNotification(notification)">
-            <i class="{{notification.icon}}"></i>
-            <span>{{notification.title}}</span>
+            <i class="fas fa-warning"></i>
+            <span>{{notification.mensaje}}</span>
           </div>
         </div>
       </div>

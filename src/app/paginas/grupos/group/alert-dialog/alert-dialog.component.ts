@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { NotificacionService } from '../../../../services/notificacion/notificacion.service';
-import { Notificacion } from '../../../../models/model';
+import { Notificacion, NotificacionDTO } from '../../../../models/model';
 import { Time } from '@angular/common';
 
 export interface AlertDialogData {
@@ -44,6 +44,7 @@ export class AlertDialogComponent implements OnInit {
       return;
     } else {
       this.crearAlerta();
+      this.sendNotify();
     }
 
     const selectedDate = new Date(`${this.data.fecha.toISOString().split('T')[0]}T${this.data.hora}:00`);
@@ -57,7 +58,6 @@ export class AlertDialogComponent implements OnInit {
       });
       return;
     }
-
     this.dialogRef.close(this.notificacion);
   }
 
@@ -83,4 +83,30 @@ export class AlertDialogComponent implements OnInit {
       });
     }
   }
+
+  sendNotify() {
+    this.notificacion = {
+      id: 0,
+      mensaje: this.data.asunto,
+      fecha: this.data.fecha,
+      hora: this.hora,
+      grupo: this.data.grupo,
+      isPinned: false // Inicialmente la alerta no está anclada
+    };
+    
+    if(this.notificacion){
+      const notify: NotificacionDTO = {
+        mensaje: ' Nueva Alerta: '+this.notificacion.grupo.nombre,
+        id_grupo: this.notificacion.grupo.id
+      };
+      console.log(notify);
+  
+      const gruposNotificacion = [this.notificacion.grupo.id]; // Obtener grupos relevantes desde un servicio
+      console.log(gruposNotificacion);
+      this.notificacionService.sendNotify(gruposNotificacion, notify);
+    }
+  }else(){
+    Swal.fire("La notificacion es nula")
+  }
+
 }
