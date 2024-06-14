@@ -14,12 +14,12 @@ export class EditInfComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.informacion = data.informacion;
+    console.log(this.informacion);
   }
 
   save(): void {
-    if (this.informacion !== undefined) {
-      this.dialogRef.close(this.informacion);
-    }
+    this.dialogRef.close(this.informacion);
+    console.log(this.informacion);
   }
 
   close(): void {

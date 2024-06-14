@@ -20,11 +20,6 @@ import { CursoService } from '../../services/curso/curso.service';
 export class PerfilComponent implements OnInit {
   habilidades: Habilidad[] = [];
   hobbies: Hobby[] = [];
-  companeros: string[] = [
-    'Camila Lisset Taype Sumen',
-    'Juan Pérez',
-    'Maria López'
-  ];
   cursos: Curso[] = [];
   descripcion: string = '';
   informacion: string = '';
@@ -48,7 +43,7 @@ export class PerfilComponent implements OnInit {
       this.hobbyService.getHobbies(codigoPersona).subscribe(hobbies => this.hobbies = hobbies);
       this.perfilService.getInfo(codigoPersona).subscribe(info => {
         this.descripcion = info.descripcion;
-        this.informacion = info.infoAdicional;  // Make sure the field name matches the DTO
+        this.informacion = info.infoAdicional;
         this.nombres = info.nombres;
         this.ap_paterno = info.ap_paterno;
         this.ap_materno = info.ap_materno;
@@ -77,7 +72,13 @@ export class PerfilComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.habilidades.push(result);
+        const codigoPersona = this.authService.getCodigo();
+        if (codigoPersona) {
+          this.habilidadService.crearHabilidad({ codigoPersona, nom_habilidad: result.nombre }).subscribe(habilidad => {
+            this.habilidades.push(habilidad);
+            window.location.reload();  // Recargar la página
+          });
+        }
       }
     });
   }
@@ -89,7 +90,13 @@ export class PerfilComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.hobbies.push(result);
+        const codigoPersona = this.authService.getCodigo();
+        if (codigoPersona) {
+          this.hobbyService.crearHobby({ codigoPersona, nom_hobby: result.nombre }).subscribe(hobby => {
+            this.hobbies.push(hobby);
+            window.location.reload();  // Recargar la página
+          });
+        }
       }
     });
   }
@@ -102,31 +109,18 @@ export class PerfilComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.informacion = result;
-        this.actualizarInfoAdicional(result);
+        const codigoPersona = this.authService.getCodigo();
+        if (codigoPersona) {
+          this.perfilService.actualizarInfoAdicional(codigoPersona, result).subscribe(() => {
+            this.informacion = result;
+          });
+        }
       }
     });
   }
 
-  actualizarInfoAdicional(nuevaInformacion: string) {
-    const codigo = this.authService.getCodigo();
-    if (codigo) {
-      const actualizarInfoAdicionalDTO = { codigoPersona: codigo, infoAdicional: nuevaInformacion };
-      this.perfilService.actualizarInfoAdicional(codigo, actualizarInfoAdicionalDTO).subscribe({
-        next: () => {
-          Swal.fire('Actualizado!', 'La información adicional ha sido actualizada.', 'success');
-        },
-        error: (error) => {
-          console.error('Error al actualizar la información adicional:', error);
-          Swal.fire('Error!', 'No se pudo actualizar la información adicional.', 'error');
-        }
-      });
-    }
-  }
-
   eliminarHabilidad(index: number) {
     const habilidad = this.habilidades[index];
-    console.log('Eliminando habilidad:', habilidad);
     Swal.fire({
       title: '¿Estás seguro?',
       text: `¿Deseas eliminar la habilidad ${habilidad.nombre}?`,
@@ -137,27 +131,26 @@ export class PerfilComponent implements OnInit {
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      const codigo = this.authService.getCodigo();
-      if (result.isConfirmed && codigo) {
-        const eliminarHabilidadDTO: EliminarHabilidadDTO = { idHabilidad: habilidad.id, codigoPersona: codigo };
-        this.habilidadService.eliminarHabilidad(eliminarHabilidadDTO).subscribe({
-          next: () => {
-            console.log('Habilidad eliminada con éxito:', habilidad);
-            this.habilidades.splice(index, 1);
-            Swal.fire('Eliminado!', 'La habilidad ha sido eliminada.', 'success');
-          },
-          error: (error) => {
-            console.error('Error al eliminar habilidad:', error);
-            Swal.fire('Error!', 'No se pudo eliminar la habilidad.', 'error');
-          }
-        });
+      if (result.isConfirmed) {
+        const codigo = this.authService.getCodigo();
+        if (codigo) {
+          const eliminarHabilidadDTO: EliminarHabilidadDTO = { idHabilidad: habilidad.id, codigoPersona: codigo };
+          this.habilidadService.eliminarHabilidad(eliminarHabilidadDTO).subscribe({
+            next: () => {
+              this.habilidades.splice(index, 1);
+              Swal.fire('Eliminado!', 'La habilidad ha sido eliminada.', 'success');
+            },
+            error: (error) => {
+              Swal.fire('Error!', 'No se pudo eliminar la habilidad.', 'error');
+            }
+          });
+        }
       }
     });
   }
 
   eliminarHobby(index: number) {
     const hobby = this.hobbies[index];
-    console.log('Eliminando hobby:', hobby);
     Swal.fire({
       title: '¿Estás seguro?',
       text: `¿Deseas eliminar el hobby ${hobby.nombre}?`,
@@ -170,15 +163,13 @@ export class PerfilComponent implements OnInit {
     }).then((result) => {
       const codigo = this.authService.getCodigo();
       if (result.isConfirmed && codigo) {
-        const eliminarHobbyDTO: EliminarHobbyDTO = { idPerfilHobby: hobby.id, codigoPersona: codigo };
+        const eliminarHobbyDTO: EliminarHobbyDTO = { idHobby: hobby.id, codigoPersona: codigo };
         this.hobbyService.eliminarHobby(eliminarHobbyDTO).subscribe({
           next: () => {
-            console.log('Hobby eliminado con éxito:', hobby);
             this.hobbies.splice(index, 1);
             Swal.fire('Eliminado!', 'El hobby ha sido eliminado.', 'success');
           },
           error: (error) => {
-            console.error('Error al eliminar hobby:', error);
             Swal.fire('Error!', 'No se pudo eliminar el hobby.', 'error');
           }
         });

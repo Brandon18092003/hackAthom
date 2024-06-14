@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Habilidad } from '../../../models/model';
 
 @Component({
   selector: 'app-add-habilidades',
@@ -21,7 +22,8 @@ export class AddHabilidadesComponent {
 
   onSave(): void {
     if (this.habilidadesForm.valid) {
-      this.dialogRef.close(this.habilidadesForm.value.habilidad);
+      const nuevaHabilidad: Habilidad = { id: 0, nombre: this.habilidadesForm.value.habilidad };
+      this.dialogRef.close(nuevaHabilidad);
     }
   }
 }

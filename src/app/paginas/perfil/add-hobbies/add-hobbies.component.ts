@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Hobby } from '../../../models/model';
 
 @Component({
   selector: 'app-add-hobbies',
@@ -21,7 +22,8 @@ export class AddHobbiesComponent {
 
   onSave(): void {
     if (this.hobbiesForm.valid) {
-      this.dialogRef.close(this.hobbiesForm.value.hobby);
+      const nuevoHobby: Hobby = { id: 0, nombre: this.hobbiesForm.value.hobby };
+      this.dialogRef.close(nuevoHobby);
     }
   }
 }

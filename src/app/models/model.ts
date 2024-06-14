@@ -1,5 +1,6 @@
 import { Time } from "@angular/common";
 
+// model.ts
 export interface CredsDTO {
   codUsuario: string;
   password: string;
@@ -137,7 +138,7 @@ export interface CrearHobbyDTO {
 }
 
 export interface EliminarHobbyDTO {
-  idPerfilHobby: number;
+  idHobby: number;
   codigoPersona: string;
 }
 
@@ -145,14 +146,8 @@ export interface InfoDTO {
   nombres: string;
   ap_paterno: string;
   ap_materno: string;
-  infoAdicional: string;  // Ensure it matches the field name in your backend DTO
-  descripcion: string;
-}
-
-
-export interface ActualizarInfoAdicionalDTO {
-  codigoPersona: string;
   infoAdicional: string;
+  descripcion: string;
 }
 
 export interface MiembroGrupo {

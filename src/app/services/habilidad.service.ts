@@ -15,8 +15,8 @@ export class HabilidadService {
     return this.http.get<Habilidad[]>(`${this.apiUrl}/lista/${codigo}`);
   }
 
-  crearHabilidad(codigo: string, habilidad: CrearHabilidadDTO): Observable<any> {
-    return this.http.post(`${this.apiUrl}/crear/${codigo}`, habilidad);
+  crearHabilidad(habilidad: CrearHabilidadDTO): Observable<Habilidad> {
+    return this.http.post<Habilidad>(`${this.apiUrl}/crear/${habilidad.codigoPersona}`, habilidad);
   }
 
   eliminarHabilidad(habilidadDTO: EliminarHabilidadDTO): Observable<void> {

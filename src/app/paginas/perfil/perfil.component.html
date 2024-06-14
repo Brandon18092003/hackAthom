@@ -22,8 +22,7 @@
         </ul>
       </div>
       <div class="hobbies">
-        <h2>
-          <img src="assets/skill-development_5776922.png" alt="Hobbies" class="icon"> Hobbies
+        <h2><img src="assets/skill-development_5776922.png" alt="Hobbies" class="icon"> Hobbies
           <button class="add-button" (click)="openAddHobbyModal()"><i class="fas fa-plus"></i> Agregar</button>
         </h2>
         <ul>
@@ -34,16 +33,13 @@
         </ul>
       </div>
       <div class="additional-info">
-        <h2>
-          <img src="assets/adicional.png" alt="Información Adicional" class="icon"> Información Adicional
+        <h2><img src="assets/adicional.png" alt="Información Adicional" class="icon"> Información Adicional
           <button class="edit-button" (click)="openEditAdditionalInfoModal()"><i class="fas fa-edit"></i> Editar</button>
         </h2>
         <p>{{ informacion }}</p>
       </div>
       <div class="courses">
-        <h2>
-          <img src="assets/aprender-en-linea.png" alt="Cursos" class="icon"> Cursos Matriculados
-        </h2>
+        <h2><img src="assets/aprender-en-linea.png" alt="Cursos" class="icon"> Cursos Matriculados</h2>
         <ul>
           <li *ngFor="let curso of cursos">
             <p class="nombreC">{{ curso.nombre }}</p>
