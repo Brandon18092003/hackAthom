@@ -1,42 +1,53 @@
 import { Component, OnInit } from '@angular/core';
-import { Curso, Grupo, Persona, PersonaDTO } from '../../models/model';
+import { Curso, Grupo, PersonaDTO, MensajeRequest, MensajeConversacionGrupal } from '../../models/model';
 import { DocenteService } from '../../services/docente/docente.service';
-import { response } from 'express';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { PersonaService } from '../../services/persona/persona.service';
-import { error } from 'console';
-
+import { ConversacionGrupalService } from '../../services/conversacion-grupal.service';
+import { WebSocketService } from '../../services/web-socket.service';
 
 @Component({
   selector: 'app-grupo-profesor',
   templateUrl: './grupo-profesor.component.html',
   styleUrls: ['./grupo-profesor.component.css']
 })
-export class GrupoProfesorComponent implements OnInit{
+export class GrupoProfesorComponent implements OnInit {
 
-  courses:Curso[] = [];
-  groups:Grupo[] = [];
+  courses: Curso[] = [];
+  groups: Grupo[] = [];
   selectedCourse = '';
-  selectedGroup?:Grupo;
-  selectedGroupMembers:PersonaDTO[] = [];
+  selectedGroup?: Grupo;
+  selectedGroupMembers: PersonaDTO[] = [];
   chatMessages: { sender: string, senderName: string, text: string, time: string }[] = [];
   messageColors: { [key: string]: string } = {};
+  newMessage: string = '';
+  currentConversacionId: number | null = null;
 
   constructor(
-    private authService:AuthService,
-    private docenteService:DocenteService,
-    private personaService:PersonaService
-  ){}
+    private authService: AuthService,
+    private docenteService: DocenteService,
+    private personaService: PersonaService,
+    private conversacionGrupalService: ConversacionGrupalService,
+    private webSocketService: WebSocketService
+  ) { }
 
   ngOnInit(): void {
     this.obtenerCursos();
 
+    this.webSocketService.getMessages().subscribe((mensaje: MensajeConversacionGrupal) => {
+      if (mensaje.id === this.currentConversacionId) {
+        this.chatMessages.push({
+          sender: mensaje.persona.codigo === this.authService.getCodigo() ? 'teacher' : 'student',
+          senderName: mensaje.persona.nombres,
+          text: mensaje.mensaje,
+          time: new Date(mensaje.fechaEnvio).toLocaleTimeString()
+        });
+      }
+    });
   }
 
   onCourseChange(event: any) {
-    console.log("Event: ",event.target.value);
-    //this.selectedGroup = '';
     this.selectedGroupMembers = [];
     this.obtenerGrupos(event.target.value);
     this.chatMessages = [];
@@ -44,20 +55,35 @@ export class GrupoProfesorComponent implements OnInit{
 
   selectGroup(group: Grupo) {
     this.selectedGroup = group;
-
-    // Aquí puedes cambiar la lógica para cargar los miembros del grupo seleccionado
     this.obtenerMiembros(group.id);
 
-    // Aquí puedes cambiar la lógica para cargar los mensajes del chat del grupo seleccionado
-    this.chatMessages = [
-      { sender: 'student', senderName: 'Juan Pérez', text: 'Hola profesor, tengo una duda sobre la tarea.', time: '10:30 AM' },
-      { sender: 'student', senderName: 'Juan Pérez', text: 'No entiendo el segundo problema.', time: '10:35 AM' },
-      { sender: 'student', senderName: 'Brandon ', text: 'No entiendo el segundo problema.', time: '10:35 AM' },
-      { sender: 'student', senderName: 'Jorge ', text: 'No entiendo el segundo problema.', time: '10:35 AM' }
-    ];
+    this.conversacionGrupalService.obtenerConversacionPorGrupo(group.id).subscribe(conversacion => {
+      if (conversacion) {
+        this.currentConversacionId = conversacion.id;
+        this.webSocketService.subscribeToGroupMessages(conversacion.id);
+        this.conversacionGrupalService.obtenerMensajes(conversacion.id).subscribe(mensajes => {
+          this.chatMessages = mensajes.map(mensaje => ({
+            sender: mensaje.persona.codigo === this.authService.getCodigo() ? 'teacher' : 'student',
+            senderName: mensaje.persona.nombres,
+            text: mensaje.mensaje,
+            time: new Date(mensaje.fechaEnvio).toLocaleTimeString()
+          }));
+          this.assignColorsToSenders();
+        });
+      }
+    });
+  }
 
-    // Asignar colores únicos a cada remitente
-    this.assignColorsToSenders();
+  sendMessage(): void {
+    if (this.newMessage.trim() && this.selectedGroup && this.currentConversacionId) {
+      const mensajeRequest: MensajeRequest = {
+        conversacionId: this.currentConversacionId,
+        codigoPersona: this.authService.getCodigo()!,
+        mensaje: this.newMessage
+      };
+      this.webSocketService.sendMessage(mensajeRequest);
+      this.newMessage = '';
+    }
   }
 
   assignColorsToSenders() {
@@ -76,37 +102,37 @@ export class GrupoProfesorComponent implements OnInit{
     return this.messageColors[senderName];
   }
 
-  obtenerCursos(){
-    const codigo=this.authService.getCodigo();
-    if(codigo){
-      this.docenteService.getCursosByDocente(codigo).subscribe(response=>{
-        this.courses=response;  
-      },error=>{
-        Swal.fire("No se pudo obtener los cursos")
-      })
-    }else{
-      Swal.fire("No se pudo obtener el codigo")
+  obtenerCursos() {
+    const codigo = this.authService.getCodigo();
+    if (codigo) {
+      this.docenteService.getCursosByDocente(codigo).subscribe(response => {
+        this.courses = response;
+      }, error => {
+        Swal.fire("No se pudo obtener los cursos");
+      });
+    } else {
+      Swal.fire("No se pudo obtener el código");
     }
   }
 
-  obtenerGrupos(idCurso:number){
-    const codigo=this.authService.getCodigo();
-    if(codigo){
-      this.docenteService.getGruposByCursoDocente(codigo,idCurso).subscribe(response=>{
-        this.groups=response;
-      },error=>{
-        Swal.fire("No se pudo obtener los grupos")
-      })
-    }else{
-      Swal.fire("No se pudo obtener el codigo")
+  obtenerGrupos(idCurso: number) {
+    const codigo = this.authService.getCodigo();
+    if (codigo) {
+      this.docenteService.getGruposByCursoDocente(codigo, idCurso).subscribe(response => {
+        this.groups = response;
+      }, error => {
+        Swal.fire("No se pudo obtener los grupos");
+      });
+    } else {
+      Swal.fire("No se pudo obtener el código");
     }
   }
 
-  obtenerMiembros(idGrupo:number){
-    this.personaService.getPersonasByGrupo(idGrupo).subscribe(response=>{
-      this.selectedGroupMembers=response;
-    },error=>{
-      Swal.fire("Error obteniendo los miembros")
-    })
+  obtenerMiembros(idGrupo: number) {
+    this.personaService.getPersonasByGrupo(idGrupo).subscribe(response => {
+      this.selectedGroupMembers = response;
+    }, error => {
+      Swal.fire("Error obteniendo los miembros");
+    });
   }
 }
