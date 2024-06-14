@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Curso, MiembroDTO, Persona, PersonaDTO } from '../../../../models/model';
 import { AuthService } from '../../../../services/auth.service';
 import Swal from 'sweetalert2';
@@ -8,6 +8,7 @@ import { PersonaService } from '../../../../services/persona/persona.service';
 import { MiembroService } from '../../../../services/miembro/miembro.service';
 import { response } from 'express';
 import { error } from 'console';
+import { VerPerfilComponent } from '../../crear-group/ver-perfil/ver-perfil.component';
 
 
 
@@ -34,6 +35,7 @@ export class AgregarIntegranteComponent implements OnInit{
 
   constructor(
     public dialogRef: MatDialogRef<AgregarIntegranteComponent>,
+    public dialog: MatDialog,
     private authService: AuthService,
     private cursoService:CursoService,
     private personaService:PersonaService,
@@ -55,7 +57,7 @@ export class AgregarIntegranteComponent implements OnInit{
   onSalonChange(): void {
     this.getPersonasPorCurso(this.selectedSalon);
   }
-
+  
   filterAlumnos(): void {
     if (this.searchQuery && this.alumnos[this.selectedSalon]) {
       this.filteredAlumnos = this.alumnos[this.selectedSalon]

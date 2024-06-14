@@ -18,12 +18,14 @@
         <i class="fas fa-calendar-alt"></i>
         <p>Calendario</p>
       </div>
-      <div *ngIf="rol=='student'" class="item" [ngClass]="{'item-seleccionado': currentView === 'link2'}" (click)="setView('link2')">
+      <div *ngIf="rol=='student'" class="item" [ngClass]="{'item-seleccionado': currentView === 'link2'}"
+        (click)="setView('link2')">
         <i class="fas fa-users"></i>
         <p>Grupos</p>
         <span *ngIf="hasPinnedAlert$ | async" class="notification-dot"></span>
       </div>
-      <div *ngIf="rol=='teacher'" class="item profesor" [ngClass]="{'item-seleccionado': currentView === 'link4'}" (click)="setView('link4')">
+      <div *ngIf="rol=='teacher'" class="item profesor" [ngClass]="{'item-seleccionado': currentView === 'link4'}"
+        (click)="setView('link4')">
         <i class="fas fa-users"></i>
         <p>Grupos</p>
       </div>
@@ -35,7 +37,8 @@
   </mat-sidenav>
   <mat-sidenav-content class="content">
     <mat-toolbar class="toolbar">
-      <button *ngIf="isHandset$ | async" type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+      <button *ngIf="isHandset$ | async" type="button" aria-label="Toggle sidenav" mat-icon-button
+        (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <img src="assets/logo.JPG" alt="">
@@ -48,25 +51,28 @@
         <div class="perfil" [matMenuTriggerFor]="menu">
           <div class="dato">
             <div class="nombre">
-              <p><span>Hola, {{perfil?.nombres}}</span></p>
+              <p>Hola, <span>{{perfil?.nombres}}</span></p>
+            </div>
+            <div class="rol">
               <span>{{rolnav}}</span>
             </div>
           </div>
           <img src="assets/img_usuario.png" alt="">
         </div>
         <mat-menu #menu="matMenu" class="custom-menu">
-          <button mat-menu-item (click)="setView('link3')">
-            <mat-icon>account_circle</mat-icon>
+          <button class="opcion" mat-menu-item (click)="setView('link3')">
+            <i class="fas fa-user-circle" style="margin-right: 8px;"></i>
             <span>Perfil</span>
           </button>
-          <button mat-menu-item (click)="logout()">
-            <mat-icon>exit_to_app</mat-icon>
+          <button class="opcion" mat-menu-item (click)="logout()">
+            <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>
             <span>Cerrar Sesión</span>
           </button>
         </mat-menu>
 
         <div class="notification-dropdown" *ngIf="showNotifications">
-          <div class="notification-item" *ngFor="let notification of notifications" (click)="openNotification(notification)">
+          <div class="notification-item" *ngFor="let notification of notifications"
+            (click)="openNotification(notification)">
             <i class="fas fa-warning"></i>
             <span>{{notification.mensaje}}</span>
           </div>
