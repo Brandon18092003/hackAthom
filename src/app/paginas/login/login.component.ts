@@ -1,5 +1,5 @@
 // login.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CredsDTO } from '../../models/model';
 import { AuthService } from '../../services/auth.service';
@@ -12,7 +12,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent {
+export class LoginComponent implements OnInit{
 
   creds: CredsDTO ={
     codUsuario:'',
@@ -25,6 +25,13 @@ export class LoginComponent {
   passwordTouched: boolean = false;
 
   constructor(private router: Router, private authService:AuthService) {}
+
+  ngOnInit(): void {
+    localStorage.removeItem("rol");
+    localStorage.removeItem("currentView");
+    localStorage.removeItem("IndexcurrentView");    
+    localStorage.removeItem("codUsuario");
+  }
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;

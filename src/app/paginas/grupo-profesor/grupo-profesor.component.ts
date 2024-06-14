@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Curso, Grupo, Persona, PersonaDTO } from '../../models/model';
+import { DocenteService } from '../../services/docente/docente.service';
+import { response } from 'express';
+import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
+import { PersonaService } from '../../services/persona/persona.service';
+import { error } from 'console';
 
 
 @Component({
@@ -6,31 +13,40 @@ import { Component } from '@angular/core';
   templateUrl: './grupo-profesor.component.html',
   styleUrls: ['./grupo-profesor.component.css']
 })
-export class GrupoProfesorComponent {
-  courses = ['Curso 1', 'Curso 2'];
-  groups = ['Grupo Taller II', 'Grupo Taller I', 'Grupo Taller III'];
+export class GrupoProfesorComponent implements OnInit{
+
+  courses:Curso[] = [];
+  groups:Grupo[] = [];
   selectedCourse = '';
-  selectedGroup = '';
-  selectedGroupMembers: { name: string, role: string }[] = [];
+  selectedGroup?:Grupo;
+  selectedGroupMembers:PersonaDTO[] = [];
   chatMessages: { sender: string, senderName: string, text: string, time: string }[] = [];
   messageColors: { [key: string]: string } = {};
 
+  constructor(
+    private authService:AuthService,
+    private docenteService:DocenteService,
+    private personaService:PersonaService
+  ){}
+
+  ngOnInit(): void {
+    this.obtenerCursos();
+
+  }
+
   onCourseChange(event: any) {
-    this.selectedGroup = '';
+    console.log("Event: ",event.target.value);
+    //this.selectedGroup = '';
     this.selectedGroupMembers = [];
+    this.obtenerGrupos(event.target.value);
     this.chatMessages = [];
   }
 
-  selectGroup(group: string) {
+  selectGroup(group: Grupo) {
     this.selectedGroup = group;
+
     // Aquí puedes cambiar la lógica para cargar los miembros del grupo seleccionado
-    this.selectedGroupMembers = [
-      { name: 'Cristopher Walken', role: 'U20217372' },
-      { name: 'Cristopher Walken', role: 'U20217372' },
-      { name: 'Cristopher Walken', role: 'U20217372' },
-      { name: 'Cristopher Walken', role: 'U20217372' },
-      { name: 'Cristopher Walken', role: 'U20217372' }
-    ];
+    this.obtenerMiembros(group.id);
 
     // Aquí puedes cambiar la lógica para cargar los mensajes del chat del grupo seleccionado
     this.chatMessages = [
@@ -58,5 +74,39 @@ export class GrupoProfesorComponent {
 
   getMessageColor(senderName: string): string {
     return this.messageColors[senderName];
+  }
+
+  obtenerCursos(){
+    const codigo=this.authService.getCodigo();
+    if(codigo){
+      this.docenteService.getCursosByDocente(codigo).subscribe(response=>{
+        this.courses=response;  
+      },error=>{
+        Swal.fire("No se pudo obtener los cursos")
+      })
+    }else{
+      Swal.fire("No se pudo obtener el codigo")
+    }
+  }
+
+  obtenerGrupos(idCurso:number){
+    const codigo=this.authService.getCodigo();
+    if(codigo){
+      this.docenteService.getGruposByCursoDocente(codigo,idCurso).subscribe(response=>{
+        this.groups=response;
+      },error=>{
+        Swal.fire("No se pudo obtener los grupos")
+      })
+    }else{
+      Swal.fire("No se pudo obtener el codigo")
+    }
+  }
+
+  obtenerMiembros(idGrupo:number){
+    this.personaService.getPersonasByGrupo(idGrupo).subscribe(response=>{
+      this.selectedGroupMembers=response;
+    },error=>{
+      Swal.fire("Error obteniendo los miembros")
+    })
   }
 }

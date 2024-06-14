@@ -4,6 +4,11 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { PerfilService } from '../../services/perfil.service';
+import { InfoDTO } from '../../models/model';
+import Swal from 'sweetalert2';
+import { error } from 'console';
 
 @Component({
   selector: 'app-index',
@@ -14,22 +19,47 @@ export class IndexComponent implements OnInit {
   currentView: string = 'link1';
   private breakpointObserver = inject(BreakpointObserver);
   hasPinnedAlert$: Observable<boolean>;
-  codigoPersona: string | null = '';
+  perfil?:InfoDTO;
   nombreCompleto: string | null = '';
+  rol?:string ;
+  rolnav:string='';
 
-  constructor(private alertService: AlertService, private authService: AuthService) {
+  constructor(
+    private alertService: AlertService, 
+    private authService: AuthService,
+    private perfilService:PerfilService,
+    private router:Router
+  ) 
+    {
     this.hasPinnedAlert$ = this.alertService.hasPinnedAlert$;
   }
 
   ngOnInit(): void {
+    //Obtener nombres
+    this.obtenerinfo();
+
+    //Cargando rol
+    if (typeof window !== 'undefined'){
+      const rol= this.authService.getRol();
+      if(rol){
+        this.rol=rol;
+
+        if(this.rol==='student'){
+          console.log(this.rolnav);
+          this.rolnav='Estudiante';
+        }else if(this.rol=='teacher'){
+          this.rolnav='Docente';
+        } 
+      }
+    }
+    
     if (typeof window !== 'undefined'){
       const saveView = localStorage.getItem('IndexcurrentView');
       if(saveView){
         this.currentView = saveView;
       }
 
-      // Obtener el código y nombre completo desde AuthService
-      this.codigoPersona = this.authService.getCodigo();
+ 
     }
   }
 
@@ -69,5 +99,25 @@ export class IndexComponent implements OnInit {
 
   logout() {
     console.log('Cerrar sesión');
+    this.router.navigate(['/login'])
+  }
+
+  obtenerinfo(){
+    const codigo = this.authService.getCodigo();
+    if(codigo){
+      this.perfilService.getInfo(codigo).subscribe(response=>{
+
+        this.perfil=response;
+      },error=>{
+        console.log(error)
+        Swal.fire("No se pudo obtener la informacion del usuario")
+      })
+    }else{
+      Swal.fire("No se pudo obtener el codigo del usuario")
+    }
+  }
+
+  obtenerNombreyRol(){
+    
   }
 }
