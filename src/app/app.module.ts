@@ -42,7 +42,8 @@ import { CommonModule } from '@angular/common'; // Importar CommonModule
 import { EditDescripcionComponent } from './paginas/perfil/edit-descripcion/edit-descripcion.component';
 import { AddHabilidadesComponent } from './paginas/perfil/add-habilidades/add-habilidades.component';
 import { AddHobbiesComponent } from './paginas/perfil/add-hobbies/add-hobbies.component';
-import { EditInfComponent } from './paginas/perfil/edit-inf/edit-inf.component'; // Importar CommonModule
+import { EditInfComponent } from './paginas/perfil/edit-inf/edit-inf.component';
+import { GrupoProfesorComponent } from './paginas/grupo-profesor/grupo-profesor.component'; // Importar CommonModule
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { EditInfComponent } from './paginas/perfil/edit-inf/edit-inf.component';
     EditDescripcionComponent,
     AddHabilidadesComponent,
     AddHobbiesComponent,
-    EditInfComponent
+    EditInfComponent,
+    GrupoProfesorComponent
   ],
   imports: [
     BrowserModule,
