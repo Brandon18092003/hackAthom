@@ -5,33 +5,33 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f0f4f8;
+    height: 92.5vh;
+    background-color: #EFF6FF;
 }
 
 .container {
     display: flex;
-    width: 100%;
-    max-width: 1200px;
-    height: 90vh;
-    background-color: #ffffff;
+    width: 90%;
+    max-width: 1500px;
+    margin: 0;
+    height: 80vh;
+    background-color: #EFF6FF;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar, .main-content, .details {
     flex: 1;
+    margin: 0 10px;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px;
 }
 
 .sidebar {
-    background-color: #f8f9fa;
+    background-color: #fff;
 }
 
 .main-content {
@@ -55,6 +55,7 @@
 }
 
 .group-item {
+    background-color: #CBDFFF;
     display: flex;
     align-items: center;
     transition: background-color 0.3s;
@@ -90,9 +91,9 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 90%;
     padding: 20px;
-    text-align: left;
-    display: flex;
     align-items: center;
+    display: flex;
+    justify-content: space-between;
     transition: transform 0.3s;
 }
 
@@ -103,12 +104,14 @@
 .card img {
     width: 60px;
     height: 60px;
+    margin-bottom: 5px;
     border-radius: 50%;
-    margin-right: 20px;
+    flex-shrink: 0;
 }
 
 .card-details {
     flex-grow: 1;
+    text-align: center;
 }
 
 .card h3 {
@@ -126,4 +129,63 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto;
+}
+
+.chat-container {
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.chat-message {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-message-e9f5ff {
+    background-color: #e9f5ff;
+    align-self: flex-start;
+}
+
+.chat-message-fff3e6 {
+    background-color: #fff3e6;
+    align-self: flex-end;
+}
+
+.chat-message-e6ffe9 {
+    background-color: #e6ffe9;
+}
+
+.chat-message-f0e6ff {
+    background-color: #f0e6ff;
+}
+
+.chat-message-fffce6 {
+    background-color: #fffce6;
+}
+
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.message-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.message-time {
+    font-size: 12px;
+    color: #a1a1a1;
+    margin-left: 10px;
 }

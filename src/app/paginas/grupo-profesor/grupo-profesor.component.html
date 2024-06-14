@@ -2,33 +2,45 @@
     <div class="container">
         <!-- Sidebar para seleccionar curso y listar grupos -->
         <div class="sidebar">
-          <select [(ngModel)]="selectedCourse" (change)="onCourseChange($event)">
-            <option value="">Selecciona el Curso - Sección</option>
-            <option *ngFor="let course of courses" [value]="course">{{ course }}</option>
-          </select>
-          <div *ngFor="let group of groups" class="group-item" (click)="selectGroup(group)">
-            <img src="assets/img_grupo.png" alt="Group Icon">
-            <span>{{ group }}</span>
-          </div>
+            <select [(ngModel)]="selectedCourse" (change)="onCourseChange($event)">
+                <option value="">Selecciona el Curso - Sección</option>
+                <option *ngFor="let course of courses" [value]="course">{{ course }}</option>
+            </select>
+            <div *ngFor="let group of groups" class="group-item" (click)="selectGroup(group)">
+                <img src="assets/img_grupo.png" alt="Group Icon">
+                <span>{{ group }}</span>
+            </div>
         </div>
-      
+
         <!-- Listado de integrantes por grupo seleccionado -->
         <div class="main-content">
-          <h2>Integrantes</h2>
-          <div class="card-container">
-            <div *ngFor="let member of selectedGroupMembers" class="card">
-              <img src="assets/profile_placeholder.png" alt="Profile Picture">
-              <div class="card-details">
-                <h3>{{ member.name }}</h3>
-                <p>{{ member.role }}</p>
-              </div>
+            <h2>Integrantes</h2>
+            <div class="card-container">
+                <div *ngFor="let member of selectedGroupMembers" class="card">
+                    <img src="assets/img_usuario.png" alt="Profile Picture">
+                    <div class="card-details">
+                        <h3>{{ member.name }}</h3>
+                        <p>{{ member.role }}</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      
-        <!-- Detalles del grupo seleccionado -->
-        <div class="details">
-          <h2>{{ selectedGroup }}</h2>
+
+        <!-- Detalles del grupo seleccionado / Chat -->
+        <div class="details" *ngIf="selectedGroup">
+            <h2>{{ selectedGroup }}</h2>
+            <div class="chat-container">
+                <div *ngFor="let message of chatMessages" class="chat-message"
+                     [ngStyle]="{'background-color': getMessageColor(message.senderName)}">
+                    <div class="message-header">
+                        <strong>{{ message.senderName }}</strong>
+                        <span class="message-time">{{ message.time }}</span>
+                    </div>
+                    <div class="message-content">
+                        <p>{{ message.text }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>      
+    </div>
 </div>
