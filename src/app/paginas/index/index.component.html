@@ -23,6 +23,10 @@
         <p>Grupos</p>
         <span *ngIf="hasPinnedAlert$ | async" class="notification-dot"></span>
       </div>
+      <div class="item profesor" [ngClass]="{'item-seleccionado': currentView === 'link4'}" (click)="setView('link4')">
+        <i class="fas fa-users"></i>
+        <p>Grupos</p>
+      </div>
       <div class="item">
         <i class="fas fa-question-circle"></i>
         <p>Ayuda</p>
@@ -72,6 +76,7 @@
       <app-inicio *ngSwitchCase="'link1'"></app-inicio>
       <app-grupos *ngSwitchCase="'link2'"></app-grupos>
       <app-perfil *ngSwitchCase="'link3'"></app-perfil>
+      <app-grupo-profesor *ngSwitchCase="'link4'"></app-grupo-profesor>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

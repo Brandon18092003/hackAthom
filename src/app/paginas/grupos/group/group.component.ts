@@ -85,6 +85,7 @@ export class GroupComponent implements OnInit {
         console.error('Invalid message structure or conversation id mismatch', mensaje);
       }
     });
+
   }
 
   cargarMensajesDeGrupo(grupo: Grupo): void {
@@ -106,10 +107,13 @@ export class GroupComponent implements OnInit {
   }
 
   selectGroup(grupo: Grupo): void {
+    this.gruposeleccionado = grupo;  // Selecciona el grupo primero
+    this.alertMessage = null;  // Resetear alertMessage antes de cargar nuevas alertas
+
     this.cargarMensajesDeGrupo(grupo);
     this.obtenerPersonasPorGrupo(grupo.id);
     this.scrollToBottom();
-    this.gruposeleccionado = grupo;
+
     console.log("grupo seleccionado", grupo);
     this.comprobarLider(grupo.id);
     this.obtenerAlertasDelGrupo(grupo.id);
@@ -335,6 +339,9 @@ export class GroupComponent implements OnInit {
     } else {
       this.cambiarAlertaAnclada(alerta);
     }
+    let contadorAlert = parseInt(localStorage.getItem('contadorAlert') ?? '0', 10);
+    contadorAlert += 1;
+    localStorage.setItem('contadorAlert', contadorAlert.toString());
   }
 
   cambiarAlertaAnclada(alerta: Notificacion): void {
@@ -373,6 +380,9 @@ export class GroupComponent implements OnInit {
         Swal.fire('Alerta desanclada', `La alerta ${alerta.mensaje} ha sido desanclada.`, 'info');
       });
     }
+    let contadorAlert = parseInt(localStorage.getItem('contadorAlert') ?? '0', 10);
+    contadorAlert -= 1;
+    localStorage.setItem('contadorAlert', contadorAlert.toString());
   }
 
   isAlertaAnclada(alerta: any): boolean {
@@ -417,9 +427,10 @@ export class GroupComponent implements OnInit {
       if (grupo) {
         grupo.alerta = alerta ? alerta.mensaje : undefined;
       }
-      if (this.selectedGroup && this.selectedGroup.id === groupId) {
+      if (this.gruposeleccionado && this.gruposeleccionado.id === groupId) {
         this.alertMessage = alerta || null;
       }
+      const contadorAlert = parseInt(localStorage.getItem('contadorAlert') ?? '0', 10);
     });
   }
 }

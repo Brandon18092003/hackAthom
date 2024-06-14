@@ -1,0 +1,34 @@
+<div class="body">
+    <div class="container">
+        <!-- Sidebar para seleccionar curso y listar grupos -->
+        <div class="sidebar">
+          <select [(ngModel)]="selectedCourse" (change)="onCourseChange($event)">
+            <option value="">Selecciona el Curso - Sección</option>
+            <option *ngFor="let course of courses" [value]="course">{{ course }}</option>
+          </select>
+          <div *ngFor="let group of groups" class="group-item" (click)="selectGroup(group)">
+            <img src="assets/img_grupo.png" alt="Group Icon">
+            <span>{{ group }}</span>
+          </div>
+        </div>
+      
+        <!-- Listado de integrantes por grupo seleccionado -->
+        <div class="main-content">
+          <h2>Integrantes</h2>
+          <div class="card-container">
+            <div *ngFor="let member of selectedGroupMembers" class="card">
+              <img src="assets/profile_placeholder.png" alt="Profile Picture">
+              <div class="card-details">
+                <h3>{{ member.name }}</h3>
+                <p>{{ member.role }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Detalles del grupo seleccionado -->
+        <div class="details">
+          <h2>{{ selectedGroup }}</h2>
+        </div>
+      </div>      
+</div>
