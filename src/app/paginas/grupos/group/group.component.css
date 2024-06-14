@@ -18,7 +18,34 @@
 
 .list .header-list {
     border-bottom: 1px solid #d0eaff;
+    height: 50px;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    /* Alinea los elementos verticalmente al centro */
+}
+
+.list .header-list h1 {
+    margin: 0;
+    /* Asegúrate de que no haya margen para una mejor alineación */
+}
+
+.list .header-list .tips {
+    background-color: transparent;
+    color: #2FBD46;
+    font-weight: bold;
+    padding: 3px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0;
+    margin-bottom: 7px;
+    margin-left: auto;
+    /* Empuja el botón hacia la derecha */
+}
+
+.list .header-list .tips:hover {
+    background-color: #bae1c0;
 }
 
 .group-item {
@@ -65,7 +92,8 @@
     font-size: 0.9em;
 }
 
-.eliminar-grupo, .salir-grupo {
+.eliminar-grupo,
+.salir-grupo {
     background-color: transparent;
     color: red;
     font-weight: bold;
@@ -76,7 +104,8 @@
     margin-left: 10px;
 }
 
-.eliminar-grupo:hover, .salir-grupo:hover {
+.eliminar-grupo:hover,
+.salir-grupo:hover {
     background-color: rgb(255, 215, 215);
 }
 
@@ -306,11 +335,14 @@
 .action-buttons {
     display: flex;
     gap: 10px;
-    margin-left: auto; /* Add this line to move buttons to the right */
-    margin-top: 0; /* Adjust the top margin as needed */
+    margin-left: auto;
+    /* Add this line to move buttons to the right */
+    margin-top: 0;
+    /* Adjust the top margin as needed */
 }
 
-.integrantes, .notificaciones {
+.integrantes,
+.notificaciones {
     background-color: white;
     margin-top: 20px;
     padding: 10px;
@@ -318,18 +350,21 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.integrantes .headerInt, .notificaciones .headerNot {
+.integrantes .headerInt,
+.notificaciones .headerNot {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.integrantes h2, .notificaciones h2 {
+.integrantes h2,
+.notificaciones h2 {
     margin: 0;
 }
 
-.añadir, .alert {
+.añadir,
+.alert {
     background-color: transparent;
     color: #2FBD46;
     padding: 5px 10px;
@@ -338,14 +373,17 @@
     cursor: pointer;
 }
 
-.añadir:hover, .alert:hover {
+.añadir:hover,
+.alert:hover {
     background-color: #2FBD46;
     color: white;
 }
 
 
-.integrantes-cards, .alert-cards {
-    max-height: 200px; /* Adjust as needed */
+.integrantes-cards,
+.alert-cards {
+    max-height: 200px;
+    /* Adjust as needed */
     overflow-y: auto;
 }
 
@@ -359,7 +397,7 @@
     margin: 10px 0;
 }
 
-.integrante-card{
+.integrante-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -410,32 +448,41 @@
 }
 
 .editar-button {
-    background-color: transparent; /* Azul */
-    color: blue !important; /* Blanco */
+    background-color: transparent;
+    /* Azul */
+    color: blue !important;
+    /* Blanco */
 }
 
 .editar-button:hover {
     color: white !important;
-    background-color: #aac6e9 !important; /* Azul un poco más oscuro */
+    background-color: #aac6e9 !important;
+    /* Azul un poco más oscuro */
 }
 
 .eliminar-button {
-    background-color: transparent; /* Rojo */
-    color: red; /* Blanco */
+    background-color: transparent;
+    /* Rojo */
+    color: red;
+    /* Blanco */
 }
 
 .eliminar-button:hover {
     color: red;
-    background-color: rgb(255, 215, 215) !important; /* Rojo un poco más oscuro */
+    background-color: rgb(255, 215, 215) !important;
+    /* Rojo un poco más oscuro */
 }
 
 .ver-perfil-button {
-    background-color: transparent !important; /* Fondo transparente */
-    color: #F1C40F !important; /* Amarillo */
+    background-color: transparent !important;
+    /* Fondo transparente */
+    color: #F1C40F !important;
+    /* Amarillo */
 }
 
 .ver-perfil-button:hover {
-    background-color: #FFFFFF !important; /* Fondo blanco */
+    background-color: #FFFFFF !important;
+    /* Fondo blanco */
 }
 
 

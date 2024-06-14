@@ -3,6 +3,7 @@
     <div class="list">
       <div class="header-list">
         <h1>Chat</h1>
+        <button class="tips" (click)="abrirTips()"><i class="fas fa-tools"></i> Herramientas</button>
       </div>
       <div *ngFor="let grupo of grupos" class="group-item" [ngClass]="{'selected': grupo === selectedGroup}"
         (click)="selectGroup(grupo)">
@@ -27,7 +28,8 @@
             <p><strong>Alerta:</strong> {{ alertMessage.mensaje }}</p>
             <p>Fecha: {{ alertMessage.fecha | date:'mediumDate' }} - {{ alertMessage.hora }}</p>
           </div>
-          <button mat-icon-button *ngIf="eslider" matTooltip="Eliminar Alerta" (click)="desanclarAlerta()" class="close-button">
+          <button mat-icon-button *ngIf="eslider" matTooltip="Eliminar Alerta" (click)="desanclarAlerta()"
+            class="close-button">
             <i class="fas fa-times"></i>
           </button>
         </div>

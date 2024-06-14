@@ -16,6 +16,7 @@ import { PersonaService } from '../../../services/persona/persona.service';
 import { MiembroService } from '../../../services/miembro/miembro.service';
 import { NotificacionService } from '../../../services/notificacion/notificacion.service';
 import { VerPerfilComponent } from '../crear-group/ver-perfil/ver-perfil.component';
+import { TipsComponent } from './tips/tips.component';
 
 @Component({
   selector: 'app-group',
@@ -161,6 +162,14 @@ export class GroupComponent implements OnInit {
         element.rol = result.rol;
       }
     });
+  }
+
+  abrirTips(): void{
+    this.dialog.open(TipsComponent,{
+      width:'600px',
+      disableClose: false,
+      data:{}
+    })
   }
 
   openAddDialog(): void {

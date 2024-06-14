@@ -1,0 +1,91 @@
+.body {
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui;
+    background-color: #F0F7FF;
+}
+
+.container {
+    display: flex; /* Mostrar por defecto para desarrollo, cambiar a none para producción */
+    width: 600px;
+    padding: 0;
+    height: 100%;
+}
+
+.container-content {
+    background-color: #F0F7FF; /* Fondo blanco */
+    border: none;
+    width: 600px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    border-radius: 10px;
+}
+
+.h2 {
+    text-align: center;
+    color: #091052;
+    margin: 0 0 20px 0;
+}
+
+/* Estilos para las cards */
+.card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card-link {
+    text-decoration: none; /* Elimina el subrayado de los enlaces */
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+    text-decoration: none; /* Elimina el subrayado del texto en los enlaces */
+    color: inherit; /* Mantiene el color de texto inherente */
+}
+
+.card:hover {
+    background-color: #f1f1f1;
+    transform: translateY(-5px);
+}
+
+.card img {
+    width: 70px;  /* Ajusta según la necesidad */
+    height: 70px; /* Ajusta según la necesidad */
+    border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+
+.card-info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.card-info h3 {
+    margin: 0;
+    font-size: 1.8em; /* Tamaño del texto del título */
+    color: #333; /* Color del texto del título */
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold; /* Negrita */
+}
+
+.card-info p {
+    margin: 5px 0 0;
+    color: #666; /* Color del texto del párrafo */
+    text-decoration: none;
+    font-size: 0.9em; /* Tamaño del texto del párrafo */
+}
